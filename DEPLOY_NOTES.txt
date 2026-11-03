@@ -1,22 +1,20 @@
-AXIOM Studio v2
+AXIOM Studio v3 — GitHub Pages deployment
 
-This is a complete static website, ready for Cloudflare Pages, Netlify, Vercel static deployments, or simple local use.
+Repository: https://github.com/mtk1606/Mastery
+Branch: main
+Website entry: index.html at repository root
 
-Required website files:
-  index.html
-  styles.css
-  data.js
-  visuals.js
-  app.js
+Enable GitHub Pages:
+1. Open the repository -> Settings -> Pages.
+2. In Build and deployment choose Deploy from a branch.
+3. Select main, folder /(root), then Save.
+4. Once GitHub reports deployment, use the URL shown in Pages settings.
+   Typical public URL: https://mtk1606.github.io/Mastery/
 
-No npm, build command or secret keys.
-Deploy these five files to the root of a website.
+All lesson content, WebGL scenes and progress logic are static files.
+The app uses # hash routes, so no server-side SPA rewrite is needed.
+Progress is stored per-browser; transfer via Practice & Exams > Export/Restore.
+Manual unlock opens material without changing earned mastery or exam passes.
 
-Start routes:
-  /#/            Homepage
-  /#/math        Math Prerequisites — separate path
-  /#/quant       Quant Academy — separate path
-  /#/practice    Exercises and examinations
-  /#/engineering Future SWE/DSA/System Design placeholders
-
-Progress stays in the browser. Use Practice & Exams > Export progress for backups.
+An account/backend is not yet provided. Hosting does NOT synchronize progress.
+README.md contains the architecture, source references and assessment limitations.
