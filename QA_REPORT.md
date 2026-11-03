@@ -1,36 +1,29 @@
-# AXIOM Studio v3 — Quality assurance report
+# AXIOM Studio v4 — Quality assurance
 
-**Date:** 2026-11-03  
-**Repository:** https://github.com/mtk1606/Mastery  
-**Build:** dark-theme modular site in repository root.
+**Release:** November 3, 2026. **Scope:** browser-side functional regression and question-generation shape checks.
 
-## Results
+## Automated browser regression: 36/36 passed
 
-- **32/32 end-to-end browser checks passed.** Verified separate Math and Quant paths, locked progression, manual unlock with no false award, wrong-answer recovery, fresh mastery check, perfect exam gate, independent academy records, progress export/import, mobile width/navigation, and no uncaught JavaScript errors.
-- **5,250 randomized question instances validated** across 35 lessons. No invalid numeric answers, malformed multiple-choice options, unknown question types, or missing answer metadata were found.
-- **Interactive visuals verified in fallback mode.** This test environment disables WebGL, so the application used its CPU canvas renderer. Its order-book model produced nonempty images, and changing inventory changed the displayed calculation and image.
-- **GitHub Pages action reported success** for commit `00a7794b339de103106ce4b837b8a697a1f08aab` (the numerical-grading wording fix). See https://github.com/mtk1606/Mastery/actions/runs/41725502149.
+Tests exercised: landing-page render; dark typography; independent Math and Quant links; 13+22 lesson catalogue; no locked rows; open access to advanced lessons and examinations; faculty-proof structure, assumptions and counterexamples; optional graphics collapsed by default; user-supplied written reasoning notes persisted across navigation; independent marking as studied; wrong-answer feedback followed by the *next question*, not a forced repair; numeric score accounting (4/5 for a deliberate mistake), no fabricated perfect badge; direct access to the final Quant examination; cumulative exam scoring (9/10 after a deliberate mistake) without restarting; persistence of exam results; download/restore of study notes and progress; all 35 lectures rendering with model solutions; user-triggered optional 3D scene; responsive mobile width; no uncaught browser exceptions.
 
-## Correction applied
+Run locally: `python test_v4.py` (uses Playwright and the installed Chromium browser). The test embeds the site’s own JavaScript and CSS into an in-memory page and intentionally skips the externally hosted MathJax renderer. It checks that the mathematical content remains readable without the CDN. It does **not** prove that the external CDN can always be reached in production.
 
-The prior answer-feedback label claimed written reasoning had been checked. It now correctly distinguishes **graded numerical steps** from written reasoning, which is **self-reviewed** and not automatically graded. The mastery completion label now describes 100% on graded answers, not verified mathematical proofs.
+## Question-bank integrity: 5,250 cases
 
-## What this QA does not establish
+Run `node test_bank.cjs`. Every case had a finite numeric answer or well-formed multiple-choice / multi-part answer; no malformed question instances were found. This validates question object structure and numeric finiteness, **not independent correctness of every mathematical answer**.
 
-- Native GPU WebGL rendering on a real consumer device remains untested here because hardware WebGL is blocked in the test environment.
-- The public GitHub Pages URL could not be opened directly from the current sandbox; GitHub's build action confirms deployment success, not a full public-device acceptance test.
-- Formula examples were spot-checked, but these automated tests are **not an external mathematical peer review** of every explanation or proof.
-- Browser local storage persists per device; import/export works, but real-time cross-device synchronization is not implemented.
-- Written justifications are not AI-graded or proof-checked. A perfect mastery score reflects graded inputs only.
+## Academic/content review notes
 
-## Repeatable test commands (Linux test environment)
+All 35 lectures have an original principle/theorem, assumptions, a reasoned derivation, worked example, counterexample/limitation, independent free-response problem, hint and solution. The updated domino/chessboard example correctly removes **two same-colored corners**, making tiling impossible by parity.
 
-The downloadable QA source package includes test scripts. With Node.js and Python Playwright + Chromium installed:
+The Avellaneda–Stoikov lesson attributes its **simplified** Brownian price, exponential utility and order-arrival assumptions; no trading performance claims are made. Statistical examples explicitly distinguish dependence from correlation, base rate from sensitivity, and out-of-sample evidence from searched backtests.
 
-```sh
-node tests/test_bank.cjs
-python tests/test_regression.py
-python tests/test_visuals.py
-```
+## Known limitations
 
-The first script checks every generated-question family, the second checks learner flows without requiring GPU, and the last exercises actual scene rendering and controls (including the canvas fallback). Test scripts use a headless Chromium browser and may need executable-path adjustment outside Linux.
+1. Written mathematical proofs are self-reviewed against authored solutions. The app does not provide an automatic semantic proof grader.
+2. Formal professor/subject-matter peer review, long-term retention outcomes and exhaustive mathematical correctness audits have not been completed.
+3. The optional MathJax renderer requires connectivity and a working CDN; readable Unicode mathematical formulas remain in the lesson text if unavailable.
+4. GPU WebGL support varies. The optional figures are not part of the core learning requirement.
+5. Progress is local to a browser unless the user exports/imports a backup.
+
+**Result:** Browser functionality and generated question structure passed the stated automated checks. This is original self-study software, not official Harvard, Oxford, MIT or University of Toronto coursework.
