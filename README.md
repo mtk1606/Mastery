@@ -1,76 +1,54 @@
-# AXIOM Studio v2 — Quant concepts you can see
+# AXIOM Studio v3 — Visual Quant Academy
 
-An original, interactive teaching website for accelerated quantitative-finance preparation. It takes inspiration from the visual learning *approach* of hft.md but contains no code, images, branding, or lesson copy from that website.
+A research-oriented, visual-first learning website with two **independent** academies: **Mathematical Prerequisites** (13 lessons) and **Quantitative Finance** (22 lessons). Three additional paths are reserved for future development: **Software Engineering**, **Data Structures & Algorithms**, and **System Design**.
 
-## What's new
+The design is dark and spacious, with larger reading fonts and native WebGL demonstrations. The goal is to teach *why* a method works, what assumptions it requires, when it fails, and how it transfers to unfamiliar problems.
 
-- Editorial, light-background course and lesson pages rather than a dashboard-heavy UI.
-- **Two completely independent programs**: Math Prerequisites (13 lessons, 2 module exams) and Quant Academy (22 lessons, 4 module exams).
-- Clearly reserved future navigation for Software Engineering, Data Structures & Algorithms, and System Design. These tracks are **not implemented yet**.
-- Real GPU WebGL cube meshes with orbit rotation, scroll zoom, 3D order book, Bayes populations, Gaussian distributions, joint correlation surfaces, decision columns, regression bars, transition paths, and optimization landscapes. If WebGL is unavailable, a software-rendered rotatable 3D projection runs instead.
-- Editable sliders update the 3D scene *and* exact calculated metrics for the displayed mathematical model.
-- Each lesson contains the idea, interactive figure, core maths/derivation, interview application, common trap, and practice.
-- 105 randomized question-generator archetypes over 35 lessons, with unlimited practice, a strict five-question 100%-correct lesson gate and six ten-question module examinations that require a flawless 10/10.
-- Every wrong answer leads to a different targeted repair problem, followed by a new mastery set or exam. A repaired answer does not retroactively earn credit on the previous set.
-- Browser progress persistence, an error ledger, and JSON export/import of progress.
+## What's new in v3
 
-## Run locally (Windows/macOS/Linux)
+- Dark editorial style, larger lesson typography and improved contrast.
+- Research-level deep-dive sections with original derivations, non-obvious examples, assumptions and limitations.
+- Multi-part numerically graded questions in Bayes, expected value, recursive expectation, inference, correlation, regression, quoting, order-book execution, and Avellaneda–Stoikov.
+- Optional written reasoning for multi-part calculations, followed by an explicit self-review rubric. **Free-text reasoning is not automatically graded.**
+- Mastery requires five correct first attempts. Module examinations require ten correct first attempts. A miss triggers a fresh repair problem and a fresh gate.
+- **Manual unlock** lets you access lessons and exams for exploration without fabricating mastery or exam passes. Toggle it from a course page or Practice & Exams.
+- **Export progress** to JSON and **restore progress** on another device from Practice & Exams. The app upgrades existing v2 progress in the same browser.
+- Original WebGL interactive models for probability, distributions, correlation, optimization, stochastic state models and order-book depth.
 
-Unzip this package, then open `index.html` using Chrome or Edge. No build step is required. Google Fonts improve typography online; safe system-font fallbacks work without them.
-
-For the most reliable local preview, serve the folder over HTTP (optional):
+### Directory
 
 ```
-py -m http.server 8000
+index.html       Main application shell
+styles.css       Original editorial layout
+dark.css         Dark theme, typography and advanced assessment components
+data.js          Lessons and randomized core question generators
+visuals.js       Native WebGL interactive mathematical figures
+pedagogy.js      Deep-dive teaching notes and multi-step problems
+app.js           Routing, gating, exercises, progress state and backup
 ```
 
-Then visit http://localhost:8000/ (from the folder containing `index.html`). The code is static HTML/CSS/JavaScript and works well with static hosting.
+No package installation or build command is needed. This is an ordinary static website.
 
-## Deploy online with Cloudflare Pages
+## Deploy on GitHub Pages
 
-1. Sign into Cloudflare and go to **Workers & Pages**.
-2. Create a **Pages** project for this *new* site (use direct upload or connect a GitHub repository).
-3. Upload the unzipped site files at the project root, with `index.html` at the top level. Do **not** upload the ZIP as the website root.
-4. Let Cloudflare deploy; it will provide an `*.pages.dev` URL.
-5. Verify both paths, the 3D controls, a wrong-answer repair, and exported progress on the deployed version.
+In **mtk1606/Mastery**, open **Settings → Pages**. Under **Build and deployment**, select **Deploy from a branch**, choose **main** and **/(root)**, then **Save**. GitHub will provide the project site URL after deployment. The app uses hash-based routes (`#/quant`, `#/math`), compatible with basic static hosting.
 
-If using GitHub, publish `index.html`, `styles.css`, `data.js`, and `visuals.js`, `app.js` at the repository root. No install or build command is necessary. Framework preset: None. Build command: none. Output directory: root (`.`), depending on hosting UI.
+## Local preview
 
-Progress is currently **local to one browser/origin**. Sync between multiple devices or real user accounts would require an online database and authentication. Export/import provides an immediate manual backup.
+Open `index.html` in a modern browser, or start a local static server with `python -m http.server 8000` and open `http://localhost:8000`. A recent Chrome, Edge, Safari or Firefox supporting WebGL is recommended.
 
-## Curriculum structure
+## Progress and integrity
 
-### Math prerequisite academy
+Progress is stored in the browser’s local storage, not on GitHub or a server. Use **Practice & Exams → Export progress** to download a backup, then **Restore progress** to import it. Import deliberately replaces the current browser state after confirmation. Manual unlock only affects content access; the earned-score counters remain unchanged.
 
-1. Arithmetic, algebra & foundations: number sense, algebra, exponents, series, combinatorics, trigonometry, discrete proofs.
-2. Calculus, linear algebra & inference: derivatives, integrals, matrices, multivariable optimization, sampling inference, numerical methods.
+The numerical evaluator accepts decimals and simple fractions with a small tolerance. Structured multi-step inputs are automatically checked, but the user's written derivation receives a transparent self-assessment rubric, not AI grading. Passing a gate therefore certifies the numeric responses to that gate, not independently verified proof quality or long-term retention.
 
-### Quant academy
+## Learning references
 
-1. Probability & decision-making: events, expectation, indicators, conditioning, Bayes, recursions, symmetry, stopping.
-2. Statistics & estimation: variance, distributions, correlation, inference, regression.
-3. Quantitative research: covariance mathematics, optimization, validation and leakage.
-4. Market making & HFT: information, pricing, limit order books, latency, Markov chains and Avellaneda–Stoikov inventory-aware quotes.
+The explanations and simulations are original educational material informed by the user-provided prerequisite and interview notes, Joseph K. Blitzstein & Jessica Hwang’s *Introduction to Probability*, Xinfeng Zhou’s *A Practical Guide to Quantitative Finance Interviews* and Avellaneda & Stoikov (2008), *High-frequency trading in a limit order book*. Original books and papers are not bundled or reproduced. Models are simplified teaching demonstrations, not live trading strategies.
 
-### Future (not implemented)
+**Independent project; not an official MIT or University of Toronto program or course.**
 
-- SWE curriculum
-- DSA and algorithmic problem-solving curriculum
-- System design and low-latency systems curriculum
+## Future phases
 
-The three future paths should be independent programs with their own modules, coding exercises, exams, and progress storage.
-
-## Research and reference notes
-
-Original content is shaped by the user-provided *Quant Math Prerequisites*, *Quant Interview Notes*, XinFeng Zhou's *A Practical Guide to Quantitative Finance Interviews* (Green Book), Blitzstein & Hwang's *Introduction to Probability*, and Avellaneda & Stoikov, “High-frequency trading in a limit order book,” *Quantitative Finance* **8** (2008), 217–224. No copyrighted PDF pages or substantial book text are copied into this package.
-
-For the Avellaneda–Stoikov example, the displayed reservation and approximate quote equations assume: `r = S − qγσ²τ` and `spread ≈ γσ²τ + (2/γ) ln(1 + γ/k)` with S=100, σ=2, τ=1, k=1.5. The displayed order-book depth is synthetic and illustrative; the quoted prices do not reflect actual exchange liquidity, queue priority, transaction fees, or a validated profitable strategy. This is not investment advice.
-
-## Quality checks and current limits
-
-- Browser-checked separate pathway unlocks, wrong-answer targeted repair, five-question 100% gate, ten-question exam, slider-model reactivity, and mobile no-horizontal-overflow at 390px.
-- Statically tested 10,500 generated question instances over all 105 generators: no malformed answers, invalid numbers, or question-generator exceptions. This does not constitute independent mathematical proof of every question/solution.
-- The principal visual categories are implemented, **but not every lesson yet has two fully bespoke simulations**. Some closely related lessons share a parameterized 3D instrument.
-- Some derivations are introductory and not the full textbook-level treatment. The next build should deepen each proof and add multi-step free-response grading and delayed retention tests.
-- 100% on a small exam is a *progression gate*, not a guarantee of permanent mastery or interview-readiness.
-- There is no online hosted URL, no student account system, no live brokerage connectivity, no AI tutor, and no SWE/DSA/System Design lessons yet.
+Build distinct SWE, DSA and System Design academies with their own content databases, autograders and progress states. Before public scale-up, add a more robust problem taxonomy, full symbolic answer checking, rigorous written-response evaluation, spaced-repetition scheduling, multi-device accounts and an automated testing/deployment pipeline.
