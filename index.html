@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="theme-color" content="#f6f6f2" />
+  <meta name="description" content="Axiom Studio: learn quant mathematics, research and market making through interactive 3D experiments, adaptive questions and mastery exams." />
+  <title>AXIOM Studio · Quant concepts you can see</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <link href="styles.css" rel="stylesheet" />
+</head>
+<body>
+  <div class="site-shell">
+    <header class="site-header">
+      <a class="brand" href="#/" aria-label="Axiom Studio home"><span class="brand-glyph">a<span>.</span></span><span>axiom<span class="brand-light">/studio</span></span></a>
+      <nav class="top-links" aria-label="Main navigation">
+        <a data-section="math" href="#/math">Math prerequisites</a>
+        <a data-section="quant" href="#/quant">Quant academy</a>
+        <a data-section="practice" href="#/practice">Practice & exams</a>
+        <a data-section="engineering" href="#/engineering">Engineering <span class="soon-tag">soon</span></a>
+      </nav>
+      <button class="menu-toggle" aria-label="Show navigation" aria-expanded="false">☰</button>
+      <div class="header-progress"><span class="progress-ring" aria-hidden="true"></span><span id="headerCount">0 mastered</span></div>
+    </header>
+    <main id="page" tabindex="-1"></main>
+    <footer class="footer"><span class="foot-brand">axiom<span>.</span> studio</span><span>Understand → experiment → derive → prove.</span><span>Built for deliberate practice, not passive reading.</span></footer>
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+  </div>
+  <script src="data.js"></script>
+  <script src="visuals.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
