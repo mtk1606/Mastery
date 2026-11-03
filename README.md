@@ -1,54 +1,28 @@
-# AXIOM Studio v3 — Visual Quant Academy
+# AXIOM Studio v4 — Open Academic Quant Academy
 
-A research-oriented, visual-first learning website with two **independent** academies: **Mathematical Prerequisites** (13 lessons) and **Quantitative Finance** (22 lessons). Three additional paths are reserved for future development: **Software Engineering**, **Data Structures & Algorithms**, and **System Design**.
+Two independent, entirely open academies: 13 Math Prerequisites and 22 Quantitative Finance lectures. Three engineering curricula (SWE, DSA and System Design) are planned.
 
-The design is dark and spacious, with larger reading fonts and native WebGL demonstrations. The goal is to teach *why* a method works, what assumptions it requires, when it fails, and how it transfers to unfamiliar problems.
+## The learning method
 
-## What's new in v3
+Each of the 35 lectures now contains a faculty-style note: objective, explicitly stated assumptions, principle/theorem, full derivation, worked example, misleading shortcut or counterexample, and independent written problem with a hint and a worked answer. Original examples and explanations are informed by the supplied prerequisite notes, interview notes, Blitzstein–Hwang, Xinfeng Zhou and Avellaneda–Stoikov. The website has no academic affiliation or endorsement.
 
-- Dark editorial style, larger lesson typography and improved contrast.
-- Research-level deep-dive sections with original derivations, non-obvious examples, assumptions and limitations.
-- Multi-part numerically graded questions in Bayes, expected value, recursive expectation, inference, correlation, regression, quoting, order-book execution, and Avellaneda–Stoikov.
-- Optional written reasoning for multi-part calculations, followed by an explicit self-review rubric. **Free-text reasoning is not automatically graded.**
-- Mastery requires five correct first attempts. Module examinations require ten correct first attempts. A miss triggers a fresh repair problem and a fresh gate.
-- **Manual unlock** lets you access lessons and exams for exploration without fabricating mastery or exam passes. Toggle it from a course page or Practice & Exams.
-- **Export progress** to JSON and **restore progress** on another device from Practice & Exams. The app upgrades existing v2 progress in the same browser.
-- Original WebGL interactive models for probability, distributions, correlation, optimization, stochastic state models and order-book depth.
+Everything is open. No course, lecture or examination is gated by progress or grades. The optional three- and five-question sets and ten-question diagnostics provide feedback and record scores. Wrong answers do not force retakes or block navigation. Written reasoning remains self-assessed against model solutions; numeric steps are automatically graded.
 
-### Directory
+Progress and free-text lecture notes are stored in the browser and can be exported/imported as JSON via **Practice & exams**. Prior v2/v3 JSON progress remains accepted. Perfect numerical sets retain existing mastery badges but never gate study.
 
-```
-index.html       Main application shell
-styles.css       Original editorial layout
-dark.css         Dark theme, typography and advanced assessment components
-data.js          Lessons and randomized core question generators
-visuals.js       Native WebGL interactive mathematical figures
-pedagogy.js      Deep-dive teaching notes and multi-step problems
-app.js           Routing, gating, exercises, progress state and backup
-```
+## Important files
 
-No package installation or build command is needed. This is an ordinary static website.
+- `index.html`: single-page website shell and optional MathJax equation renderer.
+- `styles.css`, `dark.css`, `scholar.css`: visual foundation and academic reading typography.
+- `data.js`, `pedagogy.js`: core curriculum and randomized assessment generators.
+- `seminar.js`: 35 complete original faculty-style notes and independently worked transfer problems.
+- `visuals.js`: existing WebGL visual models, loaded only when requested on lessons where a figure can clarify a mathematical relation.
+- `app.js`: routing, no-lock flow, practice, feedback, progress and notes.
 
-## Deploy on GitHub Pages
+### Deploy to GitHub Pages
 
-In **mtk1606/Mastery**, open **Settings → Pages**. Under **Build and deployment**, select **Deploy from a branch**, choose **main** and **/(root)**, then **Save**. GitHub will provide the project site URL after deployment. The app uses hash-based routes (`#/quant`, `#/math`), compatible with basic static hosting.
+The site is static. Keep files in the root of `main`; **Settings → Pages → Deploy from a branch → main → /(root)**. Visit `https://mtk1606.github.io/Mastery/` once GitHub completes its deploy. Hash URLs work on GitHub Pages.
 
-## Local preview
+### Caveats
 
-Open `index.html` in a modern browser, or start a local static server with `python -m http.server 8000` and open `http://localhost:8000`. A recent Chrome, Edge, Safari or Firefox supporting WebGL is recommended.
-
-## Progress and integrity
-
-Progress is stored in the browser’s local storage, not on GitHub or a server. Use **Practice & Exams → Export progress** to download a backup, then **Restore progress** to import it. Import deliberately replaces the current browser state after confirmation. Manual unlock only affects content access; the earned-score counters remain unchanged.
-
-The numerical evaluator accepts decimals and simple fractions with a small tolerance. Structured multi-step inputs are automatically checked, but the user's written derivation receives a transparent self-assessment rubric, not AI grading. Passing a gate therefore certifies the numeric responses to that gate, not independently verified proof quality or long-term retention.
-
-## Learning references
-
-The explanations and simulations are original educational material informed by the user-provided prerequisite and interview notes, Joseph K. Blitzstein & Jessica Hwang’s *Introduction to Probability*, Xinfeng Zhou’s *A Practical Guide to Quantitative Finance Interviews* and Avellaneda & Stoikov (2008), *High-frequency trading in a limit order book*. Original books and papers are not bundled or reproduced. Models are simplified teaching demonstrations, not live trading strategies.
-
-**Independent project; not an official MIT or University of Toronto program or course.**
-
-## Future phases
-
-Build distinct SWE, DSA and System Design academies with their own content databases, autograders and progress states. Before public scale-up, add a more robust problem taxonomy, full symbolic answer checking, rigorous written-response evaluation, spaced-repetition scheduling, multi-device accounts and an automated testing/deployment pipeline.
+The platform is an independent educational project, not official instruction from MIT, Harvard, Oxford or Toronto. The user-provided books/papers are curricular references; their copyrighted text is not redistributed. The assessment engine checks numerical values, not free-form mathematical proof. The Avellaneda–Stoikov section presents a simplified model, not trade recommendations. MathJax is an optional externally loaded enhancement; plain-text mathematics remains available if it cannot load.
