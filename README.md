@@ -1,32 +1,62 @@
-# AXIOM Studio v4 — Open Academic Quant Academy
+# Mastery — Independent Course Library (Academic redesign v5)
 
-Two independent, entirely open academies: 13 Math Prerequisites and 22 Quantitative Finance lectures. Three engineering curricula (SWE, DSA and System Design) are planned.
+**Live website:** https://mtk1606.github.io/Mastery/
 
-## The learning method
+Mastery is an independent, university-style, open-access learning project. It is not affiliated with Harvard, MIT, Oxford, or a trading firm.
 
-Each of the 35 lectures now contains a faculty-style note: objective, explicitly stated assumptions, principle/theorem, full derivation, worked example, misleading shortcut or counterexample, and independent written problem with a hint and a worked answer. Original examples and explanations are informed by the supplied prerequisite notes, interview notes, Blitzstein–Hwang, Xinfeng Zhou and Avellaneda–Stoikov. The website has no academic affiliation or endorsement.
+## Current course catalogue
 
-Everything is open. No course, lecture or examination is gated by progress or grades. The optional three- and five-question sets and ten-question diagnostics provide feedback and record scores. Wrong answers do not force retakes or block navigation. Written reasoning remains self-assessed against model solutions; numeric steps are automatically graded.
+| Course | Available lectures | Learning focus |
+|---|---:|---|
+| Mathematics | 13 | mathematical fluency, proof, calculus, matrices and inference |
+| Probability & Quantitative Finance | 22 | expected value, probability, statistics, research, market microstructure |
+| Data Structures & Algorithms | 10 | recognition, invariants, code, traces, complexity and interview questions |
+| Modern C++ & Market Systems | 4 | ownership, cache locality, concurrency and price-time matching |
+| System Design | 3 | capacity, consistency and failure handling |
 
-Progress and free-text lecture notes are stored in the browser and can be exported/imported as JSON via **Practice & exams**. Prior v2/v3 JSON progress remains accepted. Perfect numerical sets retain existing mastery badges but never gate study.
+All 52 current lectures are available without progression gates. Written notes and progress remain stored in each browser; users can export/import progress backups from the existing course pages.
 
-## Important files
+## v5 improvements
 
-- `index.html`: single-page website shell and optional MathJax equation renderer.
-- `styles.css`, `dark.css`, `scholar.css`: visual foundation and academic reading typography.
-- `data.js`, `pedagogy.js`: core curriculum and randomized assessment generators.
-- `seminar.js`: 35 complete original faculty-style notes and independently worked transfer problems.
-- `visuals.js`: existing WebGL visual models, loaded only when requested on lessons where a figure can clarify a mathematical relation.
-- `app.js`: routing, no-lock flow, practice, feedback, progress and notes.
+- Consistent course catalogue and academic design. Minimal decoration, useful hierarchy, real chapters, proof-based learning.
+- **Light and Dark** buttons in both sites; selection persists in local storage under `mastery-theme`.
+- Normal neutral palette and readable standard typography: Arial/Segoe UI for interface, Georgia for academic titles, system monospace for code.
+- Math and Quant legacy content and test generators are retained. The layout removes decorative styling and keeps optional figures subordinate to teaching.
+- Five in-depth, original **companion seminars** in engineering: linked-list pointer invariants, dynamic programming recurrence design, C++ object lifetime/RAII, price–time order-book matching, and distributed consistency/idempotency. Each adds detailed assumptions, derivations/proofs, worked examples, counterexamples, and recitation questions with solution sketches.
+- The existing step-by-step DSA code traces and chapter glossaries are retained.
+- No restrictions or grade-based lesson locks.
 
-### Deploy to GitHub Pages
+## Files
 
-The site is static. Keep files in the root of `main`; **Settings → Pages → Deploy from a branch → main → /(root)**. Visit `https://mtk1606.github.io/Mastery/` once GitHub completes its deploy. Hash URLs work on GitHub Pages.
+- `index.html`, `app.js`: main catalogue, mathematics, probability/quant courses, assessments.
+- `engineering.html`, `engineering.js`, `engineering-data.js`: algorithms, C++ and system design.
+- `theme.js`: shared, persisted light/dark selection.
+- `academic.css`: shared editorial design system loaded after old styles to preserve old UI behavior.
+- `faculty-notes.js`: independent substantive companion seminars for 5 engineering lessons.
+- `styles.css`, `dark.css`, `scholar.css`, `visuals.js`, `data.js`, `pedagogy.js`, `seminar.js`: legacy curriculum and interactive components.
 
-### Caveats
+GitHub Pages builds from `main` at `/ (root)`; no backend or bundler is required. A Python static server can be used locally with `python -m http.server 8000`.
 
-The platform is an independent educational project, not official instruction from MIT, Harvard, Oxford or Toronto. The user-provided books/papers are curricular references; their copyrighted text is not redistributed. The assessment engine checks numerical values, not free-form mathematical proof. The Avellaneda–Stoikov section presents a simplified model, not trade recommendations. MathJax is an optional externally loaded enhancement; plain-text mathematics remains available if it cannot load.
+## Educational source policy
 
-## Engineering Phase I (new)
+Content is independently authored, informed by (but not copied from):
 
-Open [Engineering Academy](engineering.html) for independent fast-but-rigorous study paths in DSA interview patterns (10 lectures and 30 official LeetCode practice links), C++20 and low-latency infrastructure (4 lectures), and system design (3 lectures). Six DSA topics include step-by-step state visualizations. Each lesson defines unfamiliar terminology/functions, gives invariant proofs, C++ source code, worked traces, complexity and counterexamples. Progress notes stay locally in your browser. See [Phase roadmap](engineering.html#track=dsa) and `engineering-data.js` for the syllabus. Phase II will expand the coverage and add executable programming checks.
+- MIT 6.006 Introduction to Algorithms: https://ocw.mit.edu/courses/6-006-introduction-to-algorithms-spring-2020/
+- Harvard CS50: https://cs50.harvard.edu/x/
+- Open Data Structures: https://opendatastructures.org/
+- cppreference: https://en.cppreference.com/w/
+- MIT 6.5840 Distributed Systems: https://pdos.csail.mit.edu/6.5840/
+- C++ Core Guidelines: https://github.com/isocpp/CppCoreGuidelines
+- *Introduction to Probability* by Blitzstein & Hwang; Xinfeng Zhou's interview guide; and Avellaneda & Stoikov's market-making paper (provided references).
+
+Linked sources and published academic materials retain their respective licences and copyrights; they are **not** incorporated wholesale into Mastery.
+
+## Quality and limitations
+
+See `QA_REPORT_v5.md` for checks. In-browser tests used an HTML/CSS/JavaScript DOM assembly because local browser navigation in the test environment was blocked; pages are ordinary static HTML and GitHub Pages deployment should be checked separately.
+
+**Not yet built:** server-side compiled code evaluation, automatic grading of free-text proofs, full-size semester syllabi for every subject, or multi-device synced progress. The five deeper engineering seminars are a first quality standard; the other lessons are not all at the same depth yet.
+
+## Next instructional phase
+
+Bring every engineering lesson up to the flagship-seminar standard, then build a real code-execution and unit-testing environment with role-specific problem sets and design critiques. Audit mathematical accuracy and citation coverage before using the material as a complete replacement for university courses.
