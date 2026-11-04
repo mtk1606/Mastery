@@ -1,0 +1,56 @@
+name: Mastery market systems verification
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'exchange/**'
+      - 'exchange-sim.js'
+      - 'market-systems.*'
+      - 'tests/market-*'
+      - 'tests/native-cli-qa.cjs'
+      - '.github/workflows/market-systems-ci.yml'
+permissions:
+  contents: read
+jobs:
+  deterministic-native:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Validate JavaScript source, fingerprint and randomized invariants
+        run: |
+          node --check exchange-sim.js
+          node --check market-systems-data.js
+          node --check market-systems.js
+          node tests/market-sim.test.cjs
+      - name: Build native C++20 with warnings and verify fixture and invariants
+        run: |
+          cmake -S exchange -B exchange/build -DCMAKE_BUILD_TYPE=Release
+          cmake --build exchange/build --parallel 2
+          ctest --test-dir exchange/build --output-on-failure
+          node tests/native-cli-qa.cjs
+      - name: Run sanitizer build for memory-safety regressions
+        run: |
+          cmake -S exchange -B exchange/build-san -DCMAKE_BUILD_TYPE=Debug -DMASTERY_ASAN=ON
+          cmake --build exchange/build-san --parallel 2
+          ctest --test-dir exchange/build-san -R exchange_invariants --output-on-failure
+  website-journey:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install Chromium test runtime
+        run: |
+          npm install --no-save --ignore-scripts playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Test course journeys on actual static HTTP site
+        run: |
+          python3 -m http.server 8779 --bind 127.0.0.1 >/tmp/market-http.log 2>&1 &
+          node tests/market-browser.test.cjs
