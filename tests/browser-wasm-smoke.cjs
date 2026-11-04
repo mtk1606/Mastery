@@ -7,6 +7,15 @@ const {chromium}=require('playwright');
  const errors=[];page.on('pageerror',e=>errors.push(String(e)));
  page.on('console',m=>{if(m.type()==='error')console.log('[browser console]',m.text().slice(0,250))});
  await page.goto('http://127.0.0.1:8765/cpp-lab.html',{waitUntil:'domcontentloaded',timeout:30000});
+ const assetResponse=await page.request.get('http://127.0.0.1:8765/clang/runtime-manifest.v1.json');
+ if(!assetResponse.ok()) throw Error('Self-hosted Clang manifest missing');
+ const manifest=await assetResponse.json();
+ if(manifest.compiler?.provenance?.version!=='22.1.8') throw Error('Unexpected pinned toolchain version');
+ await page.evaluate(()=>{
+  window.__masteryStatusHistory=[];
+  const e=document.querySelector('#compileStatus');
+  new MutationObserver(()=>window.__masteryStatusHistory.push(e.textContent||'')).observe(e,{childList:true,characterData:true,subtree:true});
+ });
  let total=0;
  for(const labId of ['two-sum','linked-list','ring','orderbook']){
   await page.locator(`[data-lesson="${labId}"]`).click();
@@ -28,8 +37,10 @@ const {chromium}=require('playwright');
   if(passes!==expected){console.log('COMPILER OUTPUT',diagnostics.slice(0,2300));throw Error('Actual browser Clang/WASM failed for '+labId)}
   total+=passes;
  }
- await browser.close();
  if(errors.length)throw Error('Page errors: '+errors.join('; ').slice(0,800));
  if(total!==30)throw Error('Expected 30 C++20 cases, got '+total);
- console.log('REAL BROWSER CLANG/WASI: ALL '+total+' / 30 C++20 ASSERTIONS PASS');
+ const usedLocal=await page.evaluate(()=>window.__masteryStatusHistory.some(x=>x.includes('assets hosted on Mastery')));
+ if(!usedLocal)throw Error('Browser did not select self-hosted Clang assets');
+ console.log('REAL BROWSER CLANG/WASI: ALL '+total+' / 30 C++20 ASSERTIONS PASS, SELF-HOSTED ASSETS');
+ await browser.close();
 })().catch(e=>{console.error(e);process.exit(1)});
