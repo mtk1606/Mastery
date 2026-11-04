@@ -26,3 +26,7 @@ The site is static. Keep files in the root of `main`; **Settings → Pages → D
 ### Caveats
 
 The platform is an independent educational project, not official instruction from MIT, Harvard, Oxford or Toronto. The user-provided books/papers are curricular references; their copyrighted text is not redistributed. The assessment engine checks numerical values, not free-form mathematical proof. The Avellaneda–Stoikov section presents a simplified model, not trade recommendations. MathJax is an optional externally loaded enhancement; plain-text mathematics remains available if it cannot load.
+
+## Engineering Phase I (new)
+
+Open [Engineering Academy](engineering.html) for independent fast-but-rigorous study paths in DSA interview patterns (10 lectures and 30 official LeetCode practice links), C++20 and low-latency infrastructure (4 lectures), and system design (3 lectures). Six DSA topics include step-by-step state visualizations. Each lesson defines unfamiliar terminology/functions, gives invariant proofs, C++ source code, worked traces, complexity and counterexamples. Progress notes stay locally in your browser. See [Phase roadmap](engineering.html#track=dsa) and `engineering-data.js` for the syllabus. Phase II will expand the coverage and add executable programming checks.
