@@ -1,0 +1,48 @@
+name: Mastery C++/WASM laboratory verification
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'cpp-lab.*'
+      - 'cpp-lessons.js'
+      - 'cpp-wasm-worker.js'
+      - 'cpp-systems-traces.js'
+      - 'vendor/clang-wasm.global.js'
+      - 'tests/native-smoke.cjs'
+      - 'tests/browser-wasm-smoke.cjs'
+      - '.github/workflows/cpp-wasm-ci.yml'
+permissions:
+  contents: read
+jobs:
+  native-cpp20:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Check JavaScript source syntax
+        run: |
+          node --check cpp-lessons.js
+          node --check cpp-lab.js
+          node --check cpp-wasm-worker.js
+          node --check cpp-systems-traces.js
+      - name: Compile C++20 reference implementations and run all native assertions
+        run: node tests/native-smoke.cjs
+  browser-llvm-wasm:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install browser test toolchain
+        run: |
+          npm install --no-save --ignore-scripts playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Serve the static site and compile a real C++ program inside Chromium
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/mastery-http.log 2>&1 &
+          node tests/browser-wasm-smoke.cjs
