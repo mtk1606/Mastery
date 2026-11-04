@@ -5,7 +5,22 @@
  * Licence: @live-codes/clang-wasm MIT; see vendor/THIRD_PARTY.md.
  */
 'use strict';
-const TOOLCHAIN_ASSETS='https://cdn.jsdelivr.net/npm/@live-codes/clang-wasm@0.3.0/assets/';
+const PINNED_CDN='https://cdn.jsdelivr.net/npm/@live-codes/clang-wasm@0.3.0/assets/';
+async function chooseAssets(){
+ const local=new URL('./clang/',self.location.href);
+ try{
+  const resp=await fetch(new URL('runtime-manifest.v1.json',local),{cache:'no-store'});
+  if(resp.ok){
+   const manifest=await resp.json();
+   if(manifest.manifestVersion===1 && manifest.compiler?.provenance?.version==='22.1.8'){
+    emit('status',{message:'Using Clang 22 assets hosted on Mastery’s own site.'});
+    return local.href;
+   }
+  }
+ }catch{}
+ emit('status',{message:'Local compiler assets unavailable; using the pinned 0.3.0 npm CDN.'});
+ return PINNED_CDN;
+}
 let compiler=null;let initializing=null;
 const emit=(type,rest={})=>self.postMessage({type,...rest});
 async function init(){
@@ -15,7 +30,7 @@ async function init(){
   emit('status',{message:'Loading Clang 22 and the C++ standard library (approximately 29 MB on first use)…'});
   importScripts('./vendor/clang-wasm.global.js');
   if(!self.clangWasm || typeof self.clangWasm.createCompiler!=='function') throw Error('Compiler vendor script did not load.');
-  compiler=await self.clangWasm.createCompiler('cpp',{std:'gnu++20',baseUrl:TOOLCHAIN_ASSETS});
+  compiler=await self.clangWasm.createCompiler('cpp',{std:'gnu++20',baseUrl:await chooseAssets()});
   emit('ready',{message:'Clang/WASI runtime ready. Compile and execution stay in this worker.'});
  })().catch(err=>{compiler=null;initializing=null;throw err});
  return initializing;
