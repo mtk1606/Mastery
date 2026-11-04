@@ -78,3 +78,12 @@ Independent educational work guided by the lecture/recitation/problem-set struct
 ### Quality limits
 
 Automated QA: 54/54 browser-DOM interaction checks, syntax checks for modified JS, and a coverage audit confirming 17 engineering + 35 math/quant topics, two original problems each. Browser checks use inlined local assets because local web navigation is restricted in the test environment. This is an incremental educational enhancement, not a claim of formal peer review or exhaustive mathematical proof auditing. No remote code execution, AI grading of free text, or cross-device accounts have been added.
+
+
+## Programming Laboratories — Phase 1 (November 4, 2026)
+
+**Live laboratory:** [Programming Laboratories](labs.html). Eight **JavaScript** exercises run directly in disposable browser Web Workers with **56 actual deterministic tests**, deliberate bug variants, stress cases, results and 6-second timeout. These are browser JavaScript exercises, not C++ compiled in the browser.
+
+**C++20 native projects:** [cpp/](cpp/) contains three compiled and tested projects: two sum, SPSC ring buffer with a 100,000-transfer concurrent test, and a price-time limit order book. Each has a student TODO header, separate reference solution and native CTest; a C++ microbenchmark reports local p50/p95/p99 observations. Reference C++ suite passed Debug, Release and ASan/UBSan on the development Linux toolchain. Incomplete student variants intentionally fail until implemented.
+
+The website preserves its Light/Dark setting, carries no learning locks, and exports/restores local laboratory drafts. A third-party C++ browser compiler link is optional and cannot replace the native verification suite. See [laboratory instructions](labs.html), [C++ setup](cpp/README.md) and [lab QA report](PROGRAMMING_LABS_QA.md). No live backend, user-account sync, AI grading of proofs, or server-hosted arbitrary C++ execution has been added. This is an independently authored course project, not affiliated with any university or trading firm.
