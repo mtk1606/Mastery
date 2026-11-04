@@ -1,0 +1,15 @@
+<PARSED TEXT FOR SHEET: 1 / 1 TABS
+TAB NAME: session.csv>
+index,seq,kind,id,side,price,quantity
+0,1,limit,1,buy,99,5
+1,2,limit,2,sell,104,7
+2,3,limit,3,buy,101,3
+3,4,limit,4,sell,101,1
+4,5,cancel,1,buy,0,0
+5,6,limit,5,sell,103,8
+6,7,market,6,buy,0,3
+7,8,limit,7,buy,100,6
+8,9,limit,8,sell,102,2
+9,10,cancel,5,buy,0,0
+10,11,market,9,sell,0,4
+11,12,limit,10,sell,105,4
