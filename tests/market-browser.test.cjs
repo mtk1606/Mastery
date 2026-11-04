@@ -31,7 +31,7 @@ const {chromium}=require('playwright');
  await page.locator('input[data-check]').first().check();
  await page.reload();
  assert.match(await page.locator('#designDraft').inputValue(),/durable journal/);
- assert(await page.locator('input[data-check]').first.isChecked());
+ assert(await page.locator('input[data-check]').first().isChecked());
  await page.locator('button[data-route="performance"]').click();
  await page.waitForSelector('#capResult');
  assert.match(await page.locator('#coursePanel').textContent(),/No benchmark report/);
