@@ -15,7 +15,7 @@ This release adds **real browser-side C++20 compilation** to the [Mastery](https
 ## Browser C++ compiler and dependencies
 
 - [@live-codes/clang-wasm](https://github.com/live-codes/clang-wasm), **0.3.0**. Its MIT-licensed ~303 KB IIFE compiler wrapper is stored under `vendor/clang-wasm.global.js`, with upstream licence and third-party notices.
-- Browser runtime assets are resolved from a pinned npm CDN folder: `https://cdn.jsdelivr.net/npm/@live-codes/clang-wasm@0.3.0/assets/`. This is an external dependency for now, **not yet full asset self-hosting**. First-time initialization downloads approximately 29 MB compressed into the browser; later runs reuse the initialized worker.
+- Browser runtime assets are **now hosted under Mastery's own `clang/` directory** (29 MB compressed), installed by a GitHub Actions vendor job. When that local manifest is unavailable, the runner falls back to the pinned npm CDN folder: `https://cdn.jsdelivr.net/npm/@live-codes/clang-wasm@0.3.0/assets/`. The local assets were published in GitHub under `clang/`, and the runner selects them first. CDN access is a deliberate fallback. First-time initialization downloads approximately 29 MB compressed into the browser; later runs reuse the initialized worker.
 - For a fully self-hosted build, run `npx --package @live-codes/clang-wasm@0.3.0 clang-wasm-copy-assets ./clang`, make that `/clang/` folder accessible on the same origin, then change `TOOLCHAIN_ASSETS` in `cpp-wasm-worker.js` to `new URL('./clang/', self.location.href).href`. The package produces `asset-receipts.json` for reproducibility. Automating deployment of those assets is the next infrastructure step.
 - The browser uses a WASI `wasm32` target. It cannot emulate native C++ threading or realistically measure native exchange latency, PMU counters, or sanitizer findings. Use Linux native Debug/Release/ASan/UBSan project testing for those.
 
@@ -27,7 +27,7 @@ python3 -m http.server 8765
 node tests/native-smoke.cjs   # requires g++ with C++20
 ```
 
-GitHub Actions runs native reference validation automatically and separately performs an **actual Chromium compiler smoke test** that compiles/executes the two-sum reference through Clang/WASI. These checks must pass before we claim end-to-end browser compilers are healthy.
+GitHub Actions runs native reference validation automatically and separately performs an **actual Chromium compiler smoke test** that compiles/executes the two-sum reference through Clang/WASI. The full 30-case Chromium smoke now verifies that the local Clang 22.1.8 assets are selected, not the CDN fallback.
 
 ## Security and scope
 
