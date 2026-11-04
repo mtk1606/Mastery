@@ -1,0 +1,42 @@
+name: Vendor pinned Clang/WASM compiler assets
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - '.github/workflows/vendor-clang-assets.yml'
+permissions:
+  contents: write
+jobs:
+  vendor-toolchain:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Copy the fixed, audited npm compiler asset release
+        run: |
+          npm exec --yes --package=@live-codes/clang-wasm@0.3.0 -- clang-wasm-copy-assets ./clang
+          test -s clang/runtime-manifest.v1.json
+          test -s clang/bin/clang.wasm.gz
+          test -s clang/bin/lld.wasm.gz
+          test -s clang/bin/memfs.wasm.gz
+          test -s clang/bin/sysroot.tar.gz
+          node -e "const m=require('./clang/runtime-manifest.v1.json'); if(m.manifestVersion!==1||m.compiler?.provenance?.version!=='22.1.8')process.exit(1)"
+          du -h clang/bin/*
+      - name: Commit static assets so GitHub Pages can serve them without an external compiler host
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add clang
+          if git diff --cached --quiet; then
+            echo "Pinned compiler assets are already committed."
+          else
+            git commit -m "Vendor Clang 22.1.8 WASM assets for independent static hosting"
+            git pull --rebase origin main
+            git push origin HEAD:main
+          fi
