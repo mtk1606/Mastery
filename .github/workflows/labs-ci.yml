@@ -1,0 +1,42 @@
+name: Mastery programming labs tests
+on:
+  push:
+    paths:
+      - 'labs*'
+      - 'cpp/**'
+      - 'tests/labs_reference.test.cjs'
+      - '.github/workflows/labs-ci.yml'
+  pull_request:
+    paths:
+      - 'labs*'
+      - 'cpp/**'
+      - 'tests/labs_reference.test.cjs'
+      - '.github/workflows/labs-ci.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  browser-reference:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate browser JavaScript syntax
+        run: |
+          node --check labs.js
+          node --check labs-worker.js
+          node --check labs-data.js
+      - name: Run all deterministic reference cases
+        run: node tests/labs_reference.test.cjs
+  cpp20-native:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure C++20 reference tests
+        run: cmake -S cpp -B cpp/build -DCMAKE_BUILD_TYPE=Debug
+      - name: Build native references
+        run: cmake --build cpp/build --parallel 2
+      - name: Run native CTest suite
+        run: ctest --test-dir cpp/build --output-on-failure
