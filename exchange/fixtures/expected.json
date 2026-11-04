@@ -1,0 +1,10 @@
+{
+  "events": 12,
+  "accepted": 12,
+  "rejected": 0,
+  "fills": 4,
+  "active": 4,
+  "bestBid": 100,
+  "bestAsk": 102,
+  "fnv1a64": "15719539211984847471"
+}
