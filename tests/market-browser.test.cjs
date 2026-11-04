@@ -28,7 +28,7 @@ const {chromium}=require('playwright');
  assert(await page.locator('#designHint').isVisible());
  await page.locator('[data-reveal-design]').click();
  assert.match(await page.locator('#coursePanel').textContent(),/Instructor's worked design/);
- await page.locator('input[data-check]').first.check();
+ await page.locator('input[data-check]').first().check();
  await page.reload();
  assert.match(await page.locator('#designDraft').inputValue(),/durable journal/);
  assert(await page.locator('input[data-check]').first.isChecked());
