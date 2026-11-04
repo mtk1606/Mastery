@@ -13,7 +13,7 @@ const {chromium}=require('playwright');
  await page.waitForFunction(()=>{
    const status=document.querySelector('#compileStatus')?.textContent||'';
    return status.includes('All 9 C++20 tests passed.') || status.includes('Worker error') || status.includes('Compiler installation:') || status.includes('exceeded 45 seconds') || status.includes('initialization timed out');
- },{timeout:210000});
+ },null,{timeout:210000});
  const status=await page.locator('#compileStatus').innerText();
  const diagnostics=await page.locator('#cppConsole').innerText();
  console.log('STATUS',status);console.log('COMPILER OUTPUT',diagnostics.slice(0,2500));
