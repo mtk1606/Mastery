@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#ffffff">
+<meta name="description" content="Mastery C++20 laboratories: a browser-based Clang/WebAssembly compiler, verified test cases, diagrams of memory and market systems, and native benchmark methodology.">
+<title>C++20 & Market Systems Laboratory | Mastery</title>
+<script src="theme.js"></script>
+<link rel="stylesheet" href="academic.css"><link rel="stylesheet" href="cpp-lab.css">
+</head>
+<body>
+<header class="campus-header">
+ <a class="campus-brand" href="index.html#/">mastery <small>/ computer science</small></a>
+ <nav aria-label="Primary"><a href="index.html#/">Catalogue</a><a href="engineering.html">Course lectures</a><a href="labs.html">JavaScript labs</a><a href="cpp-lab.html" aria-current="page">C++20 laboratory</a></nav>
+ <div class="theme-switch" role="group" aria-label="Colour theme"><button type="button" data-set-theme="light">Light</button><button type="button" data-set-theme="dark">Dark</button></div>
+</header>
+<main>
+ <section class="course-header">
+  <p class="eyebrow">COMPUTER SCIENCE / ADVANCED PRACTICAL WORK · PHASE II</p>
+  <h1>Modern C++ and market systems.</h1>
+  <p>Read the specification, implement a function or data structure, compile with Clang targeting WebAssembly, and explain what each state transition means. Then compare the result with a model solution and the native engineering projects.</p>
+  <div class="course-meta"><span>4 executable C++20 studies</span><span>30 deterministic test cases</span><span>Reference diagrams and memory traces</span><span>Open access · no grades required</span></div>
+  <div class="toolchain-info"><strong>About the compiler:</strong> The first run downloads about 29 MB of pinned Clang/WASI assets from a third-party CDN. Source is compiled and executed inside a disposable browser worker, not uploaded to a Mastery server. C++ threads, real hardware counters, sanitizers, sockets and native latency measurements are <strong>not</strong> supported in this browser environment; use the included native projects for those.</div>
+ </section>
+ <div class="learning-layout">
+  <aside class="syllabus" aria-label="C++ laboratory syllabus">
+   <h2>Laboratory sequence</h2>
+   <nav id="cppLessons"></nav>
+   <div class="syllabus-tools"><button id="exportCpp" type="button">Export code & notes</button><label for="importCpp">Import backup</label><input id="importCpp" type="file" accept="application/json" hidden></div>
+   <p class="quiet">Work is saved in this browser, independent of other Mastery courses.</p>
+  </aside>
+  <div class="teaching-pane">
+   <div id="cppLecture"></div>
+   <section class="reference-trace" aria-labelledby="traceHeading">
+    <div class="section-heading"><div><p class="eyebrow">REFERENCE MODEL · NOT YOUR PROGRAM'S TRACE</p><h2 id="traceHeading">Follow the state, one step at a time.</h2></div></div>
+    <div id="traceStage" class="trace-stage"></div>
+    <div class="trace-controls"><button type="button" id="tracePrev">← Previous</button><span id="traceCounter" aria-live="polite"></span><button type="button" id="traceNext">Next →</button></div>
+   </section>
+   <section class="workspace" id="workspace" aria-labelledby="workspaceHeading">
+    <div class="section-heading"><div><p class="eyebrow">IMPLEMENT · COMPILE · TEST</p><h2 id="workspaceHeading">C++20 workspace</h2></div><span class="env-label">Clang 22 · wasm32-WASI</span></div>
+    <div class="editor-bar"><span id="functionSignature">Function</span><span>Editable C++20 · standard library</span></div>
+    <label for="cppEditor" class="visually-hidden">C++ source code</label>
+    <div class="editor-shell"><pre id="editorLines" aria-hidden="true">1</pre><textarea id="cppEditor" spellcheck="false" autocomplete="off" autocapitalize="off" wrap="off" aria-describedby="cppEditorHelp"></textarea></div>
+    <p class="quiet" id="cppEditorHelp">Write the implementation only. Mastery supplies its own test harness, includes, and main function. Ctrl/Cmd+Enter runs tests; Tab inserts four spaces.</p>
+    <div class="editor-actions"><button type="button" id="runCpp" class="primary">Compile & run tests</button><button type="button" id="stopCpp">Stop</button><button type="button" id="resetCpp">Reset starter</button><button type="button" id="downloadCpp">Download .cpp</button></div>
+    <div id="compileStatus" class="compile-status" role="status" aria-live="polite">Compiler will load on first run.</div>
+    <div class="results-layout"><div><h3>Verification cases</h3><div id="cppCases" class="testcases"></div></div><div><h3>Compiler output</h3><pre id="cppConsole" class="console" role="log" aria-live="polite">No output yet.</pre></div></div>
+   </section>
+   <section class="postlab" aria-labelledby="analysisHeading"><p class="eyebrow">REASON ABOUT THE RESULT</p><h2 id="analysisHeading">Engineering notes and reflection</h2><p id="discussionPrompt"></p><textarea id="cppNotes" rows="4" aria-label="Your explanation and debugging notes" placeholder="Explain the invariant, identify a failure case, and describe how you would verify the implementation..."></textarea><div class="postlab-actions"><details><summary>Instructor's reference implementation</summary><p>Compare only after attempting the exercise. Multiple correct solutions are possible.</p><pre id="cppReference"></pre></details><a href="cpp/README.md" target="_blank" rel="noopener noreferrer">Run native C++ tests & benchmarks ↗</a></div></section>
+   <section class="bench-lab" aria-labelledby="benchHeading"><p class="eyebrow">EXPERIMENT · REFERENCE MODEL ONLY</p><h2 id="benchHeading">Deterministic event replay and performance</h2><p>Run a simple JavaScript reference order-book replay to explore distributional measurements. This <strong>does not benchmark your submitted C++</strong> and does not predict exchange-server latency. For actual C++ performance, compile the native <a href="cpp/bench/bench.cpp">benchmark harness</a> on your machine.</p><div class="bench-action"><label for="benchEvents">Events</label><select id="benchEvents"><option value="1000">1,000</option><option value="10000">10,000</option><option value="50000">50,000</option></select><button id="benchRun" type="button">Run browser reference benchmark</button></div><div id="benchResults" class="bench-results" aria-live="polite">No measurements yet.</div></section>
+  </div>
+ </div>
+</main>
+<footer class="campus-footer">Mastery / Independent university-style courseware <span>Not affiliated with a university or trading firm</span><a href="engineering.html">Computer science</a></footer>
+<script src="cpp-lessons.js"></script><script src="cpp-systems-traces.js"></script><script src="cpp-lab.js"></script>
+</body>
+</html>
