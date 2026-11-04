@@ -64,9 +64,9 @@ Bring every engineering lesson up to the flagship-seminar standard, then build a
 
 The academic learning layer is **implemented** in `academic-labs.js` and `academic-labs.css`, reused by both the Math/Quant site and the Engineering Academy.
 
-- **31 topics now have two new independent recitation problems each (62 total)**, with two progressive hints, an original worked solution, and an explicit reasoning checklist.
+- **All 52 lectures now have two independent recitation problems each (104 total)**, with two progressive hints, an original worked solution, and an explicit reasoning checklist.
 - **All 17 Engineering lectures now have recitations.** The 12 previously lighter Engineering lessons also receive a companion extension covering assumptions, derivation or correctness, an exact worked example, and a failure case. The existing five long-form faculty seminars are retained.
-- **14 selected Math/Quant lectures** now have these extra recitations, including counting, Bayes, expected value, recursive states, linear algebra, regression, inference, distributions, order-book execution, and Avellaneda–Stoikov. The other Math/Quant lectures retain their existing substantial seminars and assessments, and are not falsely claimed to have new recitations.
+- **All 35 Math/Quant lectures** now have two extra recitations each, including proofs, calculations, modeling limits, and harder transfer problems.
 - Written responses are saved as local drafts; the existing course progress exporters now include them as `workshopAnswers`. Restores accept older progress formats without discarding unrelated saved drafts.
 - Written proofs and architecture answers are **not automatically graded**. Students reveal model reasoning and use a checklist to review their work; numerical quick-checks remain distinct.
 - **No grading gates, forced retakes or locked lessons.** Optional figures remain optional. Light and Dark themes are unchanged.
@@ -77,4 +77,4 @@ Independent educational work guided by the lecture/recitation/problem-set struct
 
 ### Quality limits
 
-Automated QA: 26/26 browser-DOM interaction checks, syntax checks for modified JS, and a data audit confirming 17 engineering + 14 selected math/quant topics, two new tasks each. Browser checks use inlined local assets because local web navigation is restricted in the test environment. This is an incremental educational enhancement, not a claim of formal peer review or exhaustive mathematical proof auditing. No remote code execution, AI grading of free text, or cross-device accounts have been added.
+Automated QA: 54/54 browser-DOM interaction checks, syntax checks for modified JS, and a coverage audit confirming 17 engineering + 35 math/quant topics, two original problems each. Browser checks use inlined local assets because local web navigation is restricted in the test environment. This is an incremental educational enhancement, not a claim of formal peer review or exhaustive mathematical proof auditing. No remote code execution, AI grading of free text, or cross-device accounts have been added.
