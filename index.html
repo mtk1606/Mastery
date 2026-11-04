@@ -3,31 +3,34 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#0c1119" />
+  <meta name="theme-color" content="#ffffff" />
   <meta name="description" content="An open mathematical and quantitative finance academy featuring proofs, worked problems, critical assumptions, and independent practice." />
-  <title>AXIOM Studio · Mathematical and Quantitative Learning</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=DM+Mono:wght@400;500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet" />
+  <title>Mastery | Open courses in mathematics, computing and quantitative finance</title>
+  <script src="theme.js"></script>
   <link href="styles.css" rel="stylesheet" />
   <link href="dark.css" rel="stylesheet" />
   <link href="scholar.css" rel="stylesheet" />
+  <link href="academic.css" rel="stylesheet" />
 </head>
 <body>
   <div class="site-shell">
     <header class="site-header">
-      <a class="brand" href="#/" aria-label="Axiom Studio home"><span class="brand-glyph">a<span>.</span></span><span>axiom<span class="brand-light">/studio</span></span></a>
+      <a class="brand" href="#/" aria-label="Mastery course catalogue">mastery <span class="brand-light">/ open courses</span></a>
       <nav class="top-links" aria-label="Main navigation">
-        <a data-section="math" href="#/math">Math prerequisites</a>
-        <a data-section="quant" href="#/quant">Quant academy</a>
-        <a data-section="practice" href="#/practice">Practice & exams</a>
-        <a data-section="engineering" href="engineering.html">Engineering</a>
+        <a data-section="math" href="#/math">Mathematics</a>
+        <a data-section="quant" href="#/quant">Quantitative finance</a>
+        <a data-section="engineering" href="engineering.html">Computer science</a>
+        <a data-section="practice" href="#/practice">Assessments</a>
       </nav>
+      <div class="theme-switch" role="group" aria-label="Colour theme">
+        <button type="button" data-set-theme="light" aria-pressed="true">Light</button>
+        <button type="button" data-set-theme="dark" aria-pressed="false">Dark</button>
+      </div>
       <button class="menu-toggle" aria-label="Show navigation" aria-expanded="false">☰</button>
-      <div class="header-progress"><span class="progress-ring" aria-hidden="true"></span><span id="headerCount">0 mastered</span></div>
+      <div class="header-progress" aria-hidden="true"><span class="progress-ring"></span><span id="headerCount">0 studied</span></div>
     </header>
     <main id="page" tabindex="-1"></main>
-    <footer class="footer"><span class="foot-brand">axiom<span>.</span> studio</span><span>Define → derive → question → apply.</span><span>Open academic learning. Nothing is locked.</span></footer>
+    <footer class="footer"><span class="foot-brand">Mastery / Independent course library</span><span>Lectures · Worked examples · Problem sets</span><span>Independent study. All courses open.</span></footer>
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
   </div>
   <script>window.MathJax={tex:{inlineMath:[["\\(","\\)"]],displayMath:[["\\[","\\]"]]}};</script>
