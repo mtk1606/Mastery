@@ -35,7 +35,7 @@ const assert=require('node:assert/strict'),{chromium}=require('playwright');
  await page.locator('.menu-toggle').click();
  assert(await page.locator('.top-links').evaluate(n=>n.classList.contains('mobile-open')));
  await page.locator('.top-links a[href="focus.html"]').click();
- await page.locator('.f-headline h1').waitFor();
+ await page.locator('.f-sprint-title').waitFor();
  assert.deepEqual(errors,[]);
  await browser.close();console.log('PASS Focus browser: 3-stage real checks, feedback, recap, evidence counts, export, dark theme, narrow mobile, due review priority');
 })().catch(e=>{console.error(e);process.exit(1)});

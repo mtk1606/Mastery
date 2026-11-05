@@ -30,7 +30,7 @@ const {chromium}=require('playwright');
  await page.locator('#p7Answer').fill('Reject a complete WAL record if its checksum mismatches.');
  await page.locator('[data-route="snapshot"]').click();assert.match(await page.locator('#p7Reader h2').innerText(),/Checkpoint/);
  await page.locator('#p7Answer').fill('Snapshot after fsync must preserve request receipts.');
- await page.reload();assert.match(await page.locator('[data-route="snapshot"]').count()+'','1');
+ await page.reload();assert.equal(await page.locator('[data-route="snapshot"]').count(),1);
  for(const p of ['phase6.html','phase5.html','cpp-lab.html','market-systems.html']){const response=await page.request.get(base+p);assert.ok(response.ok(),p+' missing');}
  assert.equal(errs.length,0,errs.join('\n'));
  console.log('REAL HTTP CHROMIUM PASS: 25 linked interviews, company filter, timer, grade, notes, export+restore, dark theme, mobile, six fault labs and legacy routes');
