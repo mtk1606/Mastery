@@ -1,0 +1,63 @@
+name: Mastery Phase XII — career pathways and real Python
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'roadmap*'
+      - 'python-lab*'
+      - 'ROADMAP_LEARNING_STANDARD.md'
+      - 'tests/roadmap-*'
+      - 'tests/python-lab-*'
+      - 'index.html'
+      - 'app.js'
+      - '.github/workflows/roadmap-ci.yml'
+permissions:
+  contents: read
+jobs:
+  evidence-and-correctness:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - name: Validate data shape, routes, references and original lab fixtures
+        run: |
+          node --check roadmap-data.js
+          node --check roadmap.js
+          node --check python-lab-data.js
+          node --check python-lab.js
+          node --check python-lab-worker.js
+          node tests/roadmap-reference.test.cjs
+          node -e 'const bank=require("./python-lab-data.js"); process.stdout.write(JSON.stringify(bank.tasks))' | python3 tests/roadmap-oracles.py
+  real-browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - name: Install pinned browser runtime
+        run: |
+          npm install --no-save --no-package-lock playwright@1.56.1
+          npx playwright install chromium
+      - name: Verify three-track journey and responsive interface
+        run: |
+          python3 -m http.server 8897 --bind 127.0.0.1 >/tmp/mastery-roadmap-http.log 2>&1 &
+          node tests/roadmap-browser.test.cjs
+  live-cpython:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - name: Install pinned browser runtime
+        run: |
+          npm install --no-save --no-package-lock playwright@1.56.1
+          npx playwright install chromium
+      - name: Verify real CPython Web Worker, source invalidation and assisted evidence
+        run: |
+          python3 -m http.server 8897 --bind 127.0.0.1 >/tmp/mastery-cpython-http.log 2>&1 &
+          node tests/python-lab-browser.test.cjs
