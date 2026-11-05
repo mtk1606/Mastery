@@ -104,3 +104,12 @@ The browser runner's ~303 KB MIT-licensed JavaScript wrapper is vendored with no
 **System design learning:** Three specification-driven architecture studios include failure requirements, worked designs, gradual hints and self-review criteria. A fanout capacity worksheet supports quantitative estimates. No lesson locks, and all free-text work remains local with export/restore. Light/Dark themes are shared with the existing courses.
 
 **Quality and limitations:** GitHub Actions workflow `.github/workflows/market-systems-ci.yml` compiles and tests the native simulator, verifies a deterministic C++ / browser reference checksum, and performs a real browser HTTP journey test. The visualizer is a distinct JavaScript reference model, not an instrumented C++ debugger. This system is educational and not suitable for live securities execution. See [Phases III–IV roadmap](MARKET_SYSTEMS_PHASES_3_4.md) and [C++ README](exchange/README.md).
+
+
+## Phase V — Reliability engineering and interview simulations (November 2026)
+
+The [Phase V course](phase5.html) adds **six original faculty-style lectures** (multi-symbol routing, checkpoint+delta recovery, leader epoch fencing, backpressure, property testing, and performance measurement), **two interactive reference laboratories** (snapshot/sequence-fault recovery and bounded subscriber queues), and **four timed SWE/quant-dev/low-latency/system-design interview rounds** with optional pauses, full solutions, explicit self-review criteria, local notes and JSON export/import. All lessons are open and have the shared Light/Dark design.
+
+The new native [Phase V C++20 project](phase5/README.md) extends `Exchange` with FIFO-preserving snapshot export/import. Its independently testable `Venue` routes globally sequenced messages to per-symbol books, validates checksummed logical checkpoints before swapping state, rejects stale epochs, and models bounded all-or-nothing fanout. Native tests cover a pinned cross-language checkpoint and golden hash, corrupted/torn checkpoints, 4,000 seeded messages, sequence gaps and queue saturation. The browser uses a separately written JavaScript reference and does **not** trace arbitrary C++ program execution.
+
+[Phase V CI](.github/workflows/phase5-ci.yml) compiles/tests with sanitizers and runs actual HTTP/Chromium browser flows. The course is educational—not a crash-durable distributed exchange or a source of proprietary interview questions. Details in [Phase V source notes](phase5/README.md) and [release QA report](PHASE5_QA.md).
