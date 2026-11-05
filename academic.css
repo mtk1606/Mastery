@@ -193,3 +193,6 @@ html[data-theme] .start-mastery,html[data-theme] .exercise-card,html[data-theme]
 html[data-theme] .start-mastery strong,html[data-theme] .exercise-card h3,html[data-theme] .pass-result h2,html[data-theme] .pass-result h3,html[data-theme] .retake-prompt h2,html[data-theme] .retake-prompt h3{color:var(--ink)!important}
 html[data-theme] .start-mastery p,html[data-theme] .pass-result p,html[data-theme] .retake-prompt p,html[data-theme] .feedback p{color:var(--muted)!important}
 html[data-theme] .feedback,html[data-theme] .exercise-card .feedback{background:var(--surface-alt)!important;color:var(--ink)!important;border-color:var(--line)!important}
+
+/* Navigation clarity: the mobile catalogue menu inherits both theme palettes. */
+@media(max-width:790px){.site-header .top-links.mobile-open{background:var(--surface)!important;color:var(--ink);border-color:var(--line)!important}.site-header .top-links.mobile-open a{color:var(--ink)!important;min-height:44px;display:flex;align-items:center}}

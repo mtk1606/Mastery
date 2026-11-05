@@ -2,6 +2,20 @@
 
 **Live website:** https://mtk1606.github.io/Mastery/
 
+**Start practicing:** https://mtk1606.github.io/Mastery/focus.html
+
+## Choose one next action
+
+| Your objective | Start here | Objective evidence |
+|---|---|---|
+| Build daily fluency in ~5 minutes | [Focus learning desk](focus.html) | Three original numeric and reasoning checks, assisted work labelled |
+| Learn foundations deeply | [Mathematics / Quant course library](index.html) | Lectures and optional exams; studied marks are self-reported |
+| Practice real coding and invariants | [C++20 Interview Defense](interview-cpp.html) | Actual Clang/WASM finite-case test runs and separate proof checks |
+| Retrieve sourced algorithm questions | [Readiness Academy](readiness.html) | Community source labels, due reviews and selected Worker-backed JS tests |
+| Simulate interview pressure | [Phase X Interview Arena](phase10.html) | Conditional follow-ups and per-round coding/numeric results |
+
+The Focus page is the recommended entry point; it links to every other track and does not replace the full lessons. All content remains available without progression gates. See [the Focus UX release notes](PHASE11_UX_RELEASE.md) for motivation safeguards and assessment limits.
+
 Mastery is an independent, university-style, open-access learning project. It is not affiliated with Harvard, MIT, Oxford, or a trading firm.
 
 ## Current course catalogue

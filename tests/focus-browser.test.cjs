@@ -1,0 +1,41 @@
+'use strict';
+const assert=require('node:assert/strict'),{chromium}=require('playwright');
+(async()=>{
+ const browser=await chromium.launch({headless:true}),page=await browser.newPage({viewport:{width:1280,height:850},acceptDownloads:true}),errors=[];
+ page.on('pageerror',e=>errors.push(String(e)));
+ await page.goto('http://127.0.0.1:8787/focus.html',{waitUntil:'domcontentloaded'});
+ assert.match(await page.locator('.f-headline h1').innerText(),/One clear win/i);
+ const links=await page.locator('.f-paths a').count();assert.equal(links,6);
+ await page.locator('[data-action="start"]').first().click();
+ for(let i=0;i<3;i++){
+   let cur=await page.evaluate(()=>{const x=JSON.parse(localStorage.getItem('mastery-focus-v1'));return x.active.tasks[x.active.position]});
+   await page.locator('#fAnswer').fill(String(i===1?cur.answer+33:cur.answer));
+   await page.locator('input[name="fWhy"]').nth(cur.correct).check();
+   if(i===2)await page.locator('.f-hint summary').click();
+   await page.locator('[data-action="check"]').click();
+   assert.match(await page.locator('#fFeedback').innerText(),i===1?/precise correction/:/Both checks correct/);
+   assert(await page.locator('#fFeedback a').getAttribute('href'));
+   await page.locator('[data-action="next"]').click();
+ }
+ assert.match(await page.locator('.f-celebrate h1').innerText(),/One more layer/);
+ const state=await page.evaluate(()=>JSON.parse(localStorage.getItem('mastery-focus-v1')));
+ assert.equal(state.attempts.length,3);assert.equal(state.attempts.filter(x=>x.correct).length,2);assert.equal(state.completed,1);assert.equal(state.attempts[2].assisted,true);assert.equal(state.attempts[0].assisted,false);
+ assert(Object.keys(state.due).length===3);assert.equal(state.active,null);
+ await page.locator('[data-action="overview"]').click();
+ assert.match(await page.locator('.f-stats').innerText(),/2 \/ 3/);
+ const dl=page.waitForEvent('download');await page.locator('[data-action="export"]').click();assert.equal((await dl).suggestedFilename(),'mastery-focus-progress.json');
+ await page.locator('[data-set-theme="dark"]').first().click();assert.equal(await page.locator('html').getAttribute('data-theme'),'dark');
+ await page.setViewportSize({width:390,height:844});assert(await page.evaluate(()=>document.body.scrollWidth<=innerWidth+2),'Mobile horizontal overflow');
+ await page.evaluate(()=>{const s=JSON.parse(localStorage.getItem('mastery-focus-v1'));s.due.bayes=Date.now()-5;localStorage.setItem('mastery-focus-v1',JSON.stringify(s));});
+ await page.reload();await page.locator('[data-action="start"]').first().click();
+ const first=await page.evaluate(()=>JSON.parse(localStorage.getItem('mastery-focus-v1')).active.tasks[0].id);assert.equal(first,'bayes');
+ await page.goto('http://127.0.0.1:8787/index.html#/',{waitUntil:'domcontentloaded'});
+ assert.equal(await page.locator('.top-links a').count(),6);
+ assert.match(await page.locator('.campus-actions').innerText(),/5-minute practice sprint/);
+ await page.locator('.menu-toggle').click();
+ assert(await page.locator('.top-links').evaluate(n=>n.classList.contains('mobile-open')));
+ await page.locator('.top-links a[href="focus.html"]').click();
+ await page.locator('.f-headline h1').waitFor();
+ assert.deepEqual(errors,[]);
+ await browser.close();console.log('PASS Focus browser: 3-stage real checks, feedback, recap, evidence counts, export, dark theme, narrow mobile, due review priority');
+})().catch(e=>{console.error(e);process.exit(1)});
