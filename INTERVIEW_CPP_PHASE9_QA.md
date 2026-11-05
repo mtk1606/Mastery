@@ -36,3 +36,11 @@ A further four foundation C++20 labs remain available at `cpp-lab.html`, making 
 ## Next educational phase
 
 An interviewer-agent-style dialogue could ask one unexpected constraint at a time, then evaluate executable code, structured proof obligations, and human-reviewed explanations separately. Higher-fidelity future execution requires robust server isolation and user consent, not an unguarded browser script.
+## Final GitHub verification — November 5, 2026
+
+- [Phase IX CI run 42055406405](https://github.com/mtk1606/Mastery/actions/runs/42055406405) **passed both jobs**: 522 native C++ reference test cases across 3 seeds, plus six actual Clang/WASI browser compilations (174 cases on the first seed, and an additional 30-case binary search seed), deliberate invalid-code diagnostics, structured defense, JSON export, Light/Dark and mobile checks.
+- [Existing C++/WASM lab regression](https://github.com/mtk1606/Mastery/actions/runs/42055406447) **passed**.
+- [Phase VIII readiness regression](https://github.com/mtk1606/Mastery/actions/runs/42055406386) **passed**.
+- [GitHub Pages deployment](https://github.com/mtk1606/Mastery/actions/runs/42055405690) **passed** for application commit `7287cd12f3143c83a0ec7ec649e2280ca8aad78e`.
+
+All tests exercise finite, inspectable inputs. This is not a general proof of program correctness or a secure multi-tenant coding judge.
