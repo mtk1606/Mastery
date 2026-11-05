@@ -5,6 +5,8 @@
 'use strict';
 const bank=(root.MasteryVisualScenes||typeof module!=='undefined'&&require('./visual-scenes.js'));
 if(!bank||!bank.validate())throw Error('Visual scene definitions failed validation');
+const math=root.MasteryMathVisuals||(typeof module!=='undefined'&&require('./visual-math.js'));
+const mathRenderer=root.MasteryMathRender||(typeof module!=='undefined'&&require('./visual-math-render.js'));
 const escape=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const N=x=>Number.isFinite(Number(x))?Number(x):0;
 const R=(x,y,w,h,cls='mv-node',rx=13)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${rx}" class="${cls}"/>`;
@@ -129,11 +131,12 @@ function renderDP(f){
 }
 const renderShape=(s,f)=>{
  const fn={bindings:renderBindings,contract:renderContract,compare:renderCompare,flow:renderFlow,capacity:renderCapacity,hash:renderHash,window:renderWindow,binary:renderBinary,bfs:renderBFS,dp:renderDP}[s.kind];
+ if(!fn&&mathRenderer?.kinds.includes(s.kind))return frameSVG(s,f,mathRenderer.render(s,f,{R,T,L,C,P}));
  if(!fn)throw Error('Unknown visual '+s.kind);
  return frameSVG(s,f,fn(f));
 };
 /* Playback UI and deliberately non-credit-bearing prediction probes. */
-const defaults={window:2,binary:2};
+const defaults={window:2,binary:2,induction:4,bayes:1,indicators:3,sampling:{n:100,p:.5},matrix:{transform:'shear',vector:'2,1'},gradient:.1};
 let active=null,playTimer=null;
 const positions=new Map();
 function stop(){if(playTimer){clearInterval(playTimer);playTimer=null;}}
@@ -163,10 +166,15 @@ function binaryFrames(target){
   values,target,lo,hi,mid:null,result});
  return frames;
 }
-function framesFor(s,state){if(s.kind==='window'&&state.param!==defaults.window)return windowFrames(state.param);if(s.kind==='binary'&&state.param!==defaults.binary)return binaryFrames(state.param);return s.frames;}
+function framesFor(s,state){
+ if(mathRenderer?.kinds.includes(s.kind))return math.framesFor(s,state.param);
+ if(s.kind==='window'&&state.param!==defaults.window)return windowFrames(state.param);
+ if(s.kind==='binary'&&state.param!==defaults.binary)return binaryFrames(state.param);
+ return s.frames;
+}
 const control=(value,label,disabled=false)=>`<button type="button" class="mv-btn" data-mv-action="${value}" ${disabled?'disabled':''}>${label}</button>`;
-function optionsHTML(scene,choice){
- const q=scene.challenge,answered=choice!==null,correct=answered&&choice===q.answer;
+function optionsHTML(scene,choice,param){
+ const q=math?.challengeFor?.(scene,param)||scene.challenge,answered=choice!==null,correct=answered&&choice===q.answer;
  return `<div class="mv-prediction" aria-label="Predict the next concept">
  <div class="mv-prediction-head"><span class="mv-kicker-html">TEST YOUR PREDICTION</span><span class="mv-small">Not graded · original example</span></div>
  <p class="mv-question">${escape(q.question)}</p>
@@ -181,7 +189,15 @@ function textSteps(s,frames,at){
  return `<ol class="mv-steps" aria-label="Full accessible state trace">
  ${frames.map((f,i)=>`<li class="mv-step ${at===i?'is-active':''}"><strong>${escape(f.label)}</strong><p>${escape(f.explain)}</p></li>`).join('')}</ol>`;
 }
+const selectField=(label,key,items,current)=>`<label class="mv-param-label">${escape(label)}
+<select data-mv-param="${escape(key)}" aria-label="${escape(label)}">${items.map(([value,name])=>`<option value="${escape(value)}" ${String(current)===String(value)?'selected':''}>${escape(name)}</option>`).join('')}</select></label>`;
 function paramHTML(s,param){
+ if(s.kind==='induction')return selectField('Prove a different induction step','induction',math.choices.induction.map(n=>[n,'n = '+n]),param);
+ if(s.kind==='bayes')return selectField('Change condition prevalence (sensitivity 90%, false-positive rate 10%)','bayes',math.choices.bayes.map(p=>[p,'Prior '+p+'%']),param);
+ if(s.kind==='indicators')return selectField('Change the number of red balls among five','indicators',math.choices.indicators.map(n=>[n,n+' red · '+(5-n)+' blue']),param);
+ if(s.kind==='sampling')return selectField('Independent sample size','sampling-n',math.choices.samplingN.map(n=>[n,'n = '+n]),param.n)+selectField('Bernoulli success probability','sampling-p',math.choices.samplingP.map(p=>[p,'p = '+p]),param.p);
+ if(s.kind==='matrix')return selectField('Change the linear transformation','matrix-transform',math.choices.matrix.map(n=>[n,n]),param.transform)+selectField('Change input vector','matrix-vector',math.choices.matrixVector.map(x=>[x,'v = ('+x+')']),param.vector);
+ if(s.kind==='gradient')return selectField('Experiment with learning rate η','gradient',math.choices.gradient.map(x=>[x,'η = '+x]),param);
  if(s.kind==='window')return `<label class="mv-param-label">Try changing the window size:
  <select data-mv-param="window" aria-label="Sliding-window width">${[1,2,3,4].map(k=>`<option value="${k}" ${param===k?'selected':''}>k = ${k}</option>`).join('')}</select></label>`;
  if(s.kind==='binary')return `<label class="mv-param-label">Try another search target:
@@ -212,7 +228,7 @@ function draw(){
  <div class="mv-explanation" aria-live="polite" aria-atomic="true"><div class="mv-explanation-label">WHAT CHANGED AT THIS STEP</div>
  <strong>${escape(f.label)}</strong><p>${escape(f.explain)}</p></div>
  ${paramHTML(scene,state.param)}
- ${optionsHTML(scene,state.choice)}
+ ${optionsHTML(scene,state.choice,state.param)}
  <div class="mv-footer"><span><strong>Textbook principle:</strong> ${escape(scene.source)}. Original diagram, not a reproduced textbook figure.</span>
  <span>Motion is user-controlled; predicted answers earn no mastery credit.</span></div>
  </section>`;
@@ -252,9 +268,17 @@ function mount(host,id){
   });
   host.addEventListener('change',event=>{
    if(!active||active.host!==host)return;
-   const p=event.target.dataset.mvParam,k=Number(event.target.value);
-   if(p==='window'&&Number.isInteger(k)&&k>=1&&k<=4||p==='binary'&&[0,1,2,3,4,5,6].includes(k)){
-    stop();active.state.param=k;active.state.index=0;active.state.choice=null;draw();
+   const p=event.target.dataset.mvParam,raw=event.target.value,k=Number(raw),current=active.state.param;
+   let next=null;
+   if(p==='window'&&Number.isInteger(k)&&k>=1&&k<=4)next=k;
+   else if(p==='binary'&&[0,1,2,3,4,5,6].includes(k))next=k;
+   else if(['induction','bayes','indicators','gradient'].includes(p)&&math.choices[p]?.includes(k))next=k;
+   else if(p==='sampling-n'&&math.choices.samplingN.includes(k))next={...current,n:k};
+   else if(p==='sampling-p'&&math.choices.samplingP.includes(k))next={...current,p:k};
+   else if(p==='matrix-transform'&&math.choices.matrix.includes(raw))next={...current,transform:raw};
+   else if(p==='matrix-vector'&&math.choices.matrixVector.includes(raw))next={...current,vector:raw};
+   if(next!==null){
+    stop();active.state.param=next;active.state.index=0;active.state.choice=null;draw();
    }
   });
  }

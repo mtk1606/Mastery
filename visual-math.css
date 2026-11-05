@@ -1,0 +1,24 @@
+/* Phase XIV-C: six grounded mathematical SVG diagrams. All graphics are original. */
+.mv-svg .mv-math-base{fill:var(--mv-alt);stroke:var(--mv-line);stroke-width:1.2}
+.mv-svg .mv-math-highlight{fill:color-mix(in srgb,var(--mv-bg) 65%,var(--mv-accent));stroke:var(--mv-accent);stroke-width:1.6}
+.mv-svg .mv-math-dot{font-size:19px;fill:var(--mv-ink);font-weight:600}
+.mv-svg .mv-math-value{font-size:22px;font-weight:725;fill:var(--mv-ink)}
+.mv-svg .mv-urn-red{fill:color-mix(in srgb,var(--mv-bg) 56%,#b86562);stroke:#ad6563;stroke-width:1.8}
+.mv-svg .mv-urn-blue{fill:color-mix(in srgb,var(--mv-bg) 60%,#659aba);stroke:#659aba;stroke-width:1.8}
+.mv-svg .mv-math-curve{fill:none;stroke:var(--mv-accent);stroke-width:2.7;stroke-linejoin:round;stroke-linecap:round}
+.mv-svg .mv-math-point{fill:var(--mv-accent);stroke:var(--mv-bg);stroke-width:.6}
+.mv-svg .mv-math-mean{stroke:var(--mv-accent);stroke-width:2;stroke-dasharray:6 4}
+.mv-svg .mv-math-guide{stroke:var(--mv-muted);stroke-width:1.5;stroke-dasharray:4 5}
+.mv-svg .mv-math-band{fill:color-mix(in srgb,transparent 82%,var(--mv-accent));stroke:transparent;stroke-width:0}
+.mv-svg .mv-math-grid{stroke:var(--mv-line);stroke-width:.7;opacity:.48}
+.mv-svg .mv-math-input{stroke:#75a4c4;stroke-width:3.2;fill:none;marker-end:url(#mvArrow)}
+.mv-svg .mv-math-output{stroke:var(--mv-accent);stroke-width:3.5;fill:none;marker-end:url(#mvArrow)}
+.mv-svg .mv-math-basis-a{stroke:#b17caa;stroke-width:2.2;fill:none}
+.mv-svg .mv-math-basis-b{stroke:#66aaa1;stroke-width:2.2;fill:none}
+.mv-svg .mv-math-parallelogram{fill:color-mix(in srgb,transparent 87%,var(--mv-accent));stroke:var(--mv-accent);stroke-width:1.2;stroke-dasharray:4 4}
+.mv-svg .mv-math-vector-text{font-size:13px;fill:var(--mv-ink);font-weight:750}
+.mv-svg .mv-math-start{fill:#75a4c4;stroke:var(--mv-bg);stroke-width:1.5}
+.mv-svg .mv-math-finish{fill:var(--mv-accent);stroke:var(--mv-bg);stroke-width:1.5}
+.mv-svg .mv-math-update{fill:none;stroke:var(--mv-accent);stroke-width:2;stroke-dasharray:5 4}
+.mv-param-label+ .mv-param-label{border-top:0}
+@media(prefers-reduced-motion:reduce){.mv-svg *{transition:none!important;animation:none!important}}

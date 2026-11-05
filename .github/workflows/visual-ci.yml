@@ -9,22 +9,26 @@ on:
       - 'foundation.js'
       - 'VISUAL_LEARNING_PHASE14.md'
       - 'tests/visual-*'
+      - 'tests/math-*'
       - '.github/workflows/visual-ci.yml'
 permissions:
   contents: read
 jobs:
   pure-models:
     runs-on: ubuntu-24.04
-    timeout-minutes: 7
+    timeout-minutes: 8
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with: {node-version: '22'}
-      - name: Verify diagram states and algorithm invariants
+      - name: Assert exact mathematical models, SVG integrity and algorithm invariants
         run: |
+          node --check visual-math.js
+          node --check visual-math-render.js
           node --check visual-scenes.js
           node --check visual-engine.js
           node --check foundation.js
+          node tests/math-reference.test.cjs
           node tests/visual-reference.test.cjs
           node tests/foundation-reference.test.cjs
   actual-browser:
@@ -34,11 +38,12 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with: {node-version: '22'}
-      - name: Install pinned Chromium
+      - name: Install pinned Playwright Chromium
         run: |
           npm install --no-save --no-package-lock playwright@1.56.1
           npx playwright install chromium
-      - name: Verify all 15 live SVG scenes and responsive learner interactions
+      - name: Verify 21 live figures and all six C3 mathematical controls
         run: |
           python3 -m http.server 8901 --bind 127.0.0.1 >/tmp/mastery-visual-http.log 2>&1 &
           node tests/visual-browser.test.cjs
+          node tests/math-browser.test.cjs

@@ -129,6 +129,9 @@ S('c2-graphs','dp','DP combines smaller solved subproblems',
  F('Add coin 5','Only amount 5 gains one extra combination using a 5 coin. Now dp[5]=4.',{coins:[1,2,5],dp:[1,1,2,2,3,4],focus:5}),
  ],{question:'Using unlimited [1,2,5] coins, how many unordered combinations make amount 5?',options:['3','4','5'],answer:1,why:'The four unordered combinations are 1+1+1+1+1, 2+1+1+1, 2+2+1, and 5. Reordering does not create new combinations.'},'MIT 6.006 · dynamic programming'),
 ];
+const mathAddon=root.MasteryMathVisuals||(typeof module!=='undefined'&&require('./visual-math.js'));
+if(!mathAddon||!mathAddon.validate())throw Error('Missing exact math visual models');
+scenes.push(...mathAddon.scenes);
 function validate(){
  const ids=new Set();
  for(const s of scenes){

@@ -8,6 +8,19 @@
 
 **Start practicing:** https://mtk1606.github.io/Mastery/focus.html
 
+## Phase XIV-C · Six quantitative mathematics visual laboratories
+
+All **six C3 Foundation chapters** now have a grounded, interactive mathematical diagram:
+
+- Induction as growing squares, with a selectable proof step.
+- Bayes from actual counts of 1,000, with adjustable prevalence and updated posterior/prediction questions.
+- Indicator expectation from dependent urn draws, with exact combinatorial probabilities.
+- Sampling variance from the **exact Binomial distribution** of a Bernoulli sample mean, with adjustable p and n.
+- Four linear maps of selectable vectors, showing basis images, input and transformed vectors.
+- Exact one-dimensional gradient descent on a quadratic, including overshoot under a large learning rate.
+
+Every visualization retains the existing pause/step/replay, screen-readable text trace, dark/light accessibility and **no automatic learning credit** policy. This completes 21 total visual labs (15 C0–C2 plus six C3); C4 reliability and specialized Quant/AI/SWE diagrams remain future phases. See [Phase XIV-C notes](VISUAL_MATH_PHASE14C.md) and [Foundation Academy](foundation.html#C3/c3-counting).
+
 ## Phase XIV-A/B · Original visual learning (15 integrated figure labs)
 
 Foundation Academy now has **15 original, interactive SVG concept visualizers** across C0–C2. They show real state transitions and invariants, with Next/Previous, Play/Pause/Replay, an accessible text trace, prediction prompts, and parameter-changing exercises for sliding windows and binary search. The diagrams are original, lightweight, dark/light compatible, reduced-motion aware and explicitly non-credit-bearing. Start with [shared references and mutation](foundation.html#C0/c0-state), [sliding windows](foundation.html#C2/c2-windows), [binary search](foundation.html#C2/c2-binary) or [BFS layers](foundation.html#C2/c2-structures). [Coverage, correctness evidence and source transparency](VISUAL_LEARNING_PHASE14.md).
