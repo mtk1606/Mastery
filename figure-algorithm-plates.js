@@ -76,8 +76,8 @@ function drawBFS(f){
   out+=text(x,y+6,u,'plate-vertex-label','middle');
   out+=text(x,y+31,Number.isInteger(f.distance[u])?'d='+f.distance[u]:'∞','plate-index','middle');
  }
- out+=text(315,69,`expand ${f.active}`,'plate-small-strong');
- out+=text(315,88,`seen: ${f.visited.join(',')||'none'}`,'plate-small');
+ out+=text(315,69,f.visited.length?'expanded '+f.active:'next: '+f.active,'plate-small-strong');
+ out+=text(315,88,`done: ${f.visited.join(',')||'none'}`,'plate-small');
  out+=text(22,161,`FIFO   front →  ${f.queue.join('   →   ')||'(empty)'}`,'plate-math');
  return out;
 }
@@ -102,6 +102,12 @@ function drawDP(f){
  }else out+=text(35,153,'ways[0] = 1, the empty combination.','plate-math');
  out+=text(340,34,`dp[5] = ${f.dp[5]}`,'plate-small-strong');
  return out;
+}
+function enrichCoinState(f){
+ const generated=model.coinStages(f.coins,f.dp.length-1).at(-1);
+ if(generated.dp.length!==f.dp.length||generated.dp.some((v,i)=>v!==f.dp[i]))
+  throw Error('Diagram DP state disagrees with independently computed recurrence');
+ return {...f,transitions:generated.transitions};
 }
 const drawByKind={window:drawWindow,binary:drawBinary,bfs:drawBFS,dp:drawDP};
 const titles={
@@ -138,23 +144,24 @@ function relevantLine(kind,f){
 }
 function render(scene,frames,index=0){
  const kind=scene.kind,draw=drawByKind[kind];if(!draw)throw Error('Missing plate kind '+kind);
- const count=frames.length,rows=Math.ceil(count/2),height=82+rows*193+53,position=Math.max(0,Math.min(index,count-1));
+ const count=frames.length,rows=Math.ceil(count/2),height=82+rows*193+10,position=Math.max(0,Math.min(index,count-1));
  let content=`<rect x="0" y="0" width="920" height="${height}" class="plate-page"/>`;
  content+=text(43,29,'FIGURE STUDY  /  '+kind.toUpperCase(),'plate-eyebrow');
  content+=text(875,29,'AN ORIGINAL COMPUTED TRACE · ZERO-BASED INDICES','plate-small','end');
  content+=line(42,43,878,43,'plate-rule');
  for(let i=0;i<count;i++){
   const f=frames[i],col=i%2,row=Math.floor(i/2),x=42+col*428,y=68+row*193;
+  const state=kind==='dp'?enrichCoinState(f):f;
   content+=`<g transform="translate(${x} ${y})" data-plate-panel="${i}" class="${i===position?'plate-panel-selected':'plate-panel-normal'}">`;
   content+=rect(0,0,408,180,'plate-panel-border',2);
   content+=rect(0,0,408,28,'plate-panel-header',1);
   content+=text(12,19,'('+String.fromCharCode(97+i)+')  '+(f.label||['First window','Move','Update','Finish'][i]||('State '+(i+1))),'plate-panel-title');
-  content+=draw(f);
+  content+=draw(state);
   content+='</g>';
  }
  const yFooter=69+rows*193+6;
  content+=line(42,yFooter-14,878,yFooter-14,'plate-rule');
- content+=text(44,yFooter+6,'DARKER BORDER = SELECTED STATE · EVERY ARROW CORRESPONDS TO A REAL TRANSITION','plate-small');
+ content+=text(44,yFooter+6,'DARKER BORDER = SELECTED STATE · ALL PANELS COME FROM EXACT ALGORITHM STATES','plate-small');
  const svg=`<svg class="mv-svg mv-plate-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 ${height}" role="img" aria-labelledby="plateTitle plateDesc" preserveAspectRatio="xMidYMin meet">
  <title id="plateTitle">${esc(titles[kind])}, ${count} textbook-like figure panels</title>
  <desc id="plateDesc">${esc('Original indexed-state illustration. '+legends[kind]+' Selected state '+(position+1)+': '+frames[position].explain)}</desc>

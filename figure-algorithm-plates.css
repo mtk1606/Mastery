@@ -51,3 +51,12 @@
 @media(max-width:900px){.mv-plate{min-width:770px}.mv-plate-caption{margin-left:22px;margin-right:22px}.mv-plate-choice-row{margin-left:22px;margin-right:22px}.mv-plate-exegesis{padding:20px 22px}}
 @media print{.mv-plate{break-inside:avoid}.mv-plate-choice-row{display:none!important}.mv-plate-svg{max-height:none!important}}
 @media(prefers-reduced-motion:reduce){.mv-plate *{animation:none!important;transition:none!important}}
+
+/* Screenshot-review correction: the shared dark-theme stylesheet colored the
+   pseudocode nearly white on paper. Force real ink for every nested code node. */
+.mv-plate .mv-plate-code,
+.mv-plate .mv-plate-code code,
+.mv-plate .mv-plate-code-line,
+.mv-plate .mv-plate-code-line .mv-plate-code-num{color:#41372d!important;opacity:1!important}
+.mv-plate .mv-plate-code-line.is-highlighted{background:#e3d1af!important;color:#2f271e!important}
+.mv-plate .mv-plate-code-line.is-highlighted .mv-plate-code-num{color:#715331!important}
