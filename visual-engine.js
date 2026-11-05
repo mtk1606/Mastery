@@ -7,6 +7,8 @@ const bank=(root.MasteryVisualScenes||typeof module!=='undefined'&&require('./vi
 if(!bank||!bank.validate())throw Error('Visual scene definitions failed validation');
 const math=root.MasteryMathVisuals||(typeof module!=='undefined'&&require('./visual-math.js'));
 const mathRenderer=root.MasteryMathRender||(typeof module!=='undefined'&&require('./visual-math-render.js'));
+const systems=root.MasterySystemsVisuals||(typeof module!=='undefined'&&require('./visual-systems.js'));
+const systemsRenderer=root.MasterySystemsRender||(typeof module!=='undefined'&&require('./visual-systems-render.js'));
 const escape=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const N=x=>Number.isFinite(Number(x))?Number(x):0;
 const R=(x,y,w,h,cls='mv-node',rx=13)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${rx}" class="${cls}"/>`;
@@ -132,11 +134,12 @@ function renderDP(f){
 const renderShape=(s,f)=>{
  const fn={bindings:renderBindings,contract:renderContract,compare:renderCompare,flow:renderFlow,capacity:renderCapacity,hash:renderHash,window:renderWindow,binary:renderBinary,bfs:renderBFS,dp:renderDP}[s.kind];
  if(!fn&&mathRenderer?.kinds.includes(s.kind))return frameSVG(s,f,mathRenderer.render(s,f,{R,T,L,C,P}));
+ if(!fn&&systemsRenderer?.kinds.includes(s.kind))return frameSVG(s,f,systemsRenderer.render(s,f,{R,T,L,C,P}));
  if(!fn)throw Error('Unknown visual '+s.kind);
  return frameSVG(s,f,fn(f));
 };
 /* Playback UI and deliberately non-credit-bearing prediction probes. */
-const defaults={window:2,binary:2,induction:4,bayes:1,indicators:3,sampling:{n:100,p:.5},matrix:{transform:'shear',vector:'2,1'},gradient:.1};
+const defaults={window:2,binary:2,induction:4,bayes:1,indicators:3,sampling:{n:100,p:.5},matrix:{transform:'shear',vector:'2,1'},gradient:.1,dedup:{tape:'duplicate',dedup:'durable'},review:'negative',latency:'tail',transaction:{transaction:'atomic',failure:'crash'},retry:'stable',race:'unsafe'};
 let active=null,playTimer=null;
 const positions=new Map();
 function stop(){if(playTimer){clearInterval(playTimer);playTimer=null;}}
@@ -168,13 +171,14 @@ function binaryFrames(target){
 }
 function framesFor(s,state){
  if(mathRenderer?.kinds.includes(s.kind))return math.framesFor(s,state.param);
+ if(systemsRenderer?.kinds.includes(s.kind))return systems.framesFor(s,state.param);
  if(s.kind==='window'&&state.param!==defaults.window)return windowFrames(state.param);
  if(s.kind==='binary'&&state.param!==defaults.binary)return binaryFrames(state.param);
  return s.frames;
 }
 const control=(value,label,disabled=false)=>`<button type="button" class="mv-btn" data-mv-action="${value}" ${disabled?'disabled':''}>${label}</button>`;
 function optionsHTML(scene,choice,param){
- const q=math?.challengeFor?.(scene,param)||scene.challenge,answered=choice!==null,correct=answered&&choice===q.answer;
+ const q=systemsRenderer?.kinds.includes(scene.kind)?systems.challengeFor(scene,param):math?.challengeFor?.(scene,param)||scene.challenge,answered=choice!==null,correct=answered&&choice===q.answer;
  return `<div class="mv-prediction" aria-label="Predict the next concept">
  <div class="mv-prediction-head"><span class="mv-kicker-html">TEST YOUR PREDICTION</span><span class="mv-small">Not graded · original example</span></div>
  <p class="mv-question">${escape(q.question)}</p>
@@ -192,6 +196,14 @@ function textSteps(s,frames,at){
 const selectField=(label,key,items,current)=>`<label class="mv-param-label">${escape(label)}
 <select data-mv-param="${escape(key)}" aria-label="${escape(label)}">${items.map(([value,name])=>`<option value="${escape(value)}" ${String(current)===String(value)?'selected':''}>${escape(name)}</option>`).join('')}</select></label>`;
 function paramHTML(s,param){
+ if(s.kind==='dedup')return selectField('Input event tape','sys-tape',systems.allowed.tape.map(x=>[x,x==='duplicate'?'Same-ID replay':'Conflicting-ID payload']),param.tape)
+  +selectField('Replay processing policy','sys-dedup',systems.allowed.dedup.map(x=>[x,x==='durable'?'Persist processed IDs':'Unsafe count every delivery']),param.dedup);
+ if(s.kind==='review')return selectField('Try a regression fixture','sys-fixture',systems.allowed.fixture.map(x=>[x,x==='negative'?'[-3, -1], k=1':'[2, 4], k=1']),param);
+ if(s.kind==='latency')return selectField('Synthetic observation window','sys-workload',systems.allowed.workload.map(x=>[x,x==='steady'?'20 × 20ms':x==='tail'?'19 × 20ms, 1 × 400ms':'100 mixed requests']),param);
+ if(s.kind==='transaction')return selectField('Transaction protection','sys-transaction',systems.allowed.transaction.map(x=>[x,x==='atomic'?'Atomic grouped writes':'Unsafe independent writes']),param.transaction)
+ +selectField('Execution outcome','sys-failure',systems.allowed.failure.map(x=>[x,x==='crash'?'Crash before credit':'Successful completion']),param.failure);
+ if(s.kind==='retry')return selectField('Key used on retry','sys-retry',systems.allowed.retry.map(x=>[x,x==='stable'?'Reuse same key':'New key (duplicate risk)']),param);
+ if(s.kind==='race')return selectField('Shared counter protocol','sys-race',systems.allowed.race.map(x=>[x,x==='unsafe'?'Unprotected read/modify/write':'Lock serializes increments']),param);
  if(s.kind==='induction')return selectField('Prove a different induction step','induction',math.choices.induction.map(n=>[n,'n = '+n]),param);
  if(s.kind==='bayes')return selectField('Change condition prevalence (sensitivity 90%, false-positive rate 10%)','bayes',math.choices.bayes.map(p=>[p,'Prior '+p+'%']),param);
  if(s.kind==='indicators')return selectField('Change the number of red balls among five','indicators',math.choices.indicators.map(n=>[n,n+' red · '+(5-n)+' blue']),param);
@@ -277,6 +289,14 @@ function mount(host,id){
    else if(p==='sampling-p'&&math.choices.samplingP.includes(k))next={...current,p:k};
    else if(p==='matrix-transform'&&math.choices.matrix.includes(raw))next={...current,transform:raw};
    else if(p==='matrix-vector'&&math.choices.matrixVector.includes(raw))next={...current,vector:raw};
+   else if(p==='sys-tape'&&systems.allowed.tape.includes(raw))next={...current,tape:raw};
+   else if(p==='sys-dedup'&&systems.allowed.dedup.includes(raw))next={...current,dedup:raw};
+   else if(p==='sys-fixture'&&systems.allowed.fixture.includes(raw))next=raw;
+   else if(p==='sys-workload'&&systems.allowed.workload.includes(raw))next=raw;
+   else if(p==='sys-transaction'&&systems.allowed.transaction.includes(raw))next={...current,transaction:raw};
+   else if(p==='sys-failure'&&systems.allowed.failure.includes(raw))next={...current,failure:raw};
+   else if(p==='sys-retry'&&systems.allowed.retry.includes(raw))next=raw;
+   else if(p==='sys-race'&&systems.allowed.race.includes(raw))next=raw;
    if(next!==null){
     stop();active.state.param=next;active.state.index=0;active.state.choice=null;draw();
    }

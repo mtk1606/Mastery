@@ -8,8 +8,10 @@ on:
       - 'foundation.html'
       - 'foundation.js'
       - 'VISUAL_LEARNING_PHASE14.md'
+      - 'VISUAL_SYSTEMS_PHASE14D.md'
       - 'tests/visual-*'
       - 'tests/math-*'
+      - 'tests/systems-*'
       - '.github/workflows/visual-ci.yml'
 permissions:
   contents: read
@@ -25,10 +27,13 @@ jobs:
         run: |
           node --check visual-math.js
           node --check visual-math-render.js
+          node --check visual-systems.js
+          node --check visual-systems-render.js
           node --check visual-scenes.js
           node --check visual-engine.js
           node --check foundation.js
           node tests/math-reference.test.cjs
+          node tests/systems-reference.test.cjs
           node tests/visual-reference.test.cjs
           node tests/foundation-reference.test.cjs
   actual-browser:
@@ -42,8 +47,9 @@ jobs:
         run: |
           npm install --no-save --no-package-lock playwright@1.56.1
           npx playwright install chromium
-      - name: Verify 21 live figures and all six C3 mathematical controls
+      - name: Verify 27 real visuals across Foundations, mathematics and systems
         run: |
           python3 -m http.server 8901 --bind 127.0.0.1 >/tmp/mastery-visual-http.log 2>&1 &
           node tests/visual-browser.test.cjs
           node tests/math-browser.test.cjs
+          node tests/systems-browser.test.cjs

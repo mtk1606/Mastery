@@ -4,13 +4,13 @@ const scenes=require('../visual-scenes.js');
 const engine=require('../visual-engine.js');
 const foundations=require('../foundation-data.js');
 assert.equal(scenes.validate(),true);
-assert.equal(scenes.scenes.length,21);
-assert.equal(engine.sceneCount,21);
+assert.equal(scenes.scenes.length,27);
+assert.equal(engine.sceneCount,27);
 assert.equal(new Set(scenes.scenes.map(s=>s.id)).size,scenes.scenes.length);
 for(const scene of scenes.scenes){
  const chapter=foundations.chapter(scene.id);
  assert(chapter,scene.id+' points to no Foundation lesson');
- assert(['C0','C1','C2','C3'].includes(chapter.module.id),scene.id+' is not in Phase XIV-B/C scope');
+ assert(['C0','C1','C2','C3','C4'].includes(chapter.module.id),scene.id+' is not in Phase XIV-B/C/D scope');
  assert(scene.frames.length>=3);
  const all=scene.frames.map(frame=>engine.renderShape(scene,frame));
  assert(all.every(svg=>svg.includes('role="img"')&&svg.includes('<title')&&svg.includes('<desc')&&svg.includes('viewBox="0 0 920 350"')),scene.id+' must expose an accessible SVG');
@@ -80,4 +80,4 @@ for(const target of [0,1,2,3,4,5,6]){
   assert(f.hi-f.lo<=width);width=f.hi-f.lo;
  }
 }
-console.log('PASS: 21 original Foundation visual models with accessible SVGs, verified reference binding, exact window sums, monotone lower-bound searches, hash prefix counts, BFS queue and DP combination counts.');
+console.log('PASS: 27 original Foundation visual models with accessible SVGs, verified reference binding, exact window sums, monotone lower-bound searches, hash prefix counts, BFS queue and DP combination counts.');

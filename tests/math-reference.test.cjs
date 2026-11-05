@@ -6,8 +6,8 @@ const scenes=require('../visual-scenes.js');
 const engine=require('../visual-engine.js');
 assert(math.validate());
 assert.equal(math.scenes.length,6);
-assert.equal(scenes.scenes.length,21);
-assert.equal(engine.sceneCount,21);
+assert.equal(scenes.scenes.length,27);
+assert.equal(engine.sceneCount,27);
 for(const s of math.scenes){
  assert.equal(foundation.chapter(s.id).module.id,'C3',s.id+' must map to the C3 chapter');
  assert.equal(s.frames.length,math.framesFor(s,undefined).length);

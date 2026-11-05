@@ -132,6 +132,9 @@ S('c2-graphs','dp','DP combines smaller solved subproblems',
 const mathAddon=root.MasteryMathVisuals||(typeof module!=='undefined'&&require('./visual-math.js'));
 if(!mathAddon||!mathAddon.validate())throw Error('Missing exact math visual models');
 scenes.push(...mathAddon.scenes);
+const systemsAddon=root.MasterySystemsVisuals||(typeof module!=='undefined'&&require('./visual-systems.js'));
+if(!systemsAddon||!systemsAddon.validate())throw Error('Missing reliability visual models');
+scenes.push(...systemsAddon.scenes);
 function validate(){
  const ids=new Set();
  for(const s of scenes){

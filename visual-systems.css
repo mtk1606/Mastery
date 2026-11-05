@@ -1,0 +1,12 @@
+/* Mastery XIV-D: clean, instructive systems drawings and failure states. */
+.mv-svg .mv-sys-text{font:650 17px/1.2 var(--sans,Arial,sans-serif);fill:var(--mv-ink)}
+.mv-svg .mv-sys-value{font:700 22px/1.2 var(--sans,Arial,sans-serif);fill:var(--mv-ink)}
+.mv-svg .mv-sys-number{font:750 35px/1 var(--sans,Arial,sans-serif);fill:var(--mv-ink)}
+.mv-svg .mv-sys-status{font:800 16px/1.3 var(--sans,Arial,sans-serif);fill:var(--mv-ink)}
+.mv-svg .mv-sys-warning{font:750 22px/1.2 var(--sans,Arial,sans-serif);fill:var(--warn,#ac6b52)}
+.mv-svg .mv-sys-bad{fill:color-mix(in srgb,var(--mv-paper) 91%,#bb675b);stroke:#bb675b;stroke-width:1.9}
+.mv-svg .mv-sys-good{fill:color-mix(in srgb,var(--mv-paper) 89%,#59a08b);stroke:#59a08b;stroke-width:1.9}
+.mv-svg .mv-sys-hist{fill:color-mix(in srgb,var(--mv-alt) 40%,var(--mv-accent));stroke:var(--mv-accent);stroke-width:1.2}
+.mv-param-label select{min-width:160px;max-width:100%}
+.mv-svg .mv-node,.mv-svg .mv-selected{stroke-linejoin:round}
+@media(prefers-reduced-motion:reduce){.mv-svg .mv-sys-hist{transition:none!important}}

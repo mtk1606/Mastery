@@ -8,6 +8,10 @@
 
 **Start practicing:** https://mtk1606.github.io/Mastery/focus.html
 
+## Phase XIV-D · Six systems and reliability visual laboratories
+
+All **six C4 Foundation lessons** now have state-accurate, original SVG visual simulations: event deduplication, reproducible bug-fix review, nearest-rank p50/p95/p99 latency and throughput, atomic ledger transfers, retry idempotency and two-worker races. Switch between safe and unsafe scenarios and see the *actual modeled* committed balances, accepted IDs, request outcomes and worker reads. The scenes retain pause/replay, a complete text trace, prediction checks, dark/light themes and mobile panning, with no fictitious code or learning credit. That makes **27 Foundation visualizations across C0–C4**. [View the Systems reliability release report](VISUAL_SYSTEMS_PHASE14D.md) or [try the transaction visual](foundation.html#C4/c4-sql).
+
 ## Phase XIV-C · Six quantitative mathematics visual laboratories
 
 All **six C3 Foundation chapters** now have a grounded, interactive mathematical diagram:
