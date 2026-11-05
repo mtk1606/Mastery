@@ -91,7 +91,7 @@ T('two_sum_indices','First feasible complement pair','swe','C2 · Hash patterns'
  'foundation.html#C2/c2-hash',[
   [[[2,7,11,15],9],[0,1]],[[[3,3],6],[0,1]],[[[1,2,3],9],[]],
   [[[],0],[]],[[[5],10],[]],[[[1,5,1,5],6],[0,1]],
-  [[[4,-1,2,7],6],[1,3]],[[[-4,-2,6,10],8],[1,3]]
+  [[[4,-1,2,7],6],[0,2]],[[[-4,-2,6,10],8],[1,3]]
  ]),
 T('balanced_brackets','Validate nested brackets','swe','C2 · Stacks','Stack discipline','balanced_brackets',
  'Given a string containing only the six bracket characters ()[]{}, return True if it forms a correctly nested sequence, and False otherwise. Empty string is valid.',
