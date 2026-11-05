@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#ffffff">
+<meta name="description" content="Mastery Phase VI: a university-style, evidence-driven course in write-ahead logs, durable idempotency, crash recovery, and isolated market-data replay.">
+<title>Durability and Recovery · Mastery / Computer Science</title>
+<script src="theme.js"></script>
+<link rel="stylesheet" href="academic.css"><link rel="stylesheet" href="phase6.css">
+</head>
+<body>
+<header class="p6-header">
+ <a class="p6-brand" href="index.html#/">mastery <small>/ computer science</small></a>
+ <nav aria-label="Site navigation"><a href="index.html#/">Catalogue</a><a href="engineering.html">Computer science</a><a href="cpp-lab.html">C++ compiler</a><a href="market-systems.html">Market systems</a><a href="phase5.html">Phase V</a><a aria-current="page" href="phase6.html">Phase VI</a></nav>
+ <div class="theme-switch" role="group" aria-label="Theme"><button type="button" data-set-theme="light">Light</button><button type="button" data-set-theme="dark">Dark</button></div>
+</header>
+<main>
+ <section class="p6-hero">
+  <p class="p6-eyebrow">ADVANCED COMPUTER SYSTEMS / LABORATORY VI</p>
+  <h1>What survives a crash?</h1>
+  <p class="p6-lead">Engineering reliability starts with a promise: an acknowledged event must remain reconstructible after the process disappears. Study the mathematics of that promise, implement its storage contract in C++20, and prove where the promise ends.</p>
+  <div class="p6-meta"><span>Five rigorous lectures</span><span>Two fault laboratories</span><span>Three written engineering defenses</span><span>Native C++20 WAL and replay tests</span></div>
+  <p class="p6-note">Independent education · No affiliation with a university or trading firm · All materials open · Light and Dark themes</p>
+ </section>
+ <div class="p6-layout">
+  <aside class="p6-rail" aria-label="Course syllabus">
+   <p class="p6-rail-heading">LECTURES</p><nav id="p6LectureNav"></nav>
+   <p class="p6-rail-heading">PRACTICAL LABORATORIES</p><nav id="p6LabNav"></nav>
+   <p class="p6-rail-heading">ORAL / WRITTEN DEFENSES</p><nav id="p6CaseNav"></nav>
+   <div class="p6-backup"><button id="p6Export" type="button">Export notes &amp; progress</button><label for="p6Import" class="p6-import">Restore progress <input type="file" id="p6Import" accept="application/json" hidden></label><small id="p6BackupStatus" role="status"></small></div>
+  </aside>
+  <article id="p6Content" class="p6-content" tabindex="-1" aria-live="polite"><h2>Preparing course…</h2></article>
+ </div>
+</main>
+<footer class="p6-footer"><span>Mastery · Independent advanced computing laboratory</span><span>Definitions · Proofs · Fault experiments · Engineering judgment</span><a href="https://github.com/mtk1606/Mastery/tree/main/phase6" target="_blank" rel="noopener noreferrer">C++ sources and tests</a></footer>
+<script src="phase6-data.js"></script>
+<script src="phase6-model.js"></script>
+<script src="phase6.js"></script>
+</body></html>
