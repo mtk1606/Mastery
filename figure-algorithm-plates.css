@@ -1,0 +1,53 @@
+/* Mastery Figure Quality Batch II.
+ * Editorial algorithm plates: sequential diagrams with drawn state, pointers, edges,
+ * dependencies, captions and synchronized pseudocode. Scoped to four C2 lessons. */
+.mv-canvas:has(.mv-plate){background:#f7f5ef;padding:0;overscroll-behavior-x:contain}
+.mv-plate{color:#342f29;margin:0;padding:0;background:#fbf9f3;min-width:770px}
+.mv-plate-svg{display:block;width:100%;min-width:770px;max-height:none!important;height:auto!important;animation:none!important;font-family:Georgia,"Times New Roman",serif!important}
+.mv-plate-svg .plate-page{fill:#fbf9f3;stroke:none}
+.mv-plate-svg .plate-eyebrow{fill:#51493f;font:700 12px/1.2 system-ui,sans-serif;letter-spacing:.12em}
+.mv-plate-svg .plate-small{fill:#71695d;font:500 10px/1.25 system-ui,sans-serif}
+.mv-plate-svg .plate-rule{stroke:#bdb7ac;stroke-width:1;fill:none}
+.mv-plate-svg .plate-panel-border{fill:transparent;stroke:#d4cfc5;stroke-width:1}
+.mv-plate-svg .plate-panel-selected .plate-panel-border{stroke:#a17a48;stroke-width:2}
+.mv-plate-svg .plate-panel-header{fill:#f2eee6;stroke:none}
+.mv-plate-svg .plate-panel-selected .plate-panel-header{fill:#e9ddcb}
+.mv-plate-svg .plate-panel-title{fill:#3b352e;font:700 13px/1.25 Georgia,serif}
+.mv-plate-svg .plate-index{fill:#756c61;font:500 12px/1 Georgia,serif}
+.mv-plate-svg .plate-cell-idle{fill:#fffdf8;stroke:#70675d;stroke-width:1.2}
+.mv-plate-svg .plate-cell-focus{fill:#e8d6b5;stroke:#a27c4e;stroke-width:1.4}
+.mv-plate-svg .plate-cell-discard{fill:#f0ede7;stroke:#c5bfb5;stroke-width:1}
+.mv-plate-svg .plate-cell-key{fill:#342f29;stroke:#342f29;stroke-width:1.2}
+.mv-plate-svg .plate-cell-number{fill:#332e28;font:700 22px/1 Georgia,serif}
+.mv-plate-svg .plate-cell-invert{fill:#fff7e9;font:700 22px/1 Georgia,serif}
+.mv-plate-svg .plate-bracket{stroke:#986d3c;stroke-width:2.2;fill:none;stroke-linejoin:round;stroke-linecap:round}
+.mv-plate-svg .plate-removed{stroke:#a06253;stroke-width:2;fill:none;stroke-linecap:round;marker-end:url(#plateInkArrow)}
+.mv-plate-svg .plate-added{stroke:#667d72;stroke-width:2;fill:none;stroke-linecap:round;marker-end:url(#plateInkArrow)}
+.mv-plate-svg .plate-math{fill:#433b31;font:700 14px/1.1 Georgia,serif}
+.mv-plate-svg .plate-small-strong{fill:#6b5032;font:700 12px/1.2 system-ui,sans-serif}
+.mv-plate-svg .plate-note{fill:#685f53;font:500 12px/1.2 Georgia,serif}
+.mv-plate-svg .plate-vertex-idle{fill:#fcfaf4;stroke:#918677;stroke-width:1.4}
+.mv-plate-svg .plate-vertex-queued{fill:#e8d6b5;stroke:#a27c4e;stroke-width:1.7}
+.mv-plate-svg .plate-vertex-visited{fill:#dedbd4;stroke:#77736b;stroke-width:1.5}
+.mv-plate-svg .plate-vertex-label{fill:#38312a;font:700 19px/1 Georgia,serif}
+.mv-plate-svg .plate-edge{fill:none;stroke:#665d51;stroke-width:1.5;marker-end:url(#plateInkArrow)}
+.mv-plate-svg .plate-dependency{fill:none;stroke:#986d3c;stroke-width:1.9;marker-end:url(#plateBrassArrow)}
+.mv-plate-caption{font:400 15px/1.56 Georgia,serif;color:#4b4339;margin:0 37px 15px;padding:15px 0 13px;border-top:1px solid #d3cbbd}
+.mv-plate-caption strong{font-weight:700;color:#342f29}
+.mv-plate-choice-row{display:flex;gap:5px;flex-wrap:wrap;margin:0 37px 21px}
+.mv-plate-step-choice{font:700 12px/1 system-ui,sans-serif;background:#f8f5ee;color:#5b5145;border:1px solid #cbc2b4;border-radius:3px;padding:9px 16px;cursor:pointer}
+.mv-plate-step-choice:hover{background:#efe6d5;border-color:#997b52}
+.mv-plate-step-choice[aria-pressed="true"]{background:#3c3329;color:#fff7e6;border-color:#3c3329}
+.mv-plate-exegesis{display:grid;grid-template-columns:1.08fr 1fr;gap:29px;border-top:1px solid #d7d0c3;background:#f6f2e9;padding:23px 37px 28px}
+.mv-plate-section-label{color:#7d603f;font:800 10px/1.4 system-ui,sans-serif;letter-spacing:.13em}
+.mv-plate-exegesis p{color:#423a30;font:400 14px/1.68 Georgia,serif;margin:10px 0 13px}
+.mv-plate-focus-note{font:400 13px/1.55 system-ui,sans-serif;color:#4d4338;border-left:3px solid #a17d4e;padding:8px 12px;background:#ede6d9}
+.mv-plate-focus-note strong{color:#3d3026}
+.mv-plate-code{display:block;overflow:auto;white-space:pre;margin:11px 0 0;padding:10px 0;background:#fdfbf6;border:1px solid #d5cabb;color:#3e382f;font:12px/1.7 ui-monospace,SFMono-Regular,Consolas,monospace}
+.mv-plate-code-line{display:block;min-width:max-content;padding:2px 15px 2px 7px}
+.mv-plate-code-line.is-highlighted{background:#e7d9c1;font-weight:700}
+.mv-plate-code-num{display:inline-block;width:26px;text-align:right;margin-right:14px;font-size:11px;color:#8d8171;user-select:none}
+.mv-plate button:focus-visible{outline:3px solid #977243;outline-offset:2px}
+@media(max-width:900px){.mv-plate{min-width:770px}.mv-plate-caption{margin-left:22px;margin-right:22px}.mv-plate-choice-row{margin-left:22px;margin-right:22px}.mv-plate-exegesis{padding:20px 22px}}
+@media print{.mv-plate{break-inside:avoid}.mv-plate-choice-row{display:none!important}.mv-plate-svg{max-height:none!important}}
+@media(prefers-reduced-motion:reduce){.mv-plate *{animation:none!important;transition:none!important}}

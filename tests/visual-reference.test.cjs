@@ -13,7 +13,7 @@ for(const scene of scenes.scenes){
  assert(['C0','C1','C2','C3','C4'].includes(chapter.module.id),scene.id+' is not in Phase XIV-B/C/D scope');
  assert(scene.frames.length>=3);
  const all=scene.frames.map(frame=>engine.renderShape(scene,frame));
- assert(all.every(svg=>svg.includes('role="img"')&&svg.includes('<title')&&svg.includes('<desc')&&svg.includes('viewBox="0 0 920 350"')),scene.id+' must expose an accessible SVG');
+ assert(all.every(svg=>svg.includes('role="img"')&&svg.includes('<title')&&svg.includes('<desc')&&svg.includes('viewBox="0 0 920 ')),scene.id+' must expose an accessible SVG');
  assert(all.every(svg=>!/<script\b/i.test(svg)),scene.id+' must never contain untrusted scripts');
  assert(scene.challenge.question&&scene.challenge.why&&scene.challenge.options.length===3,scene.id+' missing prediction');
  if(scene.kind==='bindings'){

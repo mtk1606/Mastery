@@ -6,6 +6,9 @@ on:
     paths:
       - 'visual-*'
       - 'figure-insertion-*'
+      - 'figure-algorithm-*'
+      - 'FIGURE_PLATES_PHASE15B.md'
+      - 'tests/algorithm-plates-*'
       - 'insertion-sort.html'
       - 'engineering.html'
       - 'VISUAL_FIGURE_QUALITY_PHASE15.md'
@@ -38,10 +41,13 @@ jobs:
           node --check visual-engine.js
           node --check figure-insertion-model.js
           node --check figure-insertion.js
+          node --check figure-algorithm-model.js
+          node --check figure-algorithm-plates.js
           node --check foundation.js
           node tests/math-reference.test.cjs
           node tests/systems-reference.test.cjs
           node tests/figure-quality-reference.test.cjs
+          node tests/algorithm-plates-reference.test.cjs
           node tests/visual-reference.test.cjs
           node tests/foundation-reference.test.cjs
   actual-browser:
@@ -62,12 +68,13 @@ jobs:
           node tests/math-browser.test.cjs
           node tests/systems-browser.test.cjs
           node tests/figure-quality-browser.test.cjs
+          node tests/algorithm-plates-browser.test.cjs
 
       - name: Upload actual browser screenshots for human visual QA
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: phase15-original-figure-screenshots
+          name: phase15-textbook-quality-figure-screenshots
           path: visual-review/
           if-no-files-found: ignore
           retention-days: 7

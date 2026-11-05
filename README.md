@@ -8,6 +8,10 @@
 
 **Start practicing:** https://mtk1606.github.io/Mastery/focus.html
 
+## Phase XV-B · Four complete textbook-style algorithm plates
+
+Four original, model-verified **multi-panel textbook figures** now replace generic C2 dashboard diagrams for [sliding windows](foundation.html#C2/c2-windows), [lower-bound binary search](foundation.html#C2/c2-binary), [BFS](foundation.html#C2/c2-structures), and [coin-change dynamic programming](foundation.html#C2/c2-graphs). The full sequence is visible at once, with indexed cells, meaningful movement/interval/dependency arrows, caption, linked pseudocode, invariant, and panel selection. Sliding-window width and binary-search target recalculate the whole illustration and prediction question. Original SVG, not copied book images. [Editorial design decisions and independent QA](FIGURE_PLATES_PHASE15B.md).
+
 ## Figure Quality Reboot · Book-quality diagrams before more volume
 
 The initial visual labs were numerically checked but not sufficiently clear as teaching figures. The first redesign corrects that standard: [Insertion sort — original six-panel indexed-array figure](insertion-sort.html) shows the full input-to-output progression, element-shift arrows, sorted-prefix shading and code linked to the exact states. Try mixed, sorted, and reverse inputs. The [Bayes probability chapter](foundation.html#C3/c3-counting) now uses a one-person-per-mark 1,000-person frequency plate, not a four-card dashboard. Diagrams are original, inspired by the pedagogical approach of classical algorithm figures, not copied from textbook PDFs. Read [the visual quality acceptance standard](VISUAL_FIGURE_QUALITY_PHASE15.md). Remaining generic figures need the same editorial redesign in later batches; model-level tests alone are not considered proof of diagram quality.

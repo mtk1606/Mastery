@@ -9,6 +9,7 @@ const math=root.MasteryMathVisuals||(typeof module!=='undefined'&&require('./vis
 const mathRenderer=root.MasteryMathRender||(typeof module!=='undefined'&&require('./visual-math-render.js'));
 const systems=root.MasterySystemsVisuals||(typeof module!=='undefined'&&require('./visual-systems.js'));
 const systemsRenderer=root.MasterySystemsRender||(typeof module!=='undefined'&&require('./visual-systems-render.js'));
+const algorithmPlates=root.MasteryAlgorithmPlates||(typeof module!=='undefined'&&require('./figure-algorithm-plates.js'));
 const escape=x=>String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const N=x=>Number.isFinite(Number(x))?Number(x):0;
 const R=(x,y,w,h,cls='mv-node',rx=13)=>`<rect x="${x}" y="${y}" width="${w}" height="${h}" rx="${rx}" class="${cls}"/>`;
@@ -131,7 +132,8 @@ function renderDP(f){
  out+=T(83,299,'Process coins outside, amounts ascending inside.','mv-strong');
  return out;
 }
-const renderShape=(s,f)=>{
+const renderShape=(s,f,frames=s.frames,index=frames.indexOf(f))=>{
+ if(algorithmPlates?.kinds.includes(s.kind))return algorithmPlates.render(s,frames,index<0?0:index);
  const fn={bindings:renderBindings,contract:renderContract,compare:renderCompare,flow:renderFlow,capacity:renderCapacity,hash:renderHash,window:renderWindow,binary:renderBinary,bfs:renderBFS,dp:renderDP}[s.kind];
  if(!fn&&mathRenderer?.kinds.includes(s.kind))return frameSVG(s,f,mathRenderer.render(s,f,{R,T,L,C,P}));
  if(!fn&&systemsRenderer?.kinds.includes(s.kind))return frameSVG(s,f,systemsRenderer.render(s,f,{R,T,L,C,P}));
@@ -178,7 +180,7 @@ function framesFor(s,state){
 }
 const control=(value,label,disabled=false)=>`<button type="button" class="mv-btn" data-mv-action="${value}" ${disabled?'disabled':''}>${label}</button>`;
 function optionsHTML(scene,choice,param){
- const q=systemsRenderer?.kinds.includes(scene.kind)?systems.challengeFor(scene,param):math?.challengeFor?.(scene,param)||scene.challenge,answered=choice!==null,correct=answered&&choice===q.answer;
+ const q=algorithmPlates?.kinds.includes(scene.kind)?algorithmPlates.challengeFor(scene,param):systemsRenderer?.kinds.includes(scene.kind)?systems.challengeFor(scene,param):math?.challengeFor?.(scene,param)||scene.challenge,answered=choice!==null,correct=answered&&choice===q.answer;
  return `<div class="mv-prediction" aria-label="Predict the next concept">
  <div class="mv-prediction-head"><span class="mv-kicker-html">TEST YOUR PREDICTION</span><span class="mv-small">Not graded · original example</span></div>
  <p class="mv-question">${escape(q.question)}</p>
@@ -228,7 +230,7 @@ function draw(){
  <button type="button" data-mv-action="mode-visual" aria-pressed="${state.mode==='visual'}">Diagram</button>
  <button type="button" data-mv-action="mode-text" aria-pressed="${state.mode==='text'}">Text trace</button></div></div>
  <div class="mv-canvas" data-mv-canvas>
- ${state.mode==='text'?textSteps(scene,frames,state.index):renderShape(scene,f)}
+ ${state.mode==='text'?textSteps(scene,frames,state.index):renderShape(scene,f,frames,state.index)}
  </div>
  <div class="mv-motion">
  <div class="mv-motion-details"><span class="mv-count" aria-label="Step ${state.index+1} of ${frames.length}">${String(state.index+1).padStart(2,'0')} <span>/ ${String(frames.length).padStart(2,'0')}</span></span>
@@ -262,6 +264,7 @@ function mount(host,id){
    if(cmd==='previous'){stop();s.index=Math.max(0,s.index-1);}
    else if(cmd==='next'){stop();s.index=Math.min(frames.length-1,s.index+1);}
    else if(cmd==='replay'){stop();s.index=0;}
+   else if(cmd==='jump'){stop();const chosen=Number(button.dataset.mvStep);if(Number.isInteger(chosen)&&chosen>=0&&chosen<frames.length)s.index=chosen;}
    else if(cmd==='play'){
     if(playTimer)stop();
     else{
