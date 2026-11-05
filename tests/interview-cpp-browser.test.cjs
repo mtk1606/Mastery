@@ -1,0 +1,52 @@
+'use strict';
+const assert=require('node:assert/strict');
+const {chromium}=require('playwright');
+(async()=>{
+ const browser=await chromium.launch({headless:true,args:['--no-sandbox']});
+ const page=await browser.newPage({viewport:{width:1366,height:900},acceptDownloads:true});
+ const errors=[];page.on('pageerror',e=>errors.push(String(e)));
+ await page.goto('http://127.0.0.1:8793/interview-cpp.html',{waitUntil:'domcontentloaded',timeout:30000});
+ assert.equal(await page.locator('[data-lab]').count(),6);
+ const manifest=await page.request.get('http://127.0.0.1:8793/clang/runtime-manifest.v1.json');
+ assert(manifest.ok(),'Self-hosted Clang runtime manifest missing');
+ assert.equal((await manifest.json()).compiler.provenance.version,'22.1.8');
+ await page.evaluate(()=>{window.ixStatusHistory=[];const e=document.getElementById('ixStatus');new MutationObserver(()=>window.ixStatusHistory.push(e.textContent||'')).observe(e,{childList:true,characterData:true,subtree:true});});
+ let count=0;
+ for(const id of ['valid-parentheses','binary-search','sliding-window-maximum','merge-intervals','coin-change','lru-cache']){
+  await page.locator(`[data-lab="${id}"]`).click();
+  const n=await page.evaluate(id=>{const l=IX_LESSONS.find(x=>x.id===id);const e=document.getElementById('ixCode');e.value=l.reference;e.dispatchEvent(new Event('input',{bubbles:true}));return ixCaseData(id,1).length;},id);
+  await page.locator('#ixRun').click();
+  await page.waitForFunction(expected=>{const txt=document.getElementById('ixStatus').textContent||'';return txt.includes(`All ${expected}/${expected} compiled C++20 cases passed`)||txt.includes('exceeded 100 seconds')||txt.includes('Compiler initialization exceeded')||txt.includes('C++ worker error')||txt.includes('Compiler:');},n,{timeout:220000});
+  const status=await page.locator('#ixStatus').innerText(),passes=await page.locator('#ixCases .pass').count();
+  console.log(id,status,'TEST CASES',passes+'/'+n);
+  if(passes!==n)console.log('COMPILER DIAGNOSTICS:',(await page.locator('#ixConsole').innerText()).slice(-1600));
+  assert.equal(passes,n,`Browser-compiled C++20 failed for ${id}`);
+  assert.match(status,/All \d+\/\d+ compiled C\+\+20 cases passed/);
+  count+=n;
+ }
+ const usedOwnAssets=await page.evaluate(()=>window.ixStatusHistory.some(x=>x.includes('assets hosted on Mastery')));
+ assert(usedOwnAssets,'Clang did not use Mastery same-origin compiler assets');
+ await page.locator('[data-lab="binary-search"]').click();
+ await page.locator('#ixNextSeed').click();
+ await page.locator('#ixRun').click();
+ await page.waitForFunction(()=>document.querySelector('#ixStatus').textContent.includes('All 30/30 compiled C++20 cases passed'),null,{timeout:180000});
+ assert.match(await page.locator('#ixProgress').innerText(),/1 \/ 6 labs passed/);
+ await page.locator('#ixInvariant').selectOption('1');
+ await page.locator('#ixTime').selectOption('1');await page.locator('#ixSpace').selectOption('0');
+ await page.locator('#ixReason').fill('The candidate range [lo,hi) contains any target. Each step discards half and preserves this invariant.');
+ await page.locator('#ixCheckDefense').click();assert.match(await page.locator('#ixDefenseFeedback').innerText(),/3 \/ 3 structured claims correct/);
+ await page.locator('#ixReveal').click();assert.match(await page.locator('#ixModel').innerText(),/Correctness argument/);
+ // A real compilation failure must not be recorded as a pass.
+ await page.locator('#ixCode').fill('int searchIndex(const std::vector<int>& a, int target) { return nonexistent + ; }');
+ await page.locator('#ixRun').click();
+ await page.waitForFunction(()=>document.getElementById('ixRun').disabled===false,null,{timeout:180000});
+ assert.doesNotMatch(await page.locator('#ixStatus').innerText(),/All 30\/30 compiled C\+\+20 cases passed/);
+ assert.match(await page.locator('#ixProgress').innerText(),/1 \/ 6 labs passed/);
+ const withDownload=page.waitForEvent('download');await page.locator('#ixExport').click();const dl=await withDownload;
+ assert(dl.suggestedFilename().endsWith('.json'));
+ await page.locator('[data-set-theme="dark"]').first().click();assert.equal(await page.locator('html').getAttribute('data-theme'),'dark');
+ await page.setViewportSize({width:390,height:844});assert(await page.locator('body').evaluate(e=>e.scrollWidth<=innerWidth+2),'mobile horizontal overflow');
+ assert.deepEqual(errors,[]);
+ console.log('PHASE IX VERIFIED: '+count+' REAL C++20 CLANG/WASI CASES ACROSS SIX LABS; two batches, diagnostics, defense, download, dark and mobile');
+ await browser.close();
+})().catch(e=>{console.error(e);process.exit(1)});

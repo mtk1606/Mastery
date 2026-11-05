@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Mastery Phase IX C++20 interview laboratory: real Clang compilation, seeded correctness tests, proof obligations and structured oral defense.">
+<meta name="theme-color" content="#fff"><title>C++20 Interview Defense | Mastery</title>
+<script src="theme.js"></script><link rel="stylesheet" href="academic.css"><link rel="stylesheet" href="interview-cpp.css">
+</head><body>
+<header class="ix-top">
+<a class="ix-brand" href="index.html#/">mastery <small>/ interview school</small></a>
+<nav aria-label="Main navigation"><a href="index.html#">Catalogue</a><a href="engineering.html">Computer science</a><a href="cpp-lab.html">C++ foundations</a><a href="readiness.html">Interview readiness</a><a href="interview-cpp.html" aria-current="page">C++ defense</a></nav>
+<div class="theme-switch" role="group" aria-label="Theme"><button type="button" data-set-theme="light">Light</button><button type="button" data-set-theme="dark">Dark</button></div>
+</header>
+<section class="ix-masthead"><div class="ix-container"><p class="ix-kicker">MASTERy / SCHOOL OF COMPUTING · PHASE IX</p><h1>Code it. Prove it.<br><em>Defend it.</em></h1><p class="ix-lead">Real C++20 compilation and reproducible tests, paired with the proof, complexity and communication expected in a demanding technical interview. Study without locks or false readiness certificates.</p><div class="ix-meta"><span>6 additional C++20 labs</span><span>3 seeded native test batches</span><span>Clang/WebAssembly in your browser</span><span>Light and Dark</span></div></div></section>
+<div class="ix-shell ix-container">
+<aside class="ix-side"><p class="ix-eyebrow">C++20 LABORATORIES</p><div id="ixLessons" class="ix-lesson-list"></div>
+<div class="ix-side-block"><p class="ix-eyebrow">YOUR STUDY RECORD</p><div id="ixProgress" class="ix-progress">0 of 6 labs verified twice</div><button id="ixExport" type="button" class="ix-button secondary">Export study record</button><label class="ix-upload" for="ixImport">Restore study record <input type="file" id="ixImport" accept=".json,application/json"></label><p id="ixBackupStatus" class="ix-caption" role="status"></p></div>
+<div class="ix-side-block"><p class="ix-eyebrow">OTHER LABORATORIES</p><a href="cpp-lab.html">Four foundational C++ labs</a><a href="mock-interviews.html">Company mock interviews</a><a href="readiness.html">284 sourced problems</a></div>
+</aside>
+<main class="ix-main" id="ixMain">
+<section id="ixLecture" aria-label="Lecture and proof"></section>
+<section class="ix-section" id="ixWorked" aria-label="Worked code trace"></section>
+<section class="ix-section" id="ixEditorSection"><p class="ix-eyebrow">PROGRAMMING LAB</p><h2>Implement and test</h2>
+<p class="ix-caption">Write only the required function or class. Mastery supplies the includes, a test harness and the main function. Browser execution uses Clang 22 / WASI, not native x86 timings or threads.</p>
+<div class="ix-editor-head"><strong id="ixSignature">Function signature</strong><div class="ix-actions"><button type="button" id="ixReset" class="ix-button secondary">Reset starter</button><button type="button" id="ixDownload" class="ix-button secondary">Download .cpp</button></div></div>
+<textarea id="ixCode" class="ix-code" spellcheck="false" aria-label="C++20 code editor"></textarea>
+<div class="ix-runbar"><button type="button" id="ixRun" class="ix-button primary">Compile &amp; run C++20</button><button type="button" id="ixNextSeed" class="ix-button secondary">New test variation</button><button type="button" id="ixStop" class="ix-button secondary">Stop</button><span class="ix-seed">Test batch <strong id="ixSeed">1</strong></span></div>
+<p class="ix-caption">The first compiler load may download about 29 MB. Inputs are newly generated when the seed changes, but tests shipped to the browser are not secure secret tests.</p>
+<div id="ixStatus" class="ix-status" role="status" aria-live="polite">Choose Compile &amp; run when ready.</div>
+<div id="ixCases" class="ix-cases" aria-label="C++ test cases"></div>
+<details class="ix-details"><summary>Compiler output and diagnostics</summary><pre id="ixConsole" class="ix-console">No compiler output yet.</pre></details>
+</section>
+<section class="ix-section" id="ixDefense"><p class="ix-eyebrow">INTERVIEWER'S ORAL DEFENSE</p><h2>Explain why the solution works</h2><p>Choose the invariant and complexity that your solution actually establishes. Then write your own proof or explanation. Only structured answers are checked automatically; written reasoning remains self-reviewed.</p>
+<label for="ixInvariant">Correctness invariant</label><select id="ixInvariant"></select>
+<div class="ix-dual"><div><label for="ixTime">Time complexity</label><select id="ixTime"></select></div><div><label for="ixSpace">Auxiliary / output space</label><select id="ixSpace"></select></div></div>
+<label for="ixReason">Explain your algorithm, why it is correct, and a hard edge case</label><textarea id="ixReason" rows="7" placeholder="My invariant is ... Initialization ... Maintenance ... Termination ... An edge case is ..."></textarea>
+<div class="ix-actions"><button id="ixCheckDefense" class="ix-button primary" type="button">Evaluate structured reasoning</button><button id="ixReveal" class="ix-button secondary" type="button">Reveal instructor analysis</button></div>
+<div id="ixDefenseFeedback" class="ix-feedback" role="status"></div><div id="ixModel" hidden></div>
+</section>
+<section class="ix-section"><p class="ix-eyebrow">INTERVIEWER FOLLOW-UPS</p><h2>Now change the constraints</h2><ol id="ixFollowups" class="ix-followups"></ol><p class="ix-caption">These are original follow-up prompts. Your explanation is not automatically evaluated.</p></section>
+<section class="ix-section ix-method"><h2>Evidence and assessment limits</h2><p>Mastery can verify C++ code against finite public and seeded examples and check selected conceptual facts. It cannot prove arbitrary programs correct, authenticate a private company's interview bank, or objectively grade unstructured mathematical proofs. Repeated successful seeds are evidence of practice, not a guarantee of hiring readiness.</p><a href="INTERVIEW_CPP_PHASE9_QA.md">Technical tests and known limitations</a></section>
+</main></div>
+<footer class="ix-footer">Independent academic project · Not affiliated with MIT, Harvard, Jane Street, Citadel or LeetCode · <a href="index.html#">Mastery catalogue</a></footer>
+<script src="interview-cpp-data.js"></script><script src="interview-cpp.js"></script>
+</body></html>
