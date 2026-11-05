@@ -1,0 +1,57 @@
+name: Mastery Phase V reliability and interview QA
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'phase5.html'
+      - 'phase5.css'
+      - 'phase5.js'
+      - 'phase5-data.js'
+      - 'phase5-sim.js'
+      - 'phase5/**'
+      - 'exchange/include/exchange.hpp'
+      - 'tests/phase5-*.cjs'
+      - '.github/workflows/phase5-ci.yml'
+permissions:
+  contents: read
+jobs:
+  native-and-reference:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 22}
+      - name: Check JavaScript and test independent reference model
+        run: |
+          node --check phase5-data.js
+          node --check phase5-sim.js
+          node --check phase5.js
+          node tests/phase5-reference.test.cjs
+      - name: Build and test C++20 recovery, epochs and bounded queues
+        run: |
+          cmake -S phase5 -B phase5/build -DCMAKE_BUILD_TYPE=Debug
+          cmake --build phase5/build -j2
+          ctest --test-dir phase5/build --output-on-failure
+          ./phase5/build/reliability_demo phase5/build/demo.snapshot
+      - name: Run C++20 AddressSanitizer and UndefinedBehaviorSanitizer checks
+        run: |
+          cmake -S phase5 -B phase5/build-asan -DCMAKE_BUILD_TYPE=Debug -DMASTERY_SANITIZE=ON
+          cmake --build phase5/build-asan -j2
+          ctest --test-dir phase5/build-asan --output-on-failure
+  browser-journey:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: 22}
+      - name: Install Chromium browser testing runtime
+        run: |
+          npm install --no-save --ignore-scripts playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Serve actual static course and exercise learning flows
+        run: |
+          python3 -m http.server 8897 --bind 127.0.0.1 >/tmp/mastery-phase5-http.log 2>&1 &
+          node tests/phase5-browser.test.cjs
