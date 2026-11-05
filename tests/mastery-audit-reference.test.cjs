@@ -2,7 +2,7 @@
 const fs=require('node:fs'),path=require('node:path'),assert=require('node:assert/strict');
 const root=path.resolve(__dirname,'..');
 const htmls=fs.readdirSync(root).filter(x=>x.endsWith('.html')).sort();
-assert.equal(htmls.length,16,'All 16 principal Mastery pages must be covered');
+assert.equal(htmls.length,17,'All 17 principal Mastery pages must be covered');
 let resources=0,links=0;
 for(const file of htmls){
  const text=fs.readFileSync(path.join(root,file),'utf8');

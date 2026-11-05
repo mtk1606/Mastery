@@ -1,0 +1,99 @@
+/* Mastery Figure Studies: editorial figures and legible algorithm notation, not UI-card diagrams. */
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.68 var(--sans,system-ui,sans-serif)}
+button,select{font:inherit}
+.f-shell{width:min(1200px,calc(100% - 52px));margin:0 auto}
+.f-header{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:14px;padding:22px 0;border-bottom:1px solid var(--line)}
+.f-brand{font-weight:850;font-size:22px;letter-spacing:-.045em;color:var(--ink);text-decoration:none}
+.f-brand small{font-size:12px;color:var(--muted);font-weight:500;letter-spacing:0}
+.f-header nav{display:flex;flex-wrap:wrap;align-items:center;gap:16px}
+.f-header nav a{color:var(--muted);font-size:12px;font-weight:700;text-decoration:none}
+.f-header nav a:hover,.f-header nav a[aria-current="page"]{color:var(--ink)}
+.f-header .theme-switch{display:flex;gap:4px}
+.f-header .theme-switch button{padding:5px 10px;font-size:11px}
+.f-skip{position:absolute;left:14px;top:-100px;padding:10px 14px;background:var(--surface);z-index:10}
+.f-skip:focus{top:10px}
+.f-hero{padding:55px 0 33px;max-width:870px}
+.f-eyebrow,.fig-eyebrow{font-size:10px;line-height:1.3;font-weight:850;letter-spacing:.16em;color:var(--accent);text-transform:uppercase}
+.f-hero h1{font:normal clamp(37px,5vw,66px)/1.05 var(--serif,Georgia,serif);letter-spacing:-.043em;margin:14px 0 20px;color:var(--ink)}
+.f-hero p{font-size:15px;line-height:1.8;max-width:710px;color:var(--muted);margin:0}
+.f-tagline{margin-top:21px!important;font-size:12px!important;font-weight:650}
+.f-tagline a{color:var(--accent)}
+#figureApp{min-width:0}
+.fig-head{display:flex;gap:14px;flex-wrap:wrap;justify-content:space-between;align-items:end;margin:0 0 16px}
+.fig-head>div:first-child{flex:1 1 480px}
+.fig-head h2{font:normal clamp(28px,3.6vw,41px)/1.19 var(--serif,Georgia,serif);letter-spacing:-.025em;color:var(--ink);margin:8px 0 9px}
+.fig-lede{max-width:810px;font-size:13px;line-height:1.7;color:var(--muted);margin:0}
+.fig-controls-line{display:flex;align-items:center;flex-wrap:wrap;gap:10px;padding:0 0 3px}
+.fig-select-label{color:var(--muted);font-size:12px;font-weight:700}
+#figDataset{border:1px solid var(--line);background:var(--surface);color:var(--ink);border-radius:5px;padding:9px 12px;font-size:12px;max-width:100%;cursor:pointer}
+.fig-paper{margin:0;background:#faf8f1;color:#312b24;border:1px solid #c6c0b3;padding:27px clamp(16px,3.2vw,39px) 18px}
+.fig-paper-label{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;border-bottom:1px solid #cfc8b9;padding:0 0 11px;font:700 12px/1.4 Georgia,serif;letter-spacing:.02em;color:#443a30}
+.fig-paper-label span{font:700 9px/1.5 system-ui,sans-serif;letter-spacing:.12em;color:#777064}
+.fig-six{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:15px 11px;padding:20px 0 14px}
+.fig-panel{color:#312b24;background:transparent;cursor:pointer;border:1px solid transparent;padding:8px 5px 12px;min-width:0;text-align:left;border-radius:3px}
+.fig-panel:hover{border-color:#c6bdac;background:#f4efe4}
+.fig-panel.is-active{background:#f0e9da;border-color:#a8875f;box-shadow:inset 0 0 0 1px #a8875f}
+.fig-panel-svg{display:block;width:100%;height:auto;overflow:visible}
+.fig-panel-svg .fig-index{font:500 15px/1 Georgia,serif;fill:#6e6559}
+.fig-panel-svg .fig-figure-id{font:italic 22px/1 Georgia,serif;fill:#51483f}
+.fig-panel-svg .fig-open-cell{fill:#faf8f1;stroke:#514b42;stroke-width:1.25}
+.fig-panel-svg .fig-sorted-cell{fill:#e1ddd2;stroke:#514b42;stroke-width:1.25}
+.fig-panel-svg .fig-ink-cell{fill:#312d29;stroke:#26221d;stroke-width:1.25}
+.fig-panel-svg .fig-value{font:600 29px/1 Georgia,serif;fill:#2f2b26}
+.fig-panel-svg .fig-value-invert{font:700 29px/1 Georgia,serif;fill:#fff8e8}
+.fig-panel-svg .fig-shift-arrow{stroke:#635e55;stroke-width:1.65;fill:none;stroke-linecap:round}
+.fig-panel-svg .fig-key-arrow{stroke:#8a6640;stroke-width:1.75;fill:none;stroke-linecap:round}
+.fig-panel-svg .fig-arrow-text{font:italic 13px/1 Georgia,serif;fill:#7b5c3a}
+.fig-panel-caption{display:block;min-height:52px;color:#62594d;font:400 12px/1.45 Georgia,serif;padding:1px 8px 0}
+.fig-main-caption{border-top:1px solid #cfc8b9;padding-top:14px;margin-top:4px;color:#4f473f;font:400 14px/1.57 Georgia,serif}
+.fig-main-caption strong{font-weight:700}
+.fig-stagebar{display:flex;align-items:center;flex-wrap:wrap;gap:17px;justify-content:space-between;padding:19px 0 28px;border-bottom:1px solid var(--line)}
+.fig-progress-label{display:flex;align-items:center;gap:14px;flex:1 0 170px;font-size:12px;font-weight:750;color:var(--ink)}
+.fig-progress-label>span:first-child{font-size:11px;white-space:nowrap;color:var(--accent)}
+.fig-progress-track{height:4px;background:var(--surface-alt);border-radius:4px;overflow:hidden;flex:1 1 70px;max-width:145px}
+.fig-progress-track span{display:block;height:100%;background:var(--accent);transition:width .18s}
+.fig-buttons{display:flex;gap:7px;flex-wrap:wrap}
+.fig-buttons button{background:var(--surface);color:var(--ink);border:1px solid var(--line);padding:9px 12px;border-radius:4px;font-size:12px;font-weight:700;cursor:pointer}
+.fig-buttons button:hover:not(:disabled){border-color:var(--accent)}
+.fig-buttons button:disabled{opacity:.35;cursor:not-allowed}
+.fig-detail{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:40px;padding:34px 0 39px}
+.fig-read{min-width:0}
+.fig-read h3{font:normal clamp(27px,3vw,36px)/1.25 var(--serif,Georgia,serif);margin:10px 0 15px}
+.fig-read p{color:var(--muted);font-size:14px;line-height:1.75;max-width:570px}
+.fig-array-read{font:600 17px/1.6 ui-monospace,SFMono-Regular,Consolas,monospace;background:var(--surface);color:var(--ink);border:1px solid var(--line);padding:13px 17px;margin:22px 0;white-space:normal;overflow-wrap:anywhere}
+.fig-read p.fig-invariant{color:var(--ink);font-size:14px}
+.fig-read p.fig-proof-note{font-size:12px;color:var(--muted)}
+.fig-code{min-width:0;align-self:start;border:1px solid var(--line);background:var(--surface)}
+.fig-code-title{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:15px 19px;font-size:12px;font-weight:850;border-bottom:1px solid var(--line)}
+.fig-code-title span{font-size:11px;color:var(--muted);font-weight:500}
+.fig-code ol{margin:0;padding:15px 0 15px 53px;list-style:decimal;font:13px/1.7 ui-monospace,SFMono-Regular,Consolas,monospace;overflow-x:auto}
+.fig-code li{padding:2px 20px 2px 0;color:var(--muted);white-space:pre;min-width:max-content}
+.fig-code li.fig-code-selected{background:color-mix(in srgb,var(--surface) 75%,var(--accent));color:var(--ink);font-weight:750}
+.fig-code-line{white-space:pre}
+.fig-code-footer{border-top:1px solid var(--line);padding:12px 18px;font-size:11px;color:var(--muted);line-height:1.7}
+.fig-bottom{border-top:1px solid var(--line);display:grid;grid-template-columns:1fr 1fr;gap:33px;padding:29px 0 75px}
+.fig-bottom strong{font:normal 20px/1.3 var(--serif,Georgia,serif)}
+.fig-bottom p{color:var(--muted);font-size:13px;line-height:1.75}
+.f-footer{border-top:1px solid var(--line);padding:20px 0 32px;font-size:11px;color:var(--muted);display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap}
+.f-footer a{color:var(--accent)}
+.f-shell button:focus-visible,.f-shell a:focus-visible,.f-shell select:focus-visible{outline:3px solid var(--accent);outline-offset:3px}
+@media(max-width:960px){.fig-six{grid-template-columns:repeat(2,minmax(0,1fr))}.fig-detail{gap:21px}}
+@media(max-width:640px){
+ .f-shell{width:calc(100% - 32px)}
+ .f-header{padding:15px 0}
+ .f-header nav{gap:11px}
+ .f-hero{padding:37px 0 28px}
+ .fig-six{grid-template-columns:1fr;gap:9px}
+ .fig-panel{max-width:450px;margin:0 auto;width:100%}
+ .fig-panel-caption{min-height:0}
+ .fig-detail,.fig-bottom{grid-template-columns:1fr;gap:20px}
+ .fig-stagebar{gap:12px}
+ .fig-buttons{flex:1 1 100%}
+ .fig-buttons button{flex:1 1 auto;font-size:11px}
+ .fig-paper{padding:19px 11px}
+ .fig-paper-label span{font-size:8px}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto!important}.fig-progress-track span{transition:none!important}}
+@media print{body{background:#fff;color:#222}.fig-six{grid-template-columns:repeat(3,minmax(0,1fr))}.fig-panel{break-inside:avoid}.f-header,.fig-stagebar,.fig-controls-line,.f-footer{display:none}.fig-paper{border:0}}

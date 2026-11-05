@@ -21,26 +21,59 @@ function drawInduction(f,{R,T,L,C,P}){
  return out;
 }
 function drawBayes(f,{R,T,L,C,P}){
+ /* Original pedagogical plate: 1 glyph = 1 person. Grid populations retain exact TP/FN/FP/TN counts. */
  const {focus,affected,unaffected,tp,fn,fp,tn,total,priorPct,positive,posterior}=f;
- const x1=263,x2=551,w=260;
- let out=T(55,30,'A REAL COUNTING EXPERIMENT · 1,000 PEOPLE','mv-kicker');
- out+=T(x1+130,63,'TEST POSITIVE','mv-kicker','middle')+T(x2+130,63,'TEST NEGATIVE','mv-kicker','middle');
- out+=T(54,124,'AFFECTED','mv-strong')+T(54,144,affected+' people','mv-kicker');
- out+=T(54,216,'UNAFFECTED','mv-strong')+T(54,236,unaffected+' people','mv-kicker');
- const cells=[
- {x:x1,y:78,value:tp,label:'TRUE POSITIVE',accent:['truePositive','positiveGroup','posterior'].includes(focus)},
- {x:x2,y:78,value:fn,label:'FALSE NEGATIVE',accent:focus==='truePositive'},
- {x:x1,y:169,value:fp,label:'FALSE POSITIVE',accent:['falsePositive','positiveGroup','posterior'].includes(focus)},
- {x:x2,y:169,value:tn,label:'TRUE NEGATIVE',accent:focus==='falsePositive'}
- ];
- for(const c of cells){out+=R(c.x,c.y,w,77,c.accent?'mv-selected':'mv-node');
-  out+=T(c.x+15,c.y+25,c.label,'mv-kicker')+T(c.x+15,c.y+60,c.value,'mv-flow-label');}
- const x=260,barY=290,bw=558;
- const initial=focus==='prior',numerator=initial?affected:tp,denominator=initial?total:positive;
- const fraction=numerator/denominator,highlight=Math.max(0,bw*fraction);
- out+=T(x,281,initial?`PRIOR: ${affected} / ${total} = ${priorPct}%`:`POSTERIOR: ${tp} / ${positive} = ${(posterior*100).toFixed(2)}%`,'mv-kicker');
- out+=R(x,294,bw,28,'mv-empty',4)+R(x,294,Math.max(1,highlight),28,'mv-math-highlight',4);
- out+=T(55,321,initial?'Gold segment: affected individuals in the whole population.':'Gold segment: genuinely affected among positive test results.','mv-note');
+ const phase={
+  prior:['BASE RATE',affected+' / '+total,priorPct.toFixed(2)+'%','of the population is affected.'],
+  truePositive:['SENSITIVITY',tp+' / '+affected,(100*tp/affected).toFixed(0)+'%','of affected people test positive.'],
+  falsePositive:['FALSE-POSITIVE RATE',fp+' / '+unaffected,(100*fp/unaffected).toFixed(0)+'%','of unaffected people test positive.'],
+  positiveGroup:['ALL POSITIVE RESULTS',tp+' + '+fp+' = '+positive,(100*positive/total).toFixed(2)+'%','of the population tests positive.'],
+  posterior:['POSTERIOR PROBABILITY',tp+' / '+positive,(posterior*100).toFixed(2)+'%','of positive tests are truly affected.']
+ }[focus];
+ const c=(x,y,text,cls,anchor='start')=>T(x,y,text,'mv-plate-'+cls,anchor);
+ let out=R(0,0,920,350,'mv-plate-paper',0);
+ out+=c(40,30,'FIGURE · CONDITIONAL PROBABILITY','section');
+ out+=c(880,30,'EACH SMALL SQUARE = ONE PERSON','small','end');
+ out+=L(40,43,880,43,'mv-plate-rule');
+ out+=c(40,64,'A population of 1,000, grouped by actual condition and test outcome','subtitle');
+ // Grouped outcomes form a color-coded frequency diagram, not a spatial map.
+ const columns=50,rows=20,size=7.1,pitchX=10.35,pitchY=10.25,startX=45,startY=78;
+ const classes=['mv-bayes-tp','mv-bayes-fn','mv-bayes-fp','mv-bayes-tn'],counts=[tp,fn,fp,tn];
+ out+='<g class="mv-bayes-population" aria-label="Exactly one thousand person squares">';
+ let idx=0;
+ for(let group=0;group<4;group++){
+  for(let i=0;i<counts[group];i++,idx++){
+   const x=startX+(idx%columns)*pitchX,y=startY+Math.floor(idx/columns)*pitchY;
+   let color=classes[group];
+   if(focus==='prior')color=group<2?'mv-bayes-prior':'mv-bayes-neutral';
+   else if(focus==='truePositive'&&group>=2)color='mv-bayes-neutral';
+   else if(focus==='falsePositive'&&group===3)color='mv-bayes-neutral';
+   else if((focus==='positiveGroup'||focus==='posterior')&&(group===1||group===3))color='mv-bayes-faded';
+   out+=R(Number(x.toFixed(2)),Number(y.toFixed(2)),size,size,color,0.7);
+  }
+ }
+ out+='</g>';
+ out+=L(597,75,597,308,'mv-plate-rule');
+ out+=c(625,88,phase[0],'section');
+ out+=c(625,144,phase[1],focus==='positiveGroup'?'fraction-compact':'fraction');
+ out+=c(625,204,phase[2],'percentage');
+ out+=c(625,234,phase[3],'detail');
+ if(focus==='posterior')out+=c(625,265,'False positives enter the denominator.','insight');
+ else if(focus==='positiveGroup')out+=c(625,265,'Next: condition on these '+positive+' positives.','insight');
+ else if(focus==='prior')out+=c(625,265,'Only '+affected+' of '+total+' people are affected.','insight');
+ else out+=c(625,265,'The denominator is crucial.','insight');
+ const legend=focus==='prior'?
+  [['mv-bayes-prior','Affected',affected],['mv-bayes-neutral','Unaffected',unaffected]]:
+  [['mv-bayes-tp','True +',tp],[(focus==='posterior'||focus==='positiveGroup')?'mv-bayes-faded':'mv-bayes-fn','False −',fn],
+   ['mv-bayes-fp','False +',fp],[(focus==='posterior'||focus==='positiveGroup')?'mv-bayes-faded':'mv-bayes-tn','True −',tn]];
+ legend.forEach((item,i)=>{
+  const x=44+(i%2)*270,y=297+Math.floor(i/2)*22;
+  out+=R(x,y-10,10,10,item[0],1);
+  out+=c(x+17,y,item[1]+' · '+item[2]+' people','legend');
+ });
+ out+=c(879,322,'Counts: '+tp+' + '+fn+' + '+fp+' + '+tn+' = '+total,'small','end');
+ out+=L(40,337,880,337,'mv-plate-rule');
+ out+=c(42,347,'Population model · 90% sensitivity · 10% false-positive rate · grouped by outcome, not geography.','footnote');
  return out;
 }
 function drawIndicators(f,{R,T,L,C,P}){

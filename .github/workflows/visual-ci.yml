@@ -5,6 +5,10 @@ on:
     branches: [main]
     paths:
       - 'visual-*'
+      - 'figure-insertion-*'
+      - 'insertion-sort.html'
+      - 'engineering.html'
+      - 'VISUAL_FIGURE_QUALITY_PHASE15.md'
       - 'foundation.html'
       - 'foundation.js'
       - 'VISUAL_LEARNING_PHASE14.md'
@@ -12,6 +16,7 @@ on:
       - 'tests/visual-*'
       - 'tests/math-*'
       - 'tests/systems-*'
+      - 'tests/figure-quality-*'
       - '.github/workflows/visual-ci.yml'
 permissions:
   contents: read
@@ -31,9 +36,12 @@ jobs:
           node --check visual-systems-render.js
           node --check visual-scenes.js
           node --check visual-engine.js
+          node --check figure-insertion-model.js
+          node --check figure-insertion.js
           node --check foundation.js
           node tests/math-reference.test.cjs
           node tests/systems-reference.test.cjs
+          node tests/figure-quality-reference.test.cjs
           node tests/visual-reference.test.cjs
           node tests/foundation-reference.test.cjs
   actual-browser:
@@ -53,3 +61,13 @@ jobs:
           node tests/visual-browser.test.cjs
           node tests/math-browser.test.cjs
           node tests/systems-browser.test.cjs
+          node tests/figure-quality-browser.test.cjs
+
+      - name: Upload actual browser screenshots for human visual QA
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: phase15-original-figure-screenshots
+          path: visual-review/
+          if-no-files-found: ignore
+          retention-days: 7

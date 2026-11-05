@@ -8,6 +8,10 @@
 
 **Start practicing:** https://mtk1606.github.io/Mastery/focus.html
 
+## Figure Quality Reboot · Book-quality diagrams before more volume
+
+The initial visual labs were numerically checked but not sufficiently clear as teaching figures. The first redesign corrects that standard: [Insertion sort — original six-panel indexed-array figure](insertion-sort.html) shows the full input-to-output progression, element-shift arrows, sorted-prefix shading and code linked to the exact states. Try mixed, sorted, and reverse inputs. The [Bayes probability chapter](foundation.html#C3/c3-counting) now uses a one-person-per-mark 1,000-person frequency plate, not a four-card dashboard. Diagrams are original, inspired by the pedagogical approach of classical algorithm figures, not copied from textbook PDFs. Read [the visual quality acceptance standard](VISUAL_FIGURE_QUALITY_PHASE15.md). Remaining generic figures need the same editorial redesign in later batches; model-level tests alone are not considered proof of diagram quality.
+
 ## Phase XIV-D · Six systems and reliability visual laboratories
 
 All **six C4 Foundation lessons** now have state-accurate, original SVG visual simulations: event deduplication, reproducible bug-fix review, nearest-rank p50/p95/p99 latency and throughput, atomic ledger transfers, retry idempotency and two-worker races. Switch between safe and unsafe scenarios and see the *actual modeled* committed balances, accepted IDs, request outcomes and worker reads. The scenes retain pause/replay, a complete text trace, prediction checks, dark/light themes and mobile panning, with no fictitious code or learning credit. That makes **27 Foundation visualizations across C0–C4**. [View the Systems reliability release report](VISUAL_SYSTEMS_PHASE14D.md) or [try the transaction visual](foundation.html#C4/c4-sql).
