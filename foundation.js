@@ -132,6 +132,8 @@ function readFrom(x){
  finally{if(old===null)localStorage.removeItem(KEY);else localStorage.setItem(KEY,old);}
 }
 root.addEventListener('click',event=>{
+ const guide=event.target.closest('summary')?.parentElement;
+ if(guide?.matches('details[data-guide]')&&!guide.open){state.help[guide.dataset.guide]=true;save();}
  const b=event.target.closest('button');if(!b)return;
  if(b.dataset.stage){go(b.dataset.stage,bank.modules.find(m=>m.id===b.dataset.stage).chapters[0].id);return;}
  if(b.dataset.lesson){go(stage,b.dataset.lesson);return;}
