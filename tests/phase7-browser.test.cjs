@@ -22,7 +22,7 @@ const {chromium}=require('playwright');
  await page.locator('[data-set-theme="dark"]').first().click();assert.equal(await page.evaluate(()=>document.documentElement.dataset.theme),'dark');
  await page.reload();assert.equal(await page.evaluate(()=>document.documentElement.dataset.theme),'dark');
  assert.match(await page.locator('#iaNotes').inputValue(),/computed once/);
- const b=await dl.path();page.once('dialog',d=>d.accept());await page.setInputFiles('#iaImport',b);assert.match(await page.locator('#iaStatus').innerText(),/restored/i);
+ const b=await dl.path();page.once('dialog',d=>d.accept());await page.setInputFiles('#iaImport',b);await page.waitForFunction(()=>/restored/i.test(document.querySelector('#iaStatus')?.textContent||''),null,{timeout:8000});assert.match(await page.locator('#iaStatus').innerText(),/restored/i);
  const small=await context.newPage();await small.setViewportSize({width:390,height:844});await small.goto(base+'mock-interviews.html');await small.locator('.ia-question').first().waitFor();assert.equal(await small.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+3),true);
  await page.goto(base+'phase7.html');await page.locator('#p7Nav button').first().waitFor();assert.equal(await page.locator('#p7Nav button').count(),5);
  await page.locator('[data-route="lab"]').click();await page.locator('#p7Next').click();assert.match(await page.locator('#p7StepCounter').innerText(),/Step 2/);

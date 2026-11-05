@@ -154,6 +154,7 @@ T('window_max_sum','Best fixed-size interval','quant','10 · Streaming analysis'
   [[[1,1,1],3],3],[[[-1,5,-2,6],2],4],[[[10,-9,10,-9],2],1]
  ]))
 ];
+for(const t of tasks)t.numericMode=['rolling_vwap','gradient_step','stable_sigmoid'].includes(t.id)?'float':'exact';
 const map=Object.fromEntries(tasks.map(t=>[t.id,t]));
 function validate(){
  if(tasks.length<10||new Set(tasks.map(t=>t.id)).size!==tasks.length)throw Error('Invalid lab bank');

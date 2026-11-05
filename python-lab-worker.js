@@ -9,7 +9,9 @@ scope = {"__name__": "__mastery_student__"}
 def equal(actual, expected):
     if isinstance(expected, bool): return type(actual) is bool and actual == expected
     if expected is None: return actual is None
-    if isinstance(expected, int) and not isinstance(expected,bool): return type(actual) is int and actual == expected
+    if isinstance(expected, int) and not isinstance(expected,bool):
+        if p.get("numericMode") == "float": return isinstance(actual,(float,int)) and not isinstance(actual,bool) and math.isfinite(actual) and math.isclose(actual,expected,rel_tol=1e-7,abs_tol=1e-8)
+        return type(actual) is int and actual == expected
     if isinstance(expected, float): return isinstance(actual,(float,int)) and not isinstance(actual,bool) and math.isfinite(actual) and math.isclose(actual,expected,rel_tol=1e-7,abs_tol=1e-8)
     if isinstance(expected, str): return isinstance(actual,str) and actual == expected
     if isinstance(expected, list): return isinstance(actual,(tuple,list)) and len(actual)==len(expected) and all(equal(a,b) for a,b in zip(actual,expected))
@@ -45,7 +47,7 @@ self.onmessage=async event=>{
    runtime=await loadPyodide({indexURL:PYODIDE});
   }
   self.postMessage({type:'executing',nonce:m.nonce});
-  runtime.globals.set('_mastery_payload_json',JSON.stringify({code:m.code,fn:m.fn,cases:m.cases}));
+  runtime.globals.set('_mastery_payload_json',JSON.stringify({code:m.code,fn:m.fn,cases:m.cases,numericMode:m.numericMode}));
   const result=await runtime.runPythonAsync(RUNNER);
   self.postMessage({...JSON.parse(result),type:'result',nonce:m.nonce});
  }catch(ex){

@@ -76,7 +76,9 @@ def window_max_sum(values, k):
     return max(sum(values[i:i+k]) for i in range(len(values)-k+1))
 
 
-def compare(actual, expected):
+def compare(actual, expected, numeric_mode='exact'):
+    if isinstance(expected,(int,float)) and not isinstance(expected,bool) and numeric_mode=='float':
+        return isinstance(actual,(float,int)) and not isinstance(actual,bool) and math.isfinite(actual) and math.isclose(actual,expected,rel_tol=1e-7,abs_tol=1e-8)
     if isinstance(expected, float):
         return isinstance(actual,(float,int)) and not isinstance(actual,bool) and math.isfinite(actual) and math.isclose(actual,expected,rel_tol=1e-7,abs_tol=1e-8)
     if isinstance(expected, list):
@@ -93,7 +95,7 @@ def main():
         fn=globals()[task['fn']]
         for i,case in enumerate(task['cases'],1):
             actual=fn(*case['args'])
-            assert compare(actual,case['expected']),f"{task['id']} case {i}: expected {case['expected']!r}; oracle {actual!r}"
+            assert compare(actual,case['expected'],task.get('numericMode','exact')),f"{task['id']} case {i}: expected {case['expected']!r}; oracle {actual!r}"
             total+=1
     print(f"PASS: {len(tasks)} independently implemented Python functions agree on {total} deterministic cases.")
 

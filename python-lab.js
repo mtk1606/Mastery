@@ -108,7 +108,7 @@ function run(){
   }
  };
  worker.onerror=ev=>{clearTimeout(runTimer);destroyWorker();button.disabled=false;setStatus('Python Worker failed to load. This lab needs network access to the pinned Pyodide CDN.');};
- worker.postMessage({type:'run',nonce:n,code:source,fn:t.fn,cases:t.cases});
+ worker.postMessage({type:'run',nonce:n,code:source,fn:t.fn,cases:t.cases,numericMode:t.numericMode});
 }
 function downloadCode(){
  const t=current(),source=document.getElementById('plCode')?.value||t.starter;
