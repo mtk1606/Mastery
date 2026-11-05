@@ -1,0 +1,57 @@
+name: Mastery Phase VII systems and interview academy QA
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'phase7.html'
+      - 'phase7.css'
+      - 'phase7.js'
+      - 'phase7-data.js'
+      - 'phase7-model.js'
+      - 'phase7/**'
+      - 'mock-interviews.html'
+      - 'mock-interviews.css'
+      - 'mock-interviews.js'
+      - 'mock-questions.js'
+      - 'tests/phase7-*'
+      - '.github/workflows/phase7-ci.yml'
+permissions:
+  contents: read
+jobs:
+  native-segmented:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Validate source provenance and independent reference behaviour
+        run: node tests/phase7-data.test.cjs
+      - name: Build and test segmented WAL (C++20)
+        run: |
+          cmake -S phase7 -B /tmp/m7-build -DCMAKE_BUILD_TYPE=Debug
+          cmake --build /tmp/m7-build --parallel
+          ctest --test-dir /tmp/m7-build --output-on-failure
+      - name: Test POSIX recovery with AddressSanitizer and UndefinedBehaviorSanitizer
+        run: |
+          cmake -S phase7 -B /tmp/m7-san -DCMAKE_BUILD_TYPE=Debug -DMASTERY_SANITIZE=ON
+          cmake --build /tmp/m7-san --parallel
+          ctest --test-dir /tmp/m7-san --output-on-failure
+  real-http-browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned Playwright and Chromium
+        run: |
+          npm install --no-save --ignore-scripts playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Test the real static-site interview and Phase VII journeys
+        run: |
+          python3 -m http.server 8892 --bind 127.0.0.1 >/tmp/mastery7-http.log 2>&1 &
+          node tests/phase7-browser.test.cjs

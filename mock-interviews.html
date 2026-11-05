@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#ffffff">
+<meta name="description" content="Evidence-labelled mock interviews for Jane Street, Citadel, Meta, Google, Amazon and other SWE and quant careers. Original guided questions, public-source links and structured assessment.">
+<title>Mock Interview Academy · Mastery</title>
+<script src="theme.js"></script>
+<link rel="stylesheet" href="academic.css"><link rel="stylesheet" href="mock-interviews.css">
+</head>
+<body>
+<header class="ia-header">
+ <a class="ia-brand" href="index.html#">mastery <small>/ interview academy</small></a>
+ <nav aria-label="Main navigation"><a href="index.html#">Catalogue</a><a href="engineering.html">Computer science</a><a href="cpp-lab.html">C++ laboratory</a><a href="phase7.html">Phase VII systems</a><a href="mock-interviews.html" aria-current="page">Mock interviews</a></nav>
+ <div class="theme-switch" role="group" aria-label="Colour theme"><button type="button" data-set-theme="light">Light</button><button type="button" data-set-theme="dark">Dark</button></div>
+</header>
+<main>
+ <section class="ia-hero">
+  <p class="ia-kicker">MASTERY / SCHOOL OF COMPUTING · ASSESSMENT CENTRE</p>
+  <h1>Practice the interview.<br><em>Explain the reasoning.</em></h1>
+  <p>Real employer-published examples where available, attributed community-tagged practice, and explicitly original exercises. Work under a clock, communicate assumptions, test your code, and evaluate your reasoning against an exact rubric.</p>
+  <div class="ia-hero-meta"><span id="iaQuestionCount">Curated question library</span><span>Source evidence visible on every question</span><span>No access locks or assumed pass guarantees</span></div>
+ </section>
+ <div class="ia-notice"><strong>Question provenance matters.</strong> “Official published example” means the employer shared it; “community tag” is not independent confirmation that a particular applicant received it; “original practice” is authored for Mastery. Employer names identify relevant practice targets, not sponsorship or inside access. Original prompts here are not copies of LeetCode or employer copyrighted statements.</div>
+ <div class="ia-shell">
+  <aside class="ia-sidebar" aria-label="Question bank">
+   <h2>Question catalogue</h2>
+   <div class="ia-filter"><label for="iaCompany">Company</label><select id="iaCompany"><option value="all">All companies</option></select></div>
+   <div class="ia-filter"><label for="iaRole">Role</label><select id="iaRole"><option value="all">All roles</option><option>SWE</option><option>Quant Dev</option><option>Quant Trading</option></select></div>
+   <div class="ia-filter"><label for="iaEvidence">Evidence type</label><select id="iaEvidence"><option value="all">All source types</option><option value="official">Official published example</option><option value="company-tags">Community-tagged</option><option value="practice">Original practice</option></select></div>
+   <div class="ia-filter"><label for="iaSearch">Search topics or questions</label><input id="iaSearch" type="search" placeholder="Graph, probability, systems…"></div>
+   <div class="ia-start-options"><label for="iaDuration">Round duration</label><select id="iaDuration"><option value="25">25-minute focused practice</option><option value="45" selected>45-minute interview</option><option value="60">60-minute deep interview</option></select><button id="iaStartRound" type="button" class="ia-primary">Begin curated mock round</button></div>
+   <p id="iaFilterCount" class="ia-subtle" aria-live="polite"></p>
+   <div id="iaQuestionList" class="ia-questions" role="list"></div>
+   <div class="ia-backup"><button id="iaExport" type="button">Export performance and answers</button><label for="iaImport">Restore a saved record <input id="iaImport" type="file" accept="application/json" hidden></label><p id="iaStatus" role="status" aria-live="polite"></p></div>
+  </aside>
+  <article class="ia-reader" id="iaReader" tabindex="-1" aria-live="polite"><h2>Preparing interview library…</h2></article>
+  <aside class="ia-progress" aria-label="Interview record"><h2>Interview record</h2><div id="iaProgress"></div></aside>
+ </div>
+</main>
+<footer class="ia-footer"><span>Mastery · Independent education, not affiliated with the firms named</span><span>Source integrity · Executable thinking · Communicated reasoning</span><a href="MOCK_INTERVIEW_SOURCES.md">Source and licensing notes</a></footer>
+<script src="mock-questions.js"></script>
+<script src="mock-interviews.js"></script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+'use strict';
+const assert=require('node:assert/strict');
+const {chromium}=require('playwright');
+(async()=>{
+ const base='http://127.0.0.1:8892/';
+ const browser=await chromium.launch({headless:true});
+ const context=await browser.newContext({viewport:{width:1420,height:880},acceptDownloads:true});
+ const page=await context.newPage(),errs=[];page.on('pageerror',e=>errs.push(String(e)));
+ await page.goto(base+'mock-interviews.html',{waitUntil:'domcontentloaded'});
+ await page.locator('.ia-question').first().waitFor();assert.equal(await page.locator('.ia-question').count(),25);
+ await page.selectOption('#iaCompany','Citadel');assert.equal(await page.locator('.ia-question').count(),8);
+ await page.selectOption('#iaCompany','all');await page.locator('[data-select="js-memo"]').click();
+ assert.match(await page.locator('#iaReader h2').innerText(),/Memo/);
+ await page.locator('#iaNotes').fill('I need to prove that every uncached value is computed once.');
+ await page.locator('#iaCode').fill('template<typename F> auto memo(F fn) { /* code draft */ }');
+ await page.locator('[data-action="start-single"]').click();await page.locator('#iaClock').waitFor();
+ await page.locator('[data-action="pause"]').click();await page.locator('[data-action="resume"]').waitFor();
+ await page.locator('[data-action="resume"]').click();
+ for(let i=0;i<5;i++)await page.selectOption('#iaGrade'+i,'3');
+ await page.locator('[data-action="record-score"]').click();assert.match(await page.locator('#iaProgress').innerText(),/15\.0/);
+ const downloadPromise=page.waitForEvent('download');await page.locator('#iaExport').click();const dl=await downloadPromise;assert.match(dl.suggestedFilename(),/interview-record/);
+ await page.locator('[data-set-theme="dark"]').first().click();assert.equal(await page.evaluate(()=>document.documentElement.dataset.theme),'dark');
+ await page.reload();assert.equal(await page.evaluate(()=>document.documentElement.dataset.theme),'dark');
+ assert.match(await page.locator('#iaNotes').inputValue(),/computed once/);
+ const b=await dl.path();page.once('dialog',d=>d.accept());await page.setInputFiles('#iaImport',b);assert.match(await page.locator('#iaStatus').innerText(),/restored/i);
+ const small=await context.newPage();await small.setViewportSize({width:390,height:844});await small.goto(base+'mock-interviews.html');await small.locator('.ia-question').first().waitFor();assert.equal(await small.evaluate(()=>document.documentElement.scrollWidth<=window.innerWidth+3),true);
+ await page.goto(base+'phase7.html');await page.locator('#p7Nav button').first().waitFor();assert.equal(await page.locator('#p7Nav button').count(),5);
+ await page.locator('[data-route="lab"]').click();await page.locator('#p7Next').click();assert.match(await page.locator('#p7StepCounter').innerText(),/Step 2/);
+ await page.selectOption('#p7Scenario','corrupt');await page.locator('#p7Next').click();assert.match(await page.locator('#p7Current').innerText(),/Record was complete|altered/);
+ await page.locator('#p7Answer').fill('Reject a complete WAL record if its checksum mismatches.');
+ await page.locator('[data-route="snapshot"]').click();assert.match(await page.locator('#p7Reader h2').innerText(),/Checkpoint/);
+ await page.locator('#p7Answer').fill('Snapshot after fsync must preserve request receipts.');
+ await page.reload();assert.match(await page.locator('[data-route="snapshot"]').count()+'','1');
+ for(const p of ['phase6.html','phase5.html','cpp-lab.html','market-systems.html']){const response=await page.request.get(base+p);assert.ok(response.ok(),p+' missing');}
+ assert.equal(errs.length,0,errs.join('\n'));
+ console.log('REAL HTTP CHROMIUM PASS: 25 linked interviews, company filter, timer, grade, notes, export+restore, dark theme, mobile, six fault labs and legacy routes');
+ await browser.close();
+})().catch(err=>{console.error(err);process.exit(1)});
