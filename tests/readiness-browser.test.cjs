@@ -36,7 +36,7 @@ const {chromium}=require('playwright');
  await page.locator('#sCompany').selectOption('Jane Street');
  await page.locator('#sCount').selectOption('1');
  await page.locator('#rStart').click();
- assert.match(await page.locator('#rMain h2').innerText(),/Interview in progress/);
+ assert.match(await page.locator('#rMain h2').first().innerText(),/Interview in progress/);
  await page.locator('[data-pause]').click();assert.equal(await page.locator('#rTimerState').innerText(),'Paused');
  await page.locator('[data-pause]').click();
  await page.locator('[data-finish]').click();
