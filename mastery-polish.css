@@ -165,3 +165,6 @@ html[data-theme="dark"] :where(.progress-ring:after){background:var(--surface)!i
  html{scroll-behavior:auto!important}
  *,*::before,*::after{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}
 }
+
+/* Keep decorative ambient light inside the phone viewport; do not mask genuine layout overflow. */
+@media(max-width:600px){:where(.f-headline,.campus-hero)::before{inset:0!important}}
