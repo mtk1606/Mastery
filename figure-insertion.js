@@ -58,10 +58,10 @@ function caption(s){
 }
 function render(){
  const s=data.stages[current];
- root.innerHTML='<div class="fig-head"><div class="fig-eyebrow">FIGURE LAB / ALGORITHMS · 01</div>'+
+ root.innerHTML='<div class="fig-head"><div class="fig-intro"><div class="fig-eyebrow">FIGURE LAB / ALGORITHMS · 01</div>'+
  '<h2>The operation of insertion sort</h2>'+
  '<p class="fig-lede">Read the entire six-panel figure first. Then select a panel to trace how a value is removed conceptually, larger values shift right, and the key settles into the sorted prefix.</p>'+
- '<div class="fig-controls-line"><label class="fig-select-label" for="figDataset">Array to sort</label>'+
+ '</div><div class="fig-controls-line"><label class="fig-select-label" for="figDataset">Array to sort</label>'+
  '<select id="figDataset" aria-label="Choose insertion-sort input">'+Object.entries(model.examples).map(([key,x])=>'<option value="'+key+'" '+(key===data.variant?'selected':'')+'>'+E(x.label)+' · ['+x.values.join(', ')+']</option>').join('')+'</select></div></div>'+
  '<figure class="fig-paper"><div class="fig-paper-label">FIGURE 1 <span>INDEXED ARRAYS · KEY INSERTION · ELEMENT MOVEMENT</span></div>'+
  '<div class="fig-six">'+data.stages.map((f,i)=>'<button class="fig-panel '+(i===current?'is-active':'')+'" type="button" data-fig-pass="'+i+'" aria-pressed="'+(i===current)+'">'+

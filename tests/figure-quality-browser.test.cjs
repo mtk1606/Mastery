@@ -13,6 +13,12 @@ const {chromium}=require('playwright');
  await page.goto(base+'insertion-sort.html',{waitUntil:'domcontentloaded'});
  await page.locator('.fig-panel').first().waitFor();
  assert.equal(await page.locator('.fig-panel').count(),6);
+ const titleLayout=await page.evaluate(()=>{
+  const e=document.querySelector('.fig-eyebrow').getBoundingClientRect(),h=document.querySelector('.fig-head h2').getBoundingClientRect(),p=document.querySelector('.fig-lede').getBoundingClientRect();
+  return {eyebrow:e.x,eyebrowBottom:e.bottom,title:h.x,titleTop:h.y,titleBottom:h.bottom,lede:p.x,ledeTop:p.y};
+ });
+ assert(Math.abs(titleLayout.title-titleLayout.eyebrow)<25&&Math.abs(titleLayout.lede-titleLayout.eyebrow)<25,'Desktop title and subtitle must align with figure eyebrow: '+JSON.stringify(titleLayout));
+ assert(titleLayout.titleTop>=titleLayout.eyebrowBottom-1&&titleLayout.ledeTop>=titleLayout.titleBottom-1,'Title and description must follow vertically: '+JSON.stringify(titleLayout));
  assert.equal(await page.locator('.fig-panel-svg').count(),6);
  assert.equal(await page.locator('.fig-shift-arrow').count(),9,'9 exact right-shift arrows expected for mixed input');
  assert.equal(await page.locator('.fig-key-arrow').count(),5);
@@ -48,6 +54,7 @@ const {chromium}=require('playwright');
  await page.setViewportSize({width:1366,height:900});
  await page.goto(base+'foundation.html#C3/c3-counting',{waitUntil:'domcontentloaded'});
  await page.locator('.mv-plate-paper').waitFor();
+ assert.match(await page.locator('.fd-example').textContent(),/Among 1,000 people: 10 affected/);
  const glyphSelector='#fdVisual .mv-bayes-population rect';
  assert.equal(await page.locator(glyphSelector).count(),1000,'Each square must stand for exactly one person');
  async function checkGeometry(stage){
