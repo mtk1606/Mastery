@@ -1,0 +1,43 @@
+name: Mastery Phase X — Adaptive Interview Arena
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'phase10*'
+      - 'readiness-worker.js'
+      - 'tests/phase10-*'
+      - '.github/workflows/phase10-ci.yml'
+permissions:
+  contents: read
+jobs:
+  core-and-formulas:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Syntax and arithmetic oracle tests
+        run: |
+          node --check phase10-core.js
+          node --check phase10.js
+          node --check tests/phase10-browser.test.cjs
+          node tests/phase10-reference.test.cjs
+  real-browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Pinned Chromium
+        run: |
+          npm install --no-save --no-package-lock playwright@1.56.1
+          npx playwright install chromium
+      - name: Run actual client-side test worker journey
+        run: |
+          python3 -m http.server 8786 --bind 127.0.0.1 >/tmp/mastery-phase10-http.log 2>&1 &
+          node tests/phase10-browser.test.cjs
