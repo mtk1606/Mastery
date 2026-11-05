@@ -33,7 +33,11 @@ const {chromium}=require('playwright');
  }
  await page.locator('#p5Scenario').selectOption('normal');await page.locator('#p5Build').click();
  for(let i=0;i<20;i++)if(await page.locator('#p5Next').isEnabled())await page.locator('#p5Next').click();
+ await page.locator('#p5Prev').click();await page.locator('#p5Prev').click();
  assert.match(await page.locator('#p5Hash').innerText(),/780225790431407597/);
+ assert.match(await page.locator('#p5Hash').innerText(),/matches pinned native golden state/);
+ await page.locator('#p5Next').click();
+ assert.doesNotMatch(await page.locator('#p5Hash').innerText(),/matches pinned native golden state/);
  await page.locator('a[href="#fanout"]').click();await page.locator('#p5Publish').waitFor();
  await page.locator('#p5Publish').click();await page.locator('#p5Publish').click();await page.locator('#p5Publish').click();
  assert.match(await page.locator('#p5FeedStatus').innerText(),/BACKPRESSURE/);
