@@ -127,6 +127,47 @@ public:
         // Market orders are immediate-or-cancel; unfilled quantity is discarded.
         return out;
     }
+    // Checkpoints record resting orders in price/time FIFO order. This is a
+    // logical state snapshot; durability of the file is the caller's duty.
+    struct SnapshotOrder { Id id; Side side; Price price; Qty remaining; };
+    struct Snapshot {
+        std::uint64_t sequence{};
+        std::uint64_t trades{};
+        std::vector<SnapshotOrder> orders;
+    };
+    Snapshot export_snapshot() const {
+        Snapshot s{seq_, trades_, {}};
+        for (auto const& [price, queue] : bids_)
+            for (auto const& order : queue)
+                s.orders.push_back({order.id, Side::Buy, price, order.remaining});
+        for (auto const& [price, queue] : asks_)
+            for (auto const& order : queue)
+                s.orders.push_back({order.id, Side::Sell, price, order.remaining});
+        return s;
+    }
+    // Strong-commit import: check the entire candidate before changing this book.
+    // Rebuilding the id index from the queues avoids persisting invalid iterators.
+    void import_snapshot(Snapshot const& s) {
+        Exchange candidate;
+        candidate.seq_ = s.sequence;
+        candidate.trades_ = s.trades;
+        for (auto const& order : s.orders) {
+            if (order.id == 0 || order.price <= 0 || order.price > max_price ||
+                order.remaining == 0 || order.remaining > max_order_qty ||
+                candidate.by_id_.contains(order.id))
+                throw std::invalid_argument("invalid or duplicated snapshot order");
+            candidate.rest(Event{0, Kind::Limit, order.id, order.side, order.price, order.remaining}, order.remaining);
+        }
+        if (!candidate.invariant()) throw std::invalid_argument("crossed or invalid snapshot book");
+        // Swap all containers together; list nodes and their iterators remain owned
+        // by the same map nodes after container swap (allocator equality holds).
+        using std::swap;
+        swap(bids_, candidate.bids_);
+        swap(asks_, candidate.asks_);
+        swap(by_id_, candidate.by_id_);
+        swap(seq_, candidate.seq_);
+        swap(trades_, candidate.trades_);
+    }
     std::uint64_t sequence() const { return seq_; }
     std::size_t resting_count() const { return by_id_.size(); }
     std::uint64_t trades_count() const { return trades_; }
