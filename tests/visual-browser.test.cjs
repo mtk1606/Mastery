@@ -14,7 +14,7 @@ const assert=require('node:assert/strict'),{chromium}=require('playwright');
  };
  for(const [id,stage] of Object.entries(scenePaths)){
   const response=await page.goto(base+'foundation.html#'+stage+'/'+id,{waitUntil:'domcontentloaded'});
-  assert(response.ok(),id+' lesson load failed');
+  if(response)assert(response.ok(),id+' lesson load failed');
   await page.waitForFunction(sceneId=>document.querySelector('.mv-top h4')?.textContent===window.MasteryVisualScenes.lookup(sceneId)?.title,id);
   await page.locator('.mv-svg').waitFor();
   assert.equal(await page.locator('.mv').count(),1,id+' missing integrated figure');
