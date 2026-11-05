@@ -113,3 +113,10 @@ The [Phase V course](phase5.html) adds **six original faculty-style lectures** (
 The new native [Phase V C++20 project](phase5/README.md) extends `Exchange` with FIFO-preserving snapshot export/import. Its independently testable `Venue` routes globally sequenced messages to per-symbol books, validates checksummed logical checkpoints before swapping state, rejects stale epochs, and models bounded all-or-nothing fanout. Native tests cover a pinned cross-language checkpoint and golden hash, corrupted/torn checkpoints, 4,000 seeded messages, sequence gaps and queue saturation. The browser uses a separately written JavaScript reference and does **not** trace arbitrary C++ program execution.
 
 [Phase V CI](.github/workflows/phase5-ci.yml) compiles/tests with sanitizers and runs actual HTTP/Chromium browser flows. The course is educational—not a crash-durable distributed exchange or a source of proprietary interview questions. Details in [Phase V source notes](phase5/README.md) and [release QA report](PHASE5_QA.md).
+
+
+## Phase VI — Durable Recovery & Isolated Subscriber Replay (November 2026)
+
+The new [Phase VI module](phase6.html) includes five proof-oriented lectures, two interactive failure experiments and three open written design defenses. Its native [Linux/POSIX C++20 reference](phase6/README.md) implements an fsynced append-only WAL prior to acknowledgement, recovery of client-key idempotency receipts, strict log framing, a deliberately injected process crash after WAL fsync, and bounded per-subscriber retention with resnapshot-required gap handling.
+
+The course is open-access and preserves Light/Dark themes and JSON note backups. Browser models are **instructional representations**, not traces of arbitrary learner C++. This is not a power-cut-certified or distributed consensus storage engine. See [release documentation](PHASE6_RELEASE.md) and the [Phase VI CI workflow](.github/workflows/phase6-ci.yml).
