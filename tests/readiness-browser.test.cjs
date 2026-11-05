@@ -28,6 +28,7 @@ const {chromium}=require('playwright');
  await page.locator('[data-seed="lc-two-sum"]').click();
  await page.locator('[data-run="lc-two-sum"]').click();
  await page.waitForFunction(()=>document.querySelector('#rTestResults')?.textContent.includes('seed 2'));
+ await page.locator('summary').filter({hasText:'Five-dimensional interview rubric'}).click();
  await page.locator('[data-rubric="0"]').selectOption('4');await page.locator('[data-save-rubric="lc-two-sum"]').click();
  await page.locator('button[data-view="review"]').click();
  assert.match(await page.locator('#rMain').innerText(),/Verified code passes/);
