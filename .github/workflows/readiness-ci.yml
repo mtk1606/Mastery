@@ -1,0 +1,46 @@
+name: Mastery Interview Readiness — Phase VIII
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'readiness.html'
+      - 'readiness.css'
+      - 'readiness.js'
+      - 'readiness-worker.js'
+      - 'readiness-bank.js'
+      - 'tests/readiness-*'
+      - '.github/workflows/readiness-ci.yml'
+permissions:
+  contents: read
+jobs:
+  source-and-reference:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check syntax and 300+ source-linked bank
+        run: |
+          node --check readiness.js
+          node --check readiness-worker.js
+          node --check readiness-bank.js
+          node tests/readiness-reference.test.cjs
+  real-browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned Playwright and Chromium
+        run: |
+          npm install --no-save --no-package-lock playwright@1.56.1
+          npx playwright install chromium
+      - name: Run actual Worker/HTTP interaction tests
+        run: |
+          python3 -m http.server 8783 --bind 127.0.0.1 >/tmp/mastery-readiness-http.log 2>&1 &
+          node tests/readiness-browser.test.cjs
