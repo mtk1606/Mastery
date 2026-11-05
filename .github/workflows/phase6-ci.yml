@@ -1,0 +1,61 @@
+name: Mastery Phase VI durable systems verification
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'phase6.html'
+      - 'phase6.css'
+      - 'phase6.js'
+      - 'phase6-data.js'
+      - 'phase6-model.js'
+      - 'phase6/**'
+      - 'tests/phase6-*'
+      - 'exchange/include/exchange.hpp'
+      - 'phase5/include/reliability.hpp'
+      - '.github/workflows/phase6-ci.yml'
+permissions:
+  contents: read
+jobs:
+  native-posix:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Check reference JavaScript and deterministically exercise crash and feed models
+        run: |
+          node --check phase6.js
+          node --check phase6-model.js
+          node --check phase6-data.js
+          node tests/phase6-reference.test.cjs
+      - name: Compile and test Linux/POSIX C++20 WAL and read-only replay
+        run: |
+          cmake -S phase6 -B /tmp/mastery-phase6-build -DCMAKE_BUILD_TYPE=Debug
+          cmake --build /tmp/mastery-phase6-build --parallel 2
+          ctest --test-dir /tmp/mastery-phase6-build --output-on-failure
+          mkdir -p /tmp/mastery-phase6-demo
+          /tmp/mastery-phase6-build/durable_demo /tmp/mastery-phase6-demo/orders.wal > /tmp/p6-first.txt
+          /tmp/mastery-phase6-build/durable_demo /tmp/mastery-phase6-demo/orders.wal > /tmp/p6-replayed.txt
+          grep -q 'first_status=COMMITTED' /tmp/p6-first.txt
+          grep -q 'first_status=IDEMPOTENT_REPLAY' /tmp/p6-replayed.txt
+      - name: Compile AddressSanitizer and UndefinedBehaviorSanitizer native checks
+        run: |
+          cmake -S phase6 -B /tmp/mastery-phase6-asan -DCMAKE_BUILD_TYPE=Debug -DMASTERY_SANITIZE=ON
+          cmake --build /tmp/mastery-phase6-asan --parallel 2
+          ctest --test-dir /tmp/mastery-phase6-asan --output-on-failure
+  browser-journey:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Install Chromium and Playwright
+        run: |
+          npm install --no-save --ignore-scripts playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Verify actual course and experiments over HTTP
+        run: |
+          python3 -m http.server 8996 --bind 127.0.0.1 >/tmp/phase6-http.log 2>&1 &
+          node tests/phase6-browser.test.cjs
