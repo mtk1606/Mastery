@@ -1,0 +1,9 @@
+'use strict';const assert=require('node:assert/strict');const {frames,Feed,SCENARIOS}=require('../phase6-model.js');
+for(const [name] of Object.entries(SCENARIOS)){const f=frames(name);assert(f.length>=5);assert.equal(f[0].status,'READY');assert(f.every(s=>Array.isArray(s.wal)));}
+let normal=frames('normal');assert(normal.some(s=>s.status==='ACKNOWLEDGED'));assert.equal(normal.at(-1).status,'IDEMPOTENT_REPLAY');assert.equal(normal.at(-1).applied.length,1);
+let before=frames('before');assert.equal(before.at(-1).status,'RETRY_CAN_SUBMIT');assert.equal(before.at(-1).applied.length,0);
+let after=frames('after');assert.equal(after.at(-2).status,'IDEMPOTENT_REPLAY');assert.equal(after.at(-2).applied.length,1);
+assert.equal(frames('torn').at(-1).status,'EMPTY_DURABLE_PREFIX');assert.equal(frames('corrupt').at(-1).status,'FAIL_CLOSED');
+let f=new Feed(3);assert(f.attach('fast'));assert(f.attach('slow'));f.publish('A');f.publish('B');assert.equal(f.poll('fast').seq,1);assert.equal(f.poll('fast').seq,2);f.publish('C');f.publish('D');assert.equal(f.snapshot().oldest,2);assert.equal(f.poll('fast').seq,3);assert.equal(f.poll('fast').seq,4);assert.equal(f.poll('slow').status,'GAP_NEEDS_SNAPSHOT');assert(f.resnapshot('slow'));assert.equal(f.poll('slow').status,'NO_NEW_EVENTS');f.publish('E');assert.equal(f.poll('slow').seq,5);assert.equal(f.poll('fast').seq,5);assert(!f.attach('slow'));
+for(let cap=1;cap<=12;cap++){const g=new Feed(cap);assert(g.attach('rapid'));assert(g.attach('stalled'));for(let i=0;i<500;i++){g.publish('e'+i);const r=g.poll('rapid');assert.equal(r.status,'EVENT');assert.equal(r.seq,i+1);}const stale=g.poll('stalled');assert.equal(stale.status,'GAP_NEEDS_SNAPSHOT');assert(g.resnapshot('stalled'));assert.equal(g.poll('stalled').status,'NO_NEW_EVENTS');}
+console.log('PHASE_VI_BROWSER_MODEL_PASS: 5 crash scenarios + 6,000 deterministic feed messages, gap and resnapshot invariants');
