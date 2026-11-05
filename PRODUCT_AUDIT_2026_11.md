@@ -21,6 +21,9 @@ Audited the 13 HTML entrypoints, their local dependencies and internal links, sh
 - Existing source documentation describes 35 Math/Quant and 17 Computing lectures (52 total), 25 curated mock prompts plus 284 community-tagged LeetCode links. This audit did not independently re-verify all outbound attribution links on the public web.
 - No paid or institutional affiliation, counterfeit employer certification, artificial streak gate or screen-time points are introduced.
 
+## Measured palette readability
+WCAG contrast-ratio calculations for the primary UI tokens (not a blanket accessibility certification): dark body 15.87:1, dark muted 9.05:1, dark accent on near-black 12.36:1; light body 15.39:1 and light muted 5.86:1. Actual 13-page browser tests verify that each page resolves to the same dark background and accent.
+
 ## Test and deployment evidence
 - `tests/mastery-audit-reference.test.cjs`: 13 page entrypoints, internal resource/link existence, shared design inclusion, lazy mathematical resources, and verification invariant.
 - `tests/mastery-audit-browser.test.cjs`: dark and light computed values, no page JS failures, responsive 390px layouts, theme controls, reduced motion and MathJax lazy loading across the academies.

@@ -11,3 +11,24 @@ a{color:inherit}.f-header{display:flex;gap:20px;align-items:center;flex-wrap:wra
 @media(max-width:950px){.f-headline{grid-template-columns:1fr}.f-intro-art{display:none}.f-next-grid{grid-template-columns:1fr 1fr}.f-tile-feature{grid-column:1/-1}.f-header nav{margin:0}.f-step-columns{grid-template-columns:1fr}}
 @media(max-width:630px){.f-main{width:min(100% - 28px,1190px)}.f-header{padding:12px 15px}.f-header nav{gap:10px 15px}.f-header nav a{font-size:12px}.f-headline{padding:43px 0}.f-headline h1,.f-sprint-title{font-size:45px}.f-next-grid,.f-stats,.f-paths{grid-template-columns:1fr}.f-tile-feature{grid-column:auto}.f-section{padding:36px 0}.f-question{font-size:17px}.f-question-card h2{font-size:30px}.f-celebrate h1{font-size:40px}.f-sunburst{font-size:50px;right:0}.f-status{bottom:8px}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+
+
+/* Final interaction polish: clarity at the exact moment of choosing, never confetti for guessing. */
+.f-question-card{position:relative;overflow:clip}
+.f-question-card::before{
+ content:"";display:block;position:absolute;top:0;left:0;right:0;height:3px;
+ background:linear-gradient(90deg,var(--f-accent) 0 32%,var(--f-line) 32% 100%);
+ opacity:.7;pointer-events:none
+}
+.f-choice:has(input:checked){background:var(--f-alt);border-color:var(--f-accent);box-shadow:inset 0 0 0 1px var(--f-accent)}
+.f-choice:has(input:checked) span{font-weight:700;color:var(--f-ink)}
+.f-choice:has(input:focus-visible){outline:2px solid var(--f-accent);outline-offset:3px}
+.f-tile-feature{position:relative;overflow:hidden}
+.f-tile-feature::after{
+ content:"";position:absolute;right:-45px;top:-45px;width:140px;height:140px;
+ border:1px solid var(--f-line);border-radius:50%;box-shadow:0 0 0 23px color-mix(in srgb,var(--f-accent) 4%,transparent);
+ pointer-events:none;opacity:.65
+}
+.f-sprint-progress>span{border-radius:99px}
+.f-receipts a{white-space:nowrap}
+@media(max-width:630px){.f-tile-feature::after{width:100px;height:100px;right:-24px;top:-24px}.f-receipts>div{flex-wrap:wrap}.f-receipts a{margin-left:46px}}
