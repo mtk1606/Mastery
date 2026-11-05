@@ -30,7 +30,7 @@ const assert=require('node:assert/strict'),{chromium}=require('playwright');
  await page.reload();await page.locator('[data-action="start"]').first().click();
  const first=await page.evaluate(()=>JSON.parse(localStorage.getItem('mastery-focus-v1')).active.tasks[0].id);assert.equal(first,'bayes');
  await page.goto('http://127.0.0.1:8787/index.html#/',{waitUntil:'domcontentloaded'});
- assert.equal(await page.locator('.top-links a').count(),7);
+ assert.equal(await page.locator('.top-links a').count(),8);
  assert.match(await page.locator('.campus-actions').innerText(),/5-minute practice sprint/);
  await page.locator('.menu-toggle').click();
  assert(await page.locator('.top-links').evaluate(n=>n.classList.contains('mobile-open')));

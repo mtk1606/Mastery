@@ -1,4 +1,6 @@
 # Mastery A–Z Learning Standard — Phase XII
+
+> **Phase XIII update (November 5, 2026):** All C0–C4 common foundations now have 29 original, compact instructor-style seminars, 20 distinct exit scenarios and 25 executable Python tasks with 209 independently checked fixtures. This document preserves the Phase XII baseline; see [the current Foundation Academy release](FOUNDATION_ACADEMY_RELEASE.md) for what changed and what is still missing.
 **Release:** 2026-11-05 | **Status:** Guided 3-track pathway + first ten executable Python micro-labs; most later-stage deep labs remain future work.
 
 ## Mission

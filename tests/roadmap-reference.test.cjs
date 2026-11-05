@@ -5,6 +5,8 @@ assert.equal(api.validate(),true);
 assert.equal(labs.validate(),true);
 assert.equal(api.stages.length,23);
 assert.equal(labs.tasks.length,10);
+assert(labs.tasks.every(t=>/^C[0-4]$/.test(t.foundationStage)),'Each Python exercise must be assigned to its Foundation stage');
+assert.deepEqual([...new Set(labs.tasks.map(t=>t.foundationStage))],['C0','C1','C2','C3','C4']);
 const shared=api.forTrack('quant').slice(0,5).map(s=>s.id);
 assert.deepEqual(api.forTrack('ml').slice(0,5).map(s=>s.id),shared);
 assert.deepEqual(api.forTrack('swe').slice(0,5).map(s=>s.id),shared);

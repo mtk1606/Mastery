@@ -1,0 +1,49 @@
+name: Mastery Phase XIII — Foundation Academy and Python rigor
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'foundation*'
+      - 'FOUNDATION_ACADEMY_RELEASE.md'
+      - 'python-lab-data.js'
+      - 'python-lab.html'
+      - 'roadmap-data.js'
+      - 'roadmap.js'
+      - 'tests/foundation-*'
+      - 'tests/roadmap-oracles.py'
+      - '.github/workflows/foundation-ci.yml'
+permissions:
+  contents: read
+jobs:
+  curriculum-and-oracles:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 9
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - name: Validate Foundation data, links, Python reference answers and 209 fixtures
+        run: |
+          node --check foundation-data.js
+          node --check foundation-exams.js
+          node --check foundation-python-addons.js
+          node --check foundation.js
+          node --check python-lab-data.js
+          node tests/foundation-reference.test.cjs
+          node -e 'const bank=require("./python-lab-data.js"); process.stdout.write(JSON.stringify(bank.tasks))' | python3 tests/roadmap-oracles.py
+  real-browser:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: {node-version: '22'}
+      - name: Install pinned Chromium
+        run: |
+          npm install --no-save --no-package-lock playwright@1.56.1
+          npx playwright install chromium
+      - name: Test learning interactions and 390px graphite mobile UI
+        run: |
+          python3 -m http.server 8898 --bind 127.0.0.1 >/tmp/mastery-foundation-http.log 2>&1 &
+          node tests/foundation-browser.test.cjs

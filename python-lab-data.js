@@ -154,10 +154,17 @@ T('window_max_sum','Best fixed-size interval','quant','10 · Streaming analysis'
   [[[1,1,1],3],3],[[[-1,5,-2,6],2],4],[[[10,-9,10,-9],2],1]
  ]))
 ];
-for(const t of tasks)t.numericMode=['rolling_vwap','gradient_step','stable_sigmoid'].includes(t.id)?'float':'exact';
+const extras=(typeof module!=='undefined'&&module.exports)?require('./foundation-python-addons.js'):(root.MasteryFoundationPythonAddons||[]);
+tasks.push(...extras);
+const legacyStage={sum_positive:'C0',symbol_counts:'C1',longest_unique:'C2',binary_first:'C2',bfs:'C2',window_max_sum:'C2',rolling_vwap:'C3',gradient_step:'C3',stable_sigmoid:'C3',dedup_events:'C4'};
+for(const t of tasks){
+ t.foundationStage=legacyStage[t.id]||t.level.match(/^C[0-4]/)?.[0]||'C4';
+ t.numericMode=['rolling_vwap','gradient_step','stable_sigmoid','safe_divide','bayes_update','bernoulli_stderr'].includes(t.id)?'float':'exact';
+}
+tasks.sort((a,b)=>a.foundationStage.localeCompare(b.foundationStage));
 const map=Object.fromEntries(tasks.map(t=>[t.id,t]));
 function validate(){
- if(tasks.length<10||new Set(tasks.map(t=>t.id)).size!==tasks.length)throw Error('Invalid lab bank');
+ if(tasks.length<25||new Set(tasks.map(t=>t.id)).size!==tasks.length)throw Error('Invalid lab bank');
  for(const t of tasks)if(t.cases.length<6||!t.solution||!t.rule||!t.pitfall||!t.complexity||!t.fn)throw Error('Incomplete exercise '+t.id);
  return true;
 }

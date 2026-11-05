@@ -3,7 +3,7 @@
 'use strict';
 const core=window.MasteryRoadmap,root=document.getElementById('rpRoot'),toast=document.getElementById('rpToast');
 if(!core||!core.validate())throw Error('Roadmap curriculum not loaded');
-const key='mastery-roadmap-v1',labKey='mastery-python-lab-v1',DAY=86400000;
+const key='mastery-roadmap-v1',labKey='mastery-python-lab-v1',foundationKey='mastery-foundation-v1',DAY=86400000;
 const E=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 const read=k=>{try{return JSON.parse(localStorage.getItem(k)||'null')}catch{return null}};
 const empty=()=>({version:'v1',track:'quant',pace:'focused',selected:'C0',topics:{},notes:{},reviews:{},session:null});
@@ -27,15 +27,32 @@ function progress(st){let n=0;st.topics.forEach((_,i)=>{if(state.topics[st.id+':
 function due(st){return !!state.reviews[st.id]&&state.reviews[st.id].next<=Date.now();}
 function passes(){const x=read(labKey);return x&&x.version==='v1'&&x.passes&&typeof x.passes==='object'?x.passes:{};}
 function recommend(){
- const seq=core.forTrack(state.track);
- const delayed=seq.find(due);if(delayed)return {s:delayed,label:'SPACED RECALL IS DUE'};
- const unreviewed=seq.find(s=>!progress(s).reviewed);
- return unreviewed?{s:unreviewed,label:'NEXT UNFINISHED MISSION'}:{s:seq[10],label:'ALL STAGES SELF-REVIEWED · PRACTICE UNSEEN QUESTIONS'};
+ const seq=core.forTrack(state.track),foundation=window.MasteryFoundation;
+ const record=read(foundationKey)||{},checks=record.checks||{},exams=record.exams||{},python=passes();
+ if(foundation?.modules){
+  const neededLabs={C0:['sum_positive','clamp_score'],C1:['symbol_counts','running_totals'],C2:['longest_unique','binary_first'],C3:['rolling_vwap','gradient_step'],C4:['dedup_events','aggregate_trades']};
+  const qualifies=id=>!!python[id]&&python[id].passed>=6&&python[id].passed===python[id].total;
+  for(const module of foundation.modules){
+   const delayed=module.chapters.find(c=>checks[c.id]?.passed&&checks[c.id]?.next<=Date.now());
+   if(delayed)return {s:core.get(module.id),label:'DUE: RETRIEVE WITHOUT NOTES',studyHref:'foundation.html#'+module.id+'/'+delayed.id};
+   const first=module.chapters.find(c=>checks[c.id]?.passed!==true);
+   if(first)return {s:core.get(module.id),label:'NEXT FOUNDATION LESSON',studyHref:'foundation.html#'+module.id+'/'+first.id};
+   if(exams[module.id]?.best!==4)return {s:core.get(module.id),label:'FOUR-SCENARIO STAGE EXIT',studyHref:'foundation.html#'+module.id+'/assessment'};
+   const missing=neededLabs[module.id].find(id=>!qualifies(id));
+   if(missing)return {s:core.get(module.id),label:'FOUNDATION: VERIFY PYTHON CODE',studyHref:'python-lab.html#'+missing};
+  }
+ }
+ const delayed=seq.slice(5).find(due);if(delayed)return {s:delayed,label:'SPACED RECALL IS DUE'};
+ const unreviewed=seq.slice(5).find(s=>!progress(s).reviewed);
+ return unreviewed?{s:unreviewed,label:'NEXT SPECIALIZATION MISSION'}:{s:seq[10],label:'ALL STAGES SELF-REVIEWED · PRACTICE UNSEEN QUESTIONS'};
 }
 function stats(seq){
  const total=seq.reduce((a,s)=>a+s.topics.length,0),seen=seq.reduce((a,s)=>a+progress(s).n,0),reviewed=seq.filter(s=>progress(s).reviewed).length;
  const eligible=new Set(seq.map(s=>s.lab).filter(Boolean)),p=passes(),tested=[...eligible].filter(k=>p[k]?.passed>=6&&p[k]?.passed===p[k]?.total).length;
- return {total,seen,reviewed,tested,due:seq.filter(due).length};
+ const fr=read(foundationKey),checks=fr?.checks||{},exams=fr?.exams||{};
+ const foundationChecks=Object.entries(checks).filter(([id,v])=>/^c[0-4]-/.test(id)&&v?.passed===true).length;
+ const exitChecks=Object.entries(exams).filter(([id,v])=>/^C[0-4]$/.test(id)&&v?.best===4).length;
+ return {total,seen,reviewed,tested,foundationChecks,exitChecks,due:seq.filter(due).length};
 }
 function timerInfo(){
  const p=core.pace[state.pace],s=state.session;
@@ -57,10 +74,10 @@ function render(){
  <div class="rp-track-grid" role="group" aria-label="Career paths">${Object.values(core.tracks).map(x=>`<button type="button" class="rp-track" data-track="${x.id}" aria-pressed="${x.id===tr.id}"><span class="rp-track-head"><span class="rp-track-letter">${x.letter}</span><span class="rp-track-flag">${x.id===tr.id?'CURRENT PATH':'OPTION '+x.letter}</span></span><strong>${E(x.name)}</strong><p>${E(x.sub)}</p></button>`).join('')}</div></section>
  <section class="rp-mission" aria-label="Recommended next mission"><div><div class="rp-overline">${rec.label}</div><h2>${E(rec.s.title)}</h2><p>${E(rec.s.summary)}</p>
  <div class="rp-actions"><button class="rp-button primary" type="button" data-select="${rec.s.id}">${due(rec.s)?'Review this stage':'Open next step'} →</button>
- <a class="rp-button" href="${E(rec.s.lab?'python-lab.html#'+rec.s.lab:rec.s.resources[0].href)}">${rec.s.lab?'Practice in Python':'Open first learning source'}</a></div></div>
+ <a class="rp-button" href="${E(rec.studyHref|| (rec.s.id.startsWith('C')?'foundation.html#'+rec.s.id:rec.s.lab?'python-lab.html#'+rec.s.lab:rec.s.resources[0].href))}">${rec.label==='FOUNDATION: VERIFY PYTHON CODE'?'Pass the real Python tests':rec.s.id.startsWith('C')?'Study the full Foundation seminar':rec.s.lab?'Practice in Python':'Open first learning source'}</a></div></div>
  <div class="rp-mission-side"><span class="rp-small">TOPICS SELF-REVIEWED</span><strong>${all.seen} / ${all.total}</strong>
  <div class="rp-meter"><span style="width:${Math.round(all.seen/all.total*100)}%"></span></div><span class="rp-small">${all.reviewed}/11 stage reviews · ${all.due} due</span>
- <span class="rp-small">${all.tested} Python patterns with recorded passing runs (local evidence)</span></div></section>
+ <span class="rp-small">${all.tested} Python patterns with recorded passes · ${all.foundationChecks}/29 Foundation chapter checks · ${all.exitChecks}/5 exit scenarios fully correct</span></div></section>
  <section class="rp-stat-row" aria-label="Progress evidence"><div class="rp-stat"><b>${all.reviewed}/11</b><span>Stages self-reviewed</span></div>
  <div class="rp-stat"><b>${all.tested}</b><span>Python patterns passed locally</span></div><div class="rp-stat"><b>${all.due}</b><span>Due for delayed recall</span></div></section>
  <section class="rp-workspace" aria-label="Curriculum and stage">
@@ -126,7 +143,7 @@ root.addEventListener('change',event=>{
  if(el.id==='rpImport'){importState(el.files?.[0]);el.value='';}
 });
 root.addEventListener('input',event=>{if(event.target.id==='rpNotes'){state.notes[state.selected]=event.target.value.slice(0,6000);save();}});
-window.addEventListener('storage',event=>{if(event.key===labKey||event.key===key){if(event.key===key)state=sanitize(read(key));render();}});
+window.addEventListener('storage',event=>{if(event.key===labKey||event.key===key||event.key===foundationKey){if(event.key===key)state=sanitize(read(key));render();}});
 window.addEventListener('pageshow',render);
 setInterval(updateTimer,750);
 render();

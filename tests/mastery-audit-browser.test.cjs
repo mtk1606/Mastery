@@ -7,7 +7,7 @@ const assert=require('node:assert/strict'),{chromium}=require('playwright');
  await context.addInitScript(()=>localStorage.setItem('mastery-theme','dark'));
  const page=await context.newPage(),errors=[];
  page.on('pageerror',e=>errors.push(String(e)));
- const pages=['index.html','focus.html','engineering.html','readiness.html','mock-interviews.html','phase10.html','interview-cpp.html','cpp-lab.html','labs.html','market-systems.html','phase5.html','phase6.html','phase7.html','roadmap.html','python-lab.html'];
+ const pages=['index.html','focus.html','engineering.html','readiness.html','mock-interviews.html','phase10.html','interview-cpp.html','cpp-lab.html','labs.html','market-systems.html','phase5.html','phase6.html','phase7.html','roadmap.html','python-lab.html','foundation.html'];
  let desktop=0,mobile=0;
  for(const file of pages){
   await page.setViewportSize({width:1390,height:920});

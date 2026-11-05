@@ -8,9 +8,13 @@
 
 **Start practicing:** https://mtk1606.github.io/Mastery/focus.html
 
+## Phase XIII · Foundation Academy C0–C4
+
+**Begin here: [Foundation Academy](foundation.html).** All five common stages now have **29 original concept seminars** with guided state traces, counterexamples, proof/transfer prompts, individual quick-checks, and four distinct stage-exit scenarios each. The Python lab has **25 real CPython exercises**, with **209 deterministic test cases** checked against independently written Python oracles and published reference solutions. Lessons, recognition checks, self-reviewed proofs and executable passes are separate evidence categories; this is not an accredited university course. [Read the Phase XIII quality report.](FOUNDATION_ACADEMY_RELEASE.md)
+
 ## Phase XII · three real career tracks
 
-The default path is **A · Quant Developer / Quant SWE**, with **B · AI/ML Engineer** and **C · Software Engineer** available as first-class alternatives. Five shared foundation stages, six role-specific stages, explicit topic inventories, academic source links and four-part exit rubrics make the order unambiguous. The ten original Python exercises execute in a real Pyodide CPython Web Worker; progress labels distinguish self-review from finite local test passes. [Read the learning standard, academic grounding and honest current limitations.](ROADMAP_LEARNING_STANDARD.md)
+The default path is **A · Quant Developer / Quant SWE**, with **B · AI/ML Engineer** and **C · Software Engineer** available as first-class alternatives. Five shared foundation stages, six role-specific stages, explicit topic inventories, academic source links and four-part exit rubrics make the order unambiguous. The now 25 Python exercises execute in a real Pyodide CPython Web Worker; progress labels distinguish self-review from finite local test passes. [Read the learning standard, academic grounding and honest current limitations.](ROADMAP_LEARNING_STANDARD.md)
 
 ## Choose one next action
 

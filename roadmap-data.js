@@ -20,35 +20,35 @@ const S=(id,title,summary,topics,resources,exam,lab,transfer)=>({
 const stages=[
 S('C0','Orientation, baseline & how to learn','Begin as a novice. Make current gaps visible, then progress as quickly as genuine evidence permits.',[
  'How the three pathways overlap and differ','Variables, expressions, and evaluating simple functions','Input/output contracts and examples','Write a failing edge case before coding','How recall, proof, and repeat testing reinforce understanding'
- ],[R('Start: working Python lab','python-lab.html#sum_positive','Executable Python lab'),U('cs50')],{
+ ],[R('Guided Foundation C0 · first principles and objective checks','foundation.html#C0','Mastery Foundation Academy'),R('Start: working Python lab','python-lab.html#sum_positive','Executable Python lab'),U('cs50')],{
   reason:'Distinguish recognizing a solution from recalling and writing it unaided.',
   implement:'Solve the starter exercise without looking at a solution.',
   defend:'Describe a counterexample your first implementation would mishandle.',
   transfer:'Change the input contract and describe how you would adapt.'},'sum_positive','Record a baseline, not a label about talent.'),
 S('C1','Python fluency — from basics to reusable code','Master core Python language semantics before relying on libraries.',[
  'Numbers, collections, immutability and references','Control flow and comprehensions','Functions, closures, scope and recursion','Classes, dataclasses, iterators and generators','Exceptions, context managers and typing','Files, modules, virtual environments and package hygiene'
- ],[U('cs50'),R('Python counters and data structures','python-lab.html#symbol_counts','Executable Python lab')],{
+ ],[R('Guided Foundation C1 · Python engineering','foundation.html#C1','Mastery Foundation Academy'),U('cs50'),R('Python counters and data structures','python-lab.html#symbol_counts','Executable Python lab')],{
   reason:'Explain mutable default arguments, aliasing, iterators, and the cost of list versus dict operations.',
   implement:'Write solutions from a blank editor and add tests for empty and duplicate inputs.',
   defend:'Contrast shallow copies, deep copies and immutable values; state time/space complexity.',
   transfer:'Turn a pure function into a small reliable input-validation module.'},'symbol_counts','Write a frequency analysis utility that handles ties deterministically.'),
 S('C2','Algorithmic thinking and data structures','Learn to recognize the few powerful patterns and prove why they work.',[
  'Asymptotics, amortized work and loop invariants','Hash maps, sets and frequency tables','Two pointers, sliding windows and prefix sums','Stacks, queues, trees and heaps','Binary search as a predicate','Graphs, recursion and dynamic programming'
- ],[R('In-depth algorithm lectures','engineering.html#track=dsa&lesson=hash'),U('mit006'),U('waterloo')],{
+ ],[R('Guided Foundation C2 · algorithm proofs','foundation.html#C2','Mastery Foundation Academy'),R('In-depth algorithm lectures','engineering.html#track=dsa&lesson=hash'),U('mit006'),U('waterloo')],{
   reason:'Identify the structural clue, select a data structure and derive a bound before coding.',
   implement:'Solve an unfamiliar two-pointer or window task in Python with executable tests.',
   defend:'Give initialization, preservation, termination and one smallest counterexample to the wrong method.',
   transfer:'Translate an array exercise into a stream of market events.'},'longest_unique','Prove the sliding window retains exactly the needed state.'),
 S('C3','Mathematical reasoning and uncertainty','Make proofs and quantitative assumptions as routine as code tests.',[
  'Logic, induction, recursion and proof techniques','Combinatorics, conditional probability and Bayes','Expected value and indicators','Variance, sampling and confidence','Vectors, matrices, gradients and numerical precision','Optimization, constraints and probabilistic reasoning'
- ],[R('Discrete proofs and induction','index.html#/lesson/discrete-proofs'),R('Bayesian updating','index.html#/lesson/bayes'),R('Statistical inference','index.html#/lesson/inference')],{
+ ],[R('Guided Foundation C3 · mathematical reasoning','foundation.html#C3','Mastery Foundation Academy'),R('Discrete proofs and induction','index.html#/lesson/discrete-proofs'),R('Bayesian updating','index.html#/lesson/bayes'),R('Statistical inference','index.html#/lesson/inference')],{
   reason:'Derive an expression from assumptions rather than quoting a memorized formula.',
   implement:'Numerically verify a derived expression with small deterministic examples.',
   defend:'State which independence, finite variance or smoothness assumptions are required.',
   transfer:'Demonstrate one failure caused by violating the assumptions.'},'rolling_vwap','Treat units, precision and assumptions as part of correctness.'),
 S('C4','Production engineering habits','A solution is not finished when it works once on a sample.',[
  'Testing pyramid, property tests and reproducibility','Git, readable pull requests and code review','Debugging, profiling and complexity measurement','SQL fundamentals, data modeling and transactions','APIs, protocols, errors and observability','Concurrency, security and fault handling'
- ],[R('Reliability and engineering case studies','phase5.html'),R('System design lectures','engineering.html#track=sd&lesson=sd-reliability'),U('waterloo')],{
+ ],[R('Guided Foundation C4 · production reliability','foundation.html#C4','Mastery Foundation Academy'),R('Reliability and engineering case studies','phase5.html'),R('System design lectures','engineering.html#track=sd&lesson=sd-reliability'),U('waterloo')],{
   reason:'Specify invariants and failure modes, not only happy-path requirements.',
   implement:'Write tests for malformed input, duplicates, out-of-order events and idempotency.',
   defend:'Separate measured performance from a benchmark claim; quantify runtime and memory.',
