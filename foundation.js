@@ -35,12 +35,12 @@ const due=id=>passed(id)&&state.checks[id].next<=Date.now();
 const count=m=>m.chapters.filter(c=>passed(c.id)).length;
 function sectionNav(m){
  return m.chapters.map((c,i)=>`<button class="fd-chapter" type="button" data-lesson="${c.id}" aria-current="${view==='lesson'&&chapter===c.id?'page':'false'}">
-  <b>${String(i+1).padStart(2,'0')}</b><span>${E(c.title)}</span><small>${due(c.id)?'DUE':passed(c.id)?'✓':state.checks[c.id]?.attempts?'RETRY':'OPEN'}</small></button>`).join('');
+  <b>${String(i+1).padStart(2,'0')}</b><span>${E(c.title)}</span><small>${window.MasteryVisualScenes?.lookup(c.id)?'VISUAL · ':''}${due(c.id)?'DUE':passed(c.id)?'✓':state.checks[c.id]?.attempts?'RETRY':'OPEN'}</small></button>`).join('');
 }
 function render(){
  route();const m=bank.modules.find(x=>x.id===stage),c=m.chapters.find(x=>x.id===chapter),total=bank.modules.reduce((n,x)=>n+x.chapters.length,0),done=bank.modules.reduce((n,x)=>n+count(x),0);
  root.innerHTML=`<section class="fd-hero"><div><div class="fd-eyebrow">THE SHARED A–Z FOUNDATIONS · C0–C4</div><h1>Learn the reason.<br><em>Then prove it.</em></h1>
- <p>29 original seminars. Discover a definition, predict the working trace, defeat a counterexample, solve a checkpoint and explain a new contract in your own words.</p></div>
+ <p>29 original seminars with 15 state-driven visual labs. Predict, manipulate examples, prove the invariant, then solve an unfamiliar Python task.</p></div>
  <div class="fd-stat"><strong>${done} / ${total}</strong><span>Short recognition checks passed. Formal proof and transfer are not automatically graded.</span></div></section>
  <nav class="fd-stage-nav" aria-label="Five foundation stages">${bank.modules.map(x=>`<button class="fd-stage-tab" type="button" data-stage="${x.id}" aria-pressed="${x.id===stage}">
  <span class="fd-num">${x.id}</span><strong>${E(x.title)}</strong><small>${count(x)}/${x.chapters.length} quick-checks</small></button>`).join('')}</nav>
@@ -55,6 +55,8 @@ function render(){
 <input type="file" id="fdImport" accept=".json,application/json" aria-label="Restore Foundation Academy progress" style="width:100%;font-size:11px;max-width:100%">
 </div></aside>
  <div class="fd-main">${view==='assessment'?renderExam(m):renderLesson(m,c)}</div></section>`;
+ if(view==='lesson')window.MasteryVisuals?.mount(document.getElementById('fdVisual'),chapter);
+ else window.MasteryVisuals?.stop();
 }
 function renderLesson(m,c){
  const i=m.chapters.indexOf(c),r=state.checks[c.id]||{},q=c.quiz;
@@ -62,6 +64,7 @@ function renderLesson(m,c){
  <div class="fd-hint"><span class="fd-checkpoint">${r.passed?'QUICK-CHECK CORRECT':'CHECKPOINT OPEN'}</span><span>${r.attempts||0} attempt(s) ${r.assisted?'· assisted':''} ${due(c.id)?'· delayed review due':''}</span></div>
  <hr class="fd-rule"><section><div class="fd-label">01 · Definition and mechanism</div><h3>Understand what is happening</h3><p>${E(c.definition)}</p><p>${E(c.mechanism)}</p></section>
  <hr class="fd-rule"><section><div class="fd-label">02 · A worked example</div><h3>Follow each state transition</h3><div class="fd-example"><p>${E(c.example)}</p></div>
+ ${window.MasteryVisualScenes?.lookup(c.id)?'<div class="fd-visual-host" id="fdVisual" aria-label="Interactive teaching visualization"></div>':''}
  <div class="fd-trace" aria-label="Interactive example trace"><span class="fd-step-meta" id="fdStepMeta">Step ${step+1} of ${c.trace.length}</span>
  <div class="fd-step-meter"><span id="fdStepMeter" style="width:${Math.round(100*(step+1)/c.trace.length)}%"></span></div>
  <div class="fd-step-body" id="fdStepBody">${E(c.trace[step])}</div>

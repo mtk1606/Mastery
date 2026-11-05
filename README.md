@@ -8,6 +8,10 @@
 
 **Start practicing:** https://mtk1606.github.io/Mastery/focus.html
 
+## Phase XIV-A/B · Original visual learning (15 integrated figure labs)
+
+Foundation Academy now has **15 original, interactive SVG concept visualizers** across C0–C2. They show real state transitions and invariants, with Next/Previous, Play/Pause/Replay, an accessible text trace, prediction prompts, and parameter-changing exercises for sliding windows and binary search. The diagrams are original, lightweight, dark/light compatible, reduced-motion aware and explicitly non-credit-bearing. Start with [shared references and mutation](foundation.html#C0/c0-state), [sliding windows](foundation.html#C2/c2-windows), [binary search](foundation.html#C2/c2-binary) or [BFS layers](foundation.html#C2/c2-structures). [Coverage, correctness evidence and source transparency](VISUAL_LEARNING_PHASE14.md).
+
 ## Phase XIII · Foundation Academy C0–C4
 
 **Begin here: [Foundation Academy](foundation.html).** All five common stages now have **29 original concept seminars** with guided state traces, counterexamples, proof/transfer prompts, individual quick-checks, and four distinct stage-exit scenarios each. The Python lab has **25 real CPython exercises**, with **209 deterministic test cases** checked against independently written Python oracles and published reference solutions. Lessons, recognition checks, self-reviewed proofs and executable passes are separate evidence categories; this is not an accredited university course. [Read the Phase XIII quality report.](FOUNDATION_ACADEMY_RELEASE.md)
