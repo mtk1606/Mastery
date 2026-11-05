@@ -7,7 +7,7 @@
  const initial=()=>({format:key,run:0,attempts:[],due:{},active:null,completed:0,lastSummary:null});
  function load(){const v=safeRead(key);if(!v||v.format!==key||!Array.isArray(v.attempts))return initial();return {...initial(),...v,attempts:v.attempts.slice(-450),completed:Number.isSafeInteger(v.completed)?Math.max(0,v.completed):0};}
  let state=load();
- function message(text){if(status)status.textContent=String(text);}
+ let noticeTimer=null;function message(text){if(!status)return;status.textContent=String(text);if(noticeTimer)clearTimeout(noticeTimer);noticeTimer=setTimeout(()=>{status.textContent='';},6500);}
  function save(){try{localStorage.setItem(key,JSON.stringify(state))}catch{status.textContent='Storage is unavailable. Download your record to retain it.'}}
  function getCurrent(){const a=state.active;return a?.tasks?.[a.position]||null;}
  function getDraft(){const a=state.active;if(!a)return null;a.answers??={};return a.answers[a.position]??(a.answers[a.position]={input:'',choice:'',result:null,hintUsed:false});}

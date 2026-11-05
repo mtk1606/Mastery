@@ -1,0 +1,23 @@
+'use strict';
+const assert=require('node:assert/strict'),{chromium}=require('playwright');
+(async()=>{
+ const browser=await chromium.launch({headless:true}),page=await browser.newPage(),base='http://127.0.0.1:8895/';
+ const errors=[];page.on('pageerror',e=>errors.push(String(e)));
+ await page.goto(base+'readiness.html',{waitUntil:'domcontentloaded'});
+ await page.locator('#rSearch').fill('Valid Parentheses');
+ await page.locator('[data-open="lc-valid-parentheses"]').click();
+ await page.locator('#rCode').fill("function isValid(s){const stack=[],match={')':'(',']':'[','}':'{'};for(const c of s){if('([{'.includes(c))stack.push(c);else if(stack.pop()!==match[c])return false;}return stack.length===0;}");
+ await page.locator('[data-run="lc-valid-parentheses"]').click();
+ await page.waitForFunction(()=>{const x=JSON.parse(localStorage.getItem('mastery-readiness-v1'));return x?.state?.reviews?.['lc-valid-parentheses']?.verified===true;},{timeout:14000});
+ const success=await page.locator('#rTestResults').innerText();assert.match(success,/tests passed/);
+ await page.locator('#rCode').fill('function isValid(s){return true;}');
+ const state=await page.evaluate(()=>JSON.parse(localStorage.getItem('mastery-readiness-v1')).state);
+ assert.equal(state.reviews['lc-valid-parentheses'].verified,false,'Editing failed to invalidate objective verification');
+ assert.equal(state.lastRun?.id==='lc-valid-parentheses',false,'Stale pass is still eligible for self-review');
+ await page.locator('[data-run="lc-valid-parentheses"]').click();
+ await page.waitForFunction(()=>/tests passed/.test(document.querySelector('#rTestResults')?.innerText||''),{timeout:14000});
+ const failed=await page.evaluate(()=>JSON.parse(localStorage.getItem('mastery-readiness-v1')).state.reviews['lc-valid-parentheses'].verified);
+ assert.equal(failed,false,'Failing a new test unexpectedly created objective credit');
+ assert.deepEqual(errors,[]);
+ await browser.close();console.log('PASS: real JS Worker test, source-change invalidation and failed rerun cannot retain verified status');
+})().catch(e=>{console.error(e);process.exit(1)});

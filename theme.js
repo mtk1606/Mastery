@@ -14,7 +14,7 @@
       el.setAttribute('aria-pressed',String(active));
       el.classList.toggle('chosen',active);
     });
-    const meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.content=mode==='light'?'#ffffff':'#151c24';
+    const meta=document.querySelector('meta[name="theme-color"]');if(meta)meta.content=mode==='light'?'#ffffff':'#0b0b0c';
   };
   document.addEventListener('DOMContentLoaded',()=>{
     document.querySelectorAll('[data-set-theme]').forEach(el=>el.addEventListener('click',()=>window.setMasteryTheme(el.dataset.setTheme)));

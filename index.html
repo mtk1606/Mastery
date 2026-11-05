@@ -12,6 +12,7 @@
   <link href="scholar.css" rel="stylesheet" />
   <link href="academic.css" rel="stylesheet" />
   <link href="academic-labs.css" rel="stylesheet" />
+<link rel="stylesheet" href="mastery-polish.css" />
 </head>
 <body>
   <div class="site-shell">
@@ -30,7 +31,16 @@
     <div id="toast" class="toast" role="status" aria-live="polite"></div>
   </div>
   <script>window.MathJax={tex:{inlineMath:[["\\(","\\)"]],displayMath:[["\\[","\\]"]]}};</script>
-  <script defer src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js" onload="window.renderAxiomMath?.()"></script>
+  <script>
+   /* Preserve MathJax display while avoiding a render-engine download on the catalogue landing page. */
+   window.ensureMasteryMath=function(){
+     if(document.getElementById('mastery-mathjax'))return;
+     const s=document.createElement('script');s.id='mastery-mathjax';
+     s.src='https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-svg.js';
+     s.onload=()=>{if(window.MathJax&&typeof window.MathJax.typesetPromise==='function')window.MathJax.typesetPromise().catch(()=>{});window.renderAxiomMath?.();};
+     document.head.append(s);
+   };
+   </script>
   <script src="data.js"></script>
   <script src="visuals.js"></script>
   <script src="pedagogy.js"></script>
