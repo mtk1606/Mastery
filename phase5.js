@@ -61,7 +61,7 @@ function p5Draw(){const f=p5frames[p5step];if(!f)return;
  P5('p5Progress').max=Math.max(0,p5frames.length-1);P5('p5Progress').value=p5step;
  const s=f.snapshot;P5('p5Stats').innerHTML=[['Leader epoch',s.epoch],['Global sequence',s.seq],['Reference books',s.books.length]].map(([label,value])=>`<div><strong>${value}</strong><small>${label}</small></div>`).join('');
  P5('p5Books').innerHTML=s.books.map(p5BookHTML).join('');
- P5('p5Hash').textContent='FNV-1a regression fingerprint: '+s.hash+(p5scenario==='normal'&&s.seq===10?' · matches pinned native golden state':'');
+ P5('p5Hash').textContent='FNV-1a regression fingerprint: '+s.hash+(p5scenario==='normal'&&s.epoch===1&&s.seq===10&&s.hash==='780225790431407597'?' · matches pinned native golden state':'');
 }
 function p5Build(){p5scenario=P5('p5Scenario').value;const data=MasteryReliabilitySim.replayScenario(p5scenario);p5frames=data.frames;p5step=0;P5('p5SnapshotText').textContent=data.checkpoint;p5Draw();}
 function p5Reset(){p5fanout=new MasteryReliabilitySim.Fanout(Number(P5('p5Capacity').value));p5feedLog=[];p5feedStatus='All queues empty; next update is sequence 1.';p5DrawFanout();}
